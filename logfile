@@ -1,0 +1,177 @@
+2022-12-08 15:08:20.795 GMT [36179] FATAL:  lock file "postmaster.pid" already exists
+2022-12-08 15:08:20.795 GMT [36179] HINT:  Is another postmaster (PID 36055) running in data directory "/home/parallels/Warwick/year2/IM/CW1/online_banking_instance"?
+2022-12-08 15:08:55.997 GMT [36364] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:08:55.998 GMT [36364] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2022-12-08 15:08:55.998 GMT [36364] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2022-12-08 15:08:55.998 GMT [36364] WARNING:  could not create listen socket for "localhost"
+2022-12-08 15:08:55.998 GMT [36364] FATAL:  could not create any TCP/IP sockets
+2022-12-08 15:08:56.000 GMT [36364] LOG:  database system is shut down
+2022-12-08 15:09:46.909 GMT [36585] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:09:46.909 GMT [36585] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2022-12-08 15:09:46.909 GMT [36585] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2022-12-08 15:09:46.909 GMT [36585] WARNING:  could not create listen socket for "localhost"
+2022-12-08 15:09:46.909 GMT [36585] FATAL:  could not create any TCP/IP sockets
+2022-12-08 15:09:46.912 GMT [36585] LOG:  database system is shut down
+2022-12-08 15:11:35.856 GMT [37060] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:11:35.856 GMT [37060] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-08 15:11:35.858 GMT [37060] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-08 15:11:35.863 GMT [37061] LOG:  database system was shut down at 2022-12-08 15:11:35 GMT
+2022-12-08 15:11:35.869 GMT [37060] LOG:  database system is ready to accept connections
+2022-12-08 15:12:25.656 GMT [37234] FATAL:  lock file "postmaster.pid" already exists
+2022-12-08 15:12:25.656 GMT [37234] HINT:  Is another postmaster (PID 37060) running in data directory "/home/parallels/Warwick/year2/IM/CW1/online_banking_instance"?
+2022-12-08 15:18:01.821 GMT [37060] LOG:  received fast shutdown request
+2022-12-08 15:18:01.824 GMT [37060] LOG:  aborting any active transactions
+2022-12-08 15:18:01.830 GMT [37060] LOG:  background worker "logical replication launcher" (PID 37067) exited with exit code 1
+2022-12-08 15:18:01.830 GMT [37062] LOG:  shutting down
+2022-12-08 15:18:01.849 GMT [37060] LOG:  database system is shut down
+2022-12-08 15:18:12.424 GMT [38319] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:18:12.424 GMT [38319] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-08 15:18:12.425 GMT [38319] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-08 15:18:12.429 GMT [38327] LOG:  database system was shut down at 2022-12-08 15:18:12 GMT
+2022-12-08 15:18:12.434 GMT [38319] LOG:  database system is ready to accept connections
+2022-12-08 15:19:50.311 GMT [38319] LOG:  received fast shutdown request
+2022-12-08 15:19:50.313 GMT [38319] LOG:  aborting any active transactions
+2022-12-08 15:19:50.320 GMT [38319] LOG:  background worker "logical replication launcher" (PID 38333) exited with exit code 1
+2022-12-08 15:19:50.320 GMT [38328] LOG:  shutting down
+2022-12-08 15:19:50.342 GMT [38319] LOG:  database system is shut down
+2022-12-08 15:20:04.542 GMT [38699] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:20:04.542 GMT [38699] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-08 15:20:04.543 GMT [38699] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-08 15:20:04.548 GMT [38700] LOG:  database system was shut down at 2022-12-08 15:19:50 GMT
+2022-12-08 15:20:04.555 GMT [38699] LOG:  database system is ready to accept connections
+2022-12-08 15:21:56.367 GMT [38699] LOG:  received fast shutdown request
+2022-12-08 15:21:56.368 GMT [38699] LOG:  aborting any active transactions
+2022-12-08 15:21:56.372 GMT [38699] LOG:  background worker "logical replication launcher" (PID 38706) exited with exit code 1
+2022-12-08 15:21:56.373 GMT [38701] LOG:  shutting down
+2022-12-08 15:21:56.389 GMT [38699] LOG:  database system is shut down
+2022-12-08 15:22:13.686 GMT [39160] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:22:13.686 GMT [39160] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-08 15:22:13.688 GMT [39160] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-08 15:22:13.693 GMT [39161] LOG:  database system was shut down at 2022-12-08 15:21:56 GMT
+2022-12-08 15:22:13.699 GMT [39160] LOG:  database system is ready to accept connections
+2022-12-08 15:29:11.058 GMT [39160] LOG:  received fast shutdown request
+2022-12-08 15:29:11.059 GMT [39160] LOG:  aborting any active transactions
+2022-12-08 15:29:11.062 GMT [39160] LOG:  background worker "logical replication launcher" (PID 39167) exited with exit code 1
+2022-12-08 15:29:11.066 GMT [39162] LOG:  shutting down
+2022-12-08 15:29:11.078 GMT [39160] LOG:  database system is shut down
+2022-12-08 15:29:15.792 GMT [40407] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:29:15.793 GMT [40407] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-08 15:29:15.795 GMT [40407] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-08 15:29:15.800 GMT [40411] LOG:  database system was shut down at 2022-12-08 15:29:11 GMT
+2022-12-08 15:29:15.807 GMT [40407] LOG:  database system is ready to accept connections
+2022-12-08 15:29:45.844 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:46.518 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:46.518 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:47.197 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:47.197 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:47.894 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:47.894 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:48.452 GMT [40588] FATAL:  could not open file "global/pg_filenode.map": No such file or directory
+2022-12-08 15:29:48.506 GMT [40590] FATAL:  could not open file "global/pg_filenode.map": No such file or directory
+2022-12-08 15:29:48.508 GMT [40591] FATAL:  could not open file "global/pg_filenode.map": No such file or directory
+2022-12-08 15:29:48.560 GMT [40594] FATAL:  could not open file "global/pg_filenode.map": No such file or directory
+2022-12-08 15:29:48.608 GMT [40597] FATAL:  could not open file "global/pg_filenode.map": No such file or directory
+2022-12-08 15:29:48.615 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:48.615 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:48.645 GMT [40599] FATAL:  could not open file "global/pg_filenode.map": No such file or directory
+2022-12-08 15:29:48.689 GMT [40601] FATAL:  could not open file "global/pg_filenode.map": No such file or directory
+2022-12-08 15:29:49.291 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:49.291 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:49.977 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:49.977 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:50.665 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:50.665 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:51.340 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:51.340 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:52.025 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:52.025 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:52.719 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:52.719 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:53.405 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:53.406 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:54.078 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:54.079 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:54.830 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:54.830 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:55.507 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:55.507 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:56.179 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:56.179 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:56.597 GMT [40415] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2022-12-08 15:29:56.598 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:56.598 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:57.278 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:57.279 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:57.979 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:57.979 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:58.656 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:58.656 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:59.337 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:29:59.337 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:00.023 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:00.023 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:00.703 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:00.703 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:01.378 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:01.378 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:02.056 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:02.056 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:02.740 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:02.740 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:03.477 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:03.477 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:04.157 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:04.157 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:04.846 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:04.846 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:05.837 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:05.837 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:06.625 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:06.626 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:07.296 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:07.296 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:07.736 GMT [40415] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2022-12-08 15:30:07.737 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:07.737 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:08.405 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:08.405 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:09.074 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:09.074 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:09.748 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:09.748 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:10.410 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:10.410 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:11.070 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:11.070 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:11.733 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:11.733 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:12.407 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:12.407 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:13.078 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:13.078 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:13.752 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:13.752 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:14.426 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:14.427 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:15.097 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:15.097 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:15.766 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:15.766 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:16.437 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:16.437 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:17.106 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:17.106 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:17.775 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:17.775 GMT [40416] LOG:  could not open temporary statistics file "pg_stat_tmp/global.tmp": No such file or directory
+2022-12-08 15:30:18.200 GMT [40415] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2022-12-08 15:30:29.345 GMT [40407] LOG:  could not open file "postmaster.pid": No such file or directory
+2022-12-08 15:30:29.345 GMT [40407] LOG:  performing immediate shutdown because data directory lock file is invalid
+2022-12-08 15:30:29.345 GMT [40407] LOG:  received immediate shutdown request
+2022-12-08 15:30:29.345 GMT [40407] LOG:  could not open file "postmaster.pid": No such file or directory
+2022-12-08 15:30:29.346 GMT [40416] LOG:  could not open temporary statistics file "pg_stat/global.tmp": No such file or directory
+2022-12-08 15:30:29.351 GMT [40407] LOG:  database system is shut down
+2022-12-08 15:31:12.080 GMT [41032] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:31:12.080 GMT [41032] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-08 15:31:12.082 GMT [41032] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-08 15:31:12.086 GMT [41033] LOG:  database system was shut down at 2022-12-08 15:31:11 GMT
+2022-12-08 15:31:12.091 GMT [41032] LOG:  database system is ready to accept connections
