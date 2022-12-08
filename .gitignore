@@ -1,0 +1,4 @@
+*.stat
+online_banking_instance/
+logfile
+.DS_Store

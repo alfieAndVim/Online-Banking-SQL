@@ -175,3 +175,8 @@
 2022-12-08 15:31:12.082 GMT [41032] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
 2022-12-08 15:31:12.086 GMT [41033] LOG:  database system was shut down at 2022-12-08 15:31:11 GMT
 2022-12-08 15:31:12.091 GMT [41032] LOG:  database system is ready to accept connections
+2022-12-08 15:34:09.911 GMT [41032] LOG:  received fast shutdown request
+2022-12-08 15:34:09.913 GMT [41032] LOG:  aborting any active transactions
+2022-12-08 15:34:09.915 GMT [41032] LOG:  background worker "logical replication launcher" (PID 41039) exited with exit code 1
+2022-12-08 15:34:09.919 GMT [41034] LOG:  shutting down
+2022-12-08 15:34:09.938 GMT [41032] LOG:  database system is shut down
