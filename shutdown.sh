@@ -18,3 +18,9 @@ else
     echo "Postgres instance is not running"
     exit 1
 fi
+
+#removes instance directory
+rm -r online_banking_instance
+
+#kills postgres processes
+sudo pkill -x "postgres"

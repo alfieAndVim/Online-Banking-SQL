@@ -50,7 +50,9 @@ else
     #create role postgres with superuser and login privileges
     psql -d online_banking -c "CREATE ROLE postgres WITH SUPERUSER LOGIN CREATEDB CREATEROLE;"
 fi
-
+psql -d online_banking -c "GRANT ALL PRIVILEGES ON DATABASE online_banking TO postgres;"
 #alter database owner to postgres
 psql -d online_banking -c "ALTER DATABASE online_banking OWNER TO postgres;"
 
+#load sql file into database
+psql -U postgres -d online_banking -f online_banking.sql

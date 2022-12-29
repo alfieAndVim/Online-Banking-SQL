@@ -180,3 +180,1727 @@
 2022-12-08 15:34:09.915 GMT [41032] LOG:  background worker "logical replication launcher" (PID 41039) exited with exit code 1
 2022-12-08 15:34:09.919 GMT [41034] LOG:  shutting down
 2022-12-08 15:34:09.938 GMT [41032] LOG:  database system is shut down
+2022-12-08 15:38:22.357 GMT [42658] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-08 15:38:22.357 GMT [42658] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-08 15:38:22.359 GMT [42658] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-08 15:38:22.362 GMT [42666] LOG:  database system was shut down at 2022-12-08 15:38:22 GMT
+2022-12-08 15:38:22.367 GMT [42658] LOG:  database system is ready to accept connections
+2022-12-08 15:42:17.359 GMT [42658] LOG:  received smart shutdown request
+2022-12-08 15:42:17.373 GMT [42658] LOG:  background worker "logical replication launcher" (PID 42672) exited with exit code 1
+2022-12-08 15:42:17.374 GMT [42658] LOG:  received SIGHUP, reloading configuration files
+2022-12-08 15:42:17.374 GMT [42667] LOG:  shutting down
+2022-12-08 15:42:17.394 GMT [42658] LOG:  database system is shut down
+2022-12-09 11:37:06.202 GMT [8796] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-09 11:37:06.203 GMT [8796] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-09 11:37:06.205 GMT [8796] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-09 11:37:06.210 GMT [8797] LOG:  database system was shut down at 2022-12-09 11:36:14 GMT
+2022-12-09 11:37:06.218 GMT [8796] LOG:  database system is ready to accept connections
+2022-12-09 11:37:50.131 GMT [9074] ERROR:  syntax error at or near "@" at character 5
+2022-12-09 11:37:50.131 GMT [9074] STATEMENT:  SET @sql_dialect = 'postgresql';
+2022-12-09 11:37:50.143 GMT [9074] ERROR:  syntax error at or near ")" at character 178
+2022-12-09 11:37:50.143 GMT [9074] STATEMENT:  /*create a table account with a foreign key to customer*/
+	CREATE TABLE account (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    customer_id INTEGER REFERENCES customer(id),
+	);
+2022-12-09 11:37:50.148 GMT [9074] ERROR:  relation "account" does not exist
+2022-12-09 11:37:50.148 GMT [9074] STATEMENT:  /*create a table savings_account with a foreign key to account*/
+	CREATE TABLE savings_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:37:50.154 GMT [9074] ERROR:  relation "account" does not exist
+2022-12-09 11:37:50.154 GMT [9074] STATEMENT:  /*create a table credit_account with a foreign key to account*/
+	CREATE TABLE credit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    credit_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:37:50.159 GMT [9074] ERROR:  relation "credit_account" does not exist
+2022-12-09 11:37:50.159 GMT [9074] STATEMENT:  /*create a table credit_account_application with a foreign key to credit_account*/
+	CREATE TABLE credit_account_application (
+	    id SERIAL PRIMARY KEY,
+	    credit_account_id INTEGER REFERENCES credit_account(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:37:50.164 GMT [9074] ERROR:  relation "account" does not exist
+2022-12-09 11:37:50.164 GMT [9074] STATEMENT:  /*create a table debit_account with a foreign key to account*/
+	CREATE TABLE debit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    overdraft_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:37:50.176 GMT [9074] ERROR:  relation "account" does not exist
+2022-12-09 11:37:50.176 GMT [9074] STATEMENT:  /*create a table loan with a foreign key to account*/
+	CREATE TABLE loan (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2),
+	    loan_amount NUMERIC(10,2),
+	    loan_term INTEGER,
+	    loan_start_date DATE,
+	    loan_end_date DATE
+	);
+2022-12-09 11:37:50.180 GMT [9074] ERROR:  relation "loan" does not exist
+2022-12-09 11:37:50.180 GMT [9074] STATEMENT:  /*create a table loan_application with a foreign key to loan*/
+	CREATE TABLE loan_application (
+	    id SERIAL PRIMARY KEY,
+	    loan_id INTEGER REFERENCES loan(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:37:50.185 GMT [9074] ERROR:  relation "account" does not exist
+2022-12-09 11:37:50.185 GMT [9074] STATEMENT:  /*create a table transaction with a foreign key to account*/
+	CREATE TABLE transaction (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    transaction_date DATE,
+	    transaction_type VARCHAR(255),
+	    transaction_amount NUMERIC(10,2)
+	);
+2022-12-09 11:37:50.193 GMT [9074] ERROR:  relation "account" does not exist
+2022-12-09 11:37:50.193 GMT [9074] STATEMENT:  /*create a table to log all actions*/
+	CREATE TABLE log (
+	    id SERIAL PRIMARY KEY,
+	    date DATE,
+	    action VARCHAR(255),
+	    customer_id INTEGER REFERENCES customer(id),
+	    account_id INTEGER REFERENCES account(id)
+	);
+2022-12-09 11:37:50.196 GMT [9074] ERROR:  relation "account" does not exist at character 64
+2022-12-09 11:37:50.196 GMT [9074] STATEMENT:  /*insert 10 elements of sample data into account*/
+	INSERT INTO account (init_date, customer_id)
+	VALUES
+	    ('2019-01-01', 1),
+	    ('2019-01-01', 2),
+	    ('2019-01-01', 3),
+	    ('2019-01-01', 4),
+	    ('2019-01-01', 5),
+	    ('2019-01-01', 6),
+	    ('2019-01-01', 7),
+	    ('2019-01-01', 8),
+	    ('2019-01-01', 9),
+	    ('2019-01-01', 10);
+2022-12-09 11:37:50.196 GMT [9074] ERROR:  relation "savings_account" does not exist at character 113
+2022-12-09 11:37:50.196 GMT [9074] STATEMENT:  /*insert 8 elements of sample data into savings_account with different amounts and interest rates*/
+	INSERT INTO savings_account (account_id, current_balance, interest_rate)
+	VALUES
+	    (1, 1000.00, 0.01),
+	    (2, 2000.00, 0.02),
+	    (3, 3000.00, 0.03),
+	    (4, 4000.00, 0.04),
+	    (5, 5000.00, 0.05),
+	    (6, 6000.00, 0.06),
+	    (7, 7000.00, 0.07),
+	    (8, 8000.00, 0.08);
+2022-12-09 11:37:50.197 GMT [9074] ERROR:  relation "credit_account" does not exist at character 128
+2022-12-09 11:37:50.197 GMT [9074] STATEMENT:  /*insert 8 elements of sample data into credit_account with different amounts, credit limits, and interest rates*/
+	INSERT INTO credit_account (account_id, current_balance, credit_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:37:50.197 GMT [9074] ERROR:  relation "debit_account" does not exist at character 130
+2022-12-09 11:37:50.197 GMT [9074] STATEMENT:  /*insert 8 elements of sample data into debit_account with different amounts, overdraft limits, and interest rates*/
+	INSERT INTO debit_account (account_id, current_balance, overdraft_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:37:50.198 GMT [9074] ERROR:  relation "loan" does not exist at character 141
+2022-12-09 11:37:50.198 GMT [9074] STATEMENT:  /*insert 8 elements of sample data into loan with different amounts, interest rates, loan terms, and loan start and end dates*/
+	INSERT INTO loan (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date)
+	VALUES
+	    (1, 1000.00, 0.01, 12, '2019-01-01', '2020-01-01'),
+	    (2, 2000.00, 0.02, 12, '2019-01-01', '2020-01-01'),
+	    (3, 3000.00, 0.03, 12, '2019-01-01', '2020-01-01'),
+	    (4, 4000.00, 0.04, 12, '2019-01-01', '2020-01-01'),
+	    (5, 5000.00, 0.05, 12, '2019-01-01', '2020-01-01'),
+	    (6, 6000.00, 0.06, 12, '2019-01-01', '2020-01-01'),
+	    (7, 7000.00, 0.07, 12, '2019-01-01', '2020-01-01'),
+	    (8, 8000.00, 0.08, 12, '2019-01-01', '2020-01-01');
+2022-12-09 11:43:05.355 GMT [10018] ERROR:  syntax error at or near "DIALECT" at character 9
+2022-12-09 11:43:05.355 GMT [10018] STATEMENT:  SET SQL DIALECT PostgreSQL;
+2022-12-09 11:43:05.355 GMT [10018] ERROR:  schema "online_banking" already exists
+2022-12-09 11:43:05.355 GMT [10018] STATEMENT:  /*create schema*/
+	CREATE SCHEMA online_banking;
+2022-12-09 11:43:05.357 GMT [10018] ERROR:  relation "customer" already exists
+2022-12-09 11:43:05.357 GMT [10018] STATEMENT:  /*create a table customer with their address as an array*/
+	CREATE TABLE customer (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    first_name VARCHAR(255),
+	    last_name VARCHAR(255),
+	    date_of_birth DATE,
+	    phone_number VARCHAR(255),
+	    address VARCHAR(255) []
+	);
+2022-12-09 11:43:05.357 GMT [10018] ERROR:  syntax error at or near ")" at character 178
+2022-12-09 11:43:05.357 GMT [10018] STATEMENT:  /*create a table account with a foreign key to customer*/
+	CREATE TABLE account (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    customer_id INTEGER REFERENCES customer(id),
+	);
+2022-12-09 11:43:05.362 GMT [10018] ERROR:  relation "account" does not exist
+2022-12-09 11:43:05.362 GMT [10018] STATEMENT:  /*create a table savings_account with a foreign key to account*/
+	CREATE TABLE savings_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:43:05.366 GMT [10018] ERROR:  relation "account" does not exist
+2022-12-09 11:43:05.366 GMT [10018] STATEMENT:  /*create a table credit_account with a foreign key to account*/
+	CREATE TABLE credit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    credit_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:43:05.372 GMT [10018] ERROR:  relation "credit_account" does not exist
+2022-12-09 11:43:05.372 GMT [10018] STATEMENT:  /*create a table credit_account_application with a foreign key to credit_account*/
+	CREATE TABLE credit_account_application (
+	    id SERIAL PRIMARY KEY,
+	    credit_account_id INTEGER REFERENCES credit_account(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:43:05.377 GMT [10018] ERROR:  relation "account" does not exist
+2022-12-09 11:43:05.377 GMT [10018] STATEMENT:  /*create a table debit_account with a foreign key to account*/
+	CREATE TABLE debit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    overdraft_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:43:05.382 GMT [10018] ERROR:  relation "account" does not exist
+2022-12-09 11:43:05.382 GMT [10018] STATEMENT:  /*create a table loan with a foreign key to account*/
+	CREATE TABLE loan (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2),
+	    loan_amount NUMERIC(10,2),
+	    loan_term INTEGER,
+	    loan_start_date DATE,
+	    loan_end_date DATE
+	);
+2022-12-09 11:43:05.389 GMT [10018] ERROR:  relation "loan" does not exist
+2022-12-09 11:43:05.389 GMT [10018] STATEMENT:  /*create a table loan_application with a foreign key to loan*/
+	CREATE TABLE loan_application (
+	    id SERIAL PRIMARY KEY,
+	    loan_id INTEGER REFERENCES loan(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:43:05.394 GMT [10018] ERROR:  relation "account" does not exist
+2022-12-09 11:43:05.394 GMT [10018] STATEMENT:  /*create a table transaction with a foreign key to account*/
+	CREATE TABLE transaction (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    transaction_date DATE,
+	    transaction_type VARCHAR(255),
+	    transaction_amount NUMERIC(10,2)
+	);
+2022-12-09 11:43:05.406 GMT [10018] ERROR:  relation "account" does not exist
+2022-12-09 11:43:05.406 GMT [10018] STATEMENT:  /*create a table to log all actions*/
+	CREATE TABLE log (
+	    id SERIAL PRIMARY KEY,
+	    date DATE,
+	    action VARCHAR(255),
+	    customer_id INTEGER REFERENCES customer(id),
+	    account_id INTEGER REFERENCES account(id)
+	);
+2022-12-09 11:43:05.408 GMT [10018] ERROR:  relation "account" does not exist at character 64
+2022-12-09 11:43:05.408 GMT [10018] STATEMENT:  /*insert 10 elements of sample data into account*/
+	INSERT INTO account (init_date, customer_id)
+	VALUES
+	    ('2019-01-01', 1),
+	    ('2019-01-01', 2),
+	    ('2019-01-01', 3),
+	    ('2019-01-01', 4),
+	    ('2019-01-01', 5),
+	    ('2019-01-01', 6),
+	    ('2019-01-01', 7),
+	    ('2019-01-01', 8),
+	    ('2019-01-01', 9),
+	    ('2019-01-01', 10);
+2022-12-09 11:43:05.409 GMT [10018] ERROR:  relation "savings_account" does not exist at character 113
+2022-12-09 11:43:05.409 GMT [10018] STATEMENT:  /*insert 8 elements of sample data into savings_account with different amounts and interest rates*/
+	INSERT INTO savings_account (account_id, current_balance, interest_rate)
+	VALUES
+	    (1, 1000.00, 0.01),
+	    (2, 2000.00, 0.02),
+	    (3, 3000.00, 0.03),
+	    (4, 4000.00, 0.04),
+	    (5, 5000.00, 0.05),
+	    (6, 6000.00, 0.06),
+	    (7, 7000.00, 0.07),
+	    (8, 8000.00, 0.08);
+2022-12-09 11:43:05.409 GMT [10018] ERROR:  relation "credit_account" does not exist at character 128
+2022-12-09 11:43:05.409 GMT [10018] STATEMENT:  /*insert 8 elements of sample data into credit_account with different amounts, credit limits, and interest rates*/
+	INSERT INTO credit_account (account_id, current_balance, credit_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:43:05.409 GMT [10018] ERROR:  relation "debit_account" does not exist at character 130
+2022-12-09 11:43:05.409 GMT [10018] STATEMENT:  /*insert 8 elements of sample data into debit_account with different amounts, overdraft limits, and interest rates*/
+	INSERT INTO debit_account (account_id, current_balance, overdraft_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:43:05.409 GMT [10018] ERROR:  relation "loan" does not exist at character 141
+2022-12-09 11:43:05.409 GMT [10018] STATEMENT:  /*insert 8 elements of sample data into loan with different amounts, interest rates, loan terms, and loan start and end dates*/
+	INSERT INTO loan (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date)
+	VALUES
+	    (1, 1000.00, 0.01, 12, '2019-01-01', '2020-01-01'),
+	    (2, 2000.00, 0.02, 12, '2019-01-01', '2020-01-01'),
+	    (3, 3000.00, 0.03, 12, '2019-01-01', '2020-01-01'),
+	    (4, 4000.00, 0.04, 12, '2019-01-01', '2020-01-01'),
+	    (5, 5000.00, 0.05, 12, '2019-01-01', '2020-01-01'),
+	    (6, 6000.00, 0.06, 12, '2019-01-01', '2020-01-01'),
+	    (7, 7000.00, 0.07, 12, '2019-01-01', '2020-01-01'),
+	    (8, 8000.00, 0.08, 12, '2019-01-01', '2020-01-01');
+2022-12-09 11:47:19.564 GMT [10844] ERROR:  schema "online_banking" already exists
+2022-12-09 11:47:19.564 GMT [10844] STATEMENT:  /*create schema*/
+	CREATE SCHEMA online_banking;
+2022-12-09 11:47:19.566 GMT [10844] ERROR:  relation "customer" already exists
+2022-12-09 11:47:19.566 GMT [10844] STATEMENT:  /*create a table customer with their address as an array*/
+	CREATE TABLE customer (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    first_name VARCHAR(255),
+	    last_name VARCHAR(255),
+	    date_of_birth DATE,
+	    phone_number VARCHAR(255),
+	    address VARCHAR(255) []
+	);
+2022-12-09 11:47:19.567 GMT [10844] ERROR:  syntax error at or near ")" at character 178
+2022-12-09 11:47:19.567 GMT [10844] STATEMENT:  /*create a table account with a foreign key to customer*/
+	CREATE TABLE account (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    customer_id INTEGER REFERENCES customer(id),
+	);
+2022-12-09 11:47:19.572 GMT [10844] ERROR:  relation "account" does not exist
+2022-12-09 11:47:19.572 GMT [10844] STATEMENT:  /*create a table savings_account with a foreign key to account*/
+	CREATE TABLE savings_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:47:19.579 GMT [10844] ERROR:  relation "account" does not exist
+2022-12-09 11:47:19.579 GMT [10844] STATEMENT:  /*create a table credit_account with a foreign key to account*/
+	CREATE TABLE credit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    credit_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:47:19.585 GMT [10844] ERROR:  relation "credit_account" does not exist
+2022-12-09 11:47:19.585 GMT [10844] STATEMENT:  /*create a table credit_account_application with a foreign key to credit_account*/
+	CREATE TABLE credit_account_application (
+	    id SERIAL PRIMARY KEY,
+	    credit_account_id INTEGER REFERENCES credit_account(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:47:19.589 GMT [10844] ERROR:  relation "account" does not exist
+2022-12-09 11:47:19.589 GMT [10844] STATEMENT:  /*create a table debit_account with a foreign key to account*/
+	CREATE TABLE debit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    overdraft_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:47:19.593 GMT [10844] ERROR:  relation "account" does not exist
+2022-12-09 11:47:19.593 GMT [10844] STATEMENT:  /*create a table loan with a foreign key to account*/
+	CREATE TABLE loan (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2),
+	    loan_amount NUMERIC(10,2),
+	    loan_term INTEGER,
+	    loan_start_date DATE,
+	    loan_end_date DATE
+	);
+2022-12-09 11:47:19.598 GMT [10844] ERROR:  relation "loan" does not exist
+2022-12-09 11:47:19.598 GMT [10844] STATEMENT:  /*create a table loan_application with a foreign key to loan*/
+	CREATE TABLE loan_application (
+	    id SERIAL PRIMARY KEY,
+	    loan_id INTEGER REFERENCES loan(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:47:19.603 GMT [10844] ERROR:  relation "account" does not exist
+2022-12-09 11:47:19.603 GMT [10844] STATEMENT:  /*create a table transaction with a foreign key to account*/
+	CREATE TABLE transaction (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    transaction_date DATE,
+	    transaction_type VARCHAR(255),
+	    transaction_amount NUMERIC(10,2)
+	);
+2022-12-09 11:47:19.609 GMT [10844] ERROR:  relation "account" does not exist
+2022-12-09 11:47:19.609 GMT [10844] STATEMENT:  /*create a table to log all actions*/
+	CREATE TABLE log (
+	    id SERIAL PRIMARY KEY,
+	    date DATE,
+	    action VARCHAR(255),
+	    customer_id INTEGER REFERENCES customer(id),
+	    account_id INTEGER REFERENCES account(id)
+	);
+2022-12-09 11:47:19.613 GMT [10844] ERROR:  relation "account" does not exist at character 64
+2022-12-09 11:47:19.613 GMT [10844] STATEMENT:  /*insert 10 elements of sample data into account*/
+	INSERT INTO account (init_date, customer_id)
+	VALUES
+	    ('2019-01-01', 1),
+	    ('2019-01-01', 2),
+	    ('2019-01-01', 3),
+	    ('2019-01-01', 4),
+	    ('2019-01-01', 5),
+	    ('2019-01-01', 6),
+	    ('2019-01-01', 7),
+	    ('2019-01-01', 8),
+	    ('2019-01-01', 9),
+	    ('2019-01-01', 10);
+2022-12-09 11:47:19.614 GMT [10844] ERROR:  relation "savings_account" does not exist at character 113
+2022-12-09 11:47:19.614 GMT [10844] STATEMENT:  /*insert 8 elements of sample data into savings_account with different amounts and interest rates*/
+	INSERT INTO savings_account (account_id, current_balance, interest_rate)
+	VALUES
+	    (1, 1000.00, 0.01),
+	    (2, 2000.00, 0.02),
+	    (3, 3000.00, 0.03),
+	    (4, 4000.00, 0.04),
+	    (5, 5000.00, 0.05),
+	    (6, 6000.00, 0.06),
+	    (7, 7000.00, 0.07),
+	    (8, 8000.00, 0.08);
+2022-12-09 11:47:19.615 GMT [10844] ERROR:  relation "credit_account" does not exist at character 128
+2022-12-09 11:47:19.615 GMT [10844] STATEMENT:  /*insert 8 elements of sample data into credit_account with different amounts, credit limits, and interest rates*/
+	INSERT INTO credit_account (account_id, current_balance, credit_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:47:19.618 GMT [10844] ERROR:  relation "debit_account" does not exist at character 130
+2022-12-09 11:47:19.618 GMT [10844] STATEMENT:  /*insert 8 elements of sample data into debit_account with different amounts, overdraft limits, and interest rates*/
+	INSERT INTO debit_account (account_id, current_balance, overdraft_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:47:19.618 GMT [10844] ERROR:  relation "loan" does not exist at character 141
+2022-12-09 11:47:19.618 GMT [10844] STATEMENT:  /*insert 8 elements of sample data into loan with different amounts, interest rates, loan terms, and loan start and end dates*/
+	INSERT INTO loan (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date)
+	VALUES
+	    (1, 1000.00, 0.01, 12, '2019-01-01', '2020-01-01'),
+	    (2, 2000.00, 0.02, 12, '2019-01-01', '2020-01-01'),
+	    (3, 3000.00, 0.03, 12, '2019-01-01', '2020-01-01'),
+	    (4, 4000.00, 0.04, 12, '2019-01-01', '2020-01-01'),
+	    (5, 5000.00, 0.05, 12, '2019-01-01', '2020-01-01'),
+	    (6, 6000.00, 0.06, 12, '2019-01-01', '2020-01-01'),
+	    (7, 7000.00, 0.07, 12, '2019-01-01', '2020-01-01'),
+	    (8, 8000.00, 0.08, 12, '2019-01-01', '2020-01-01');
+2022-12-09 11:48:33.730 GMT [11109] ERROR:  schema "online_banking" already exists
+2022-12-09 11:48:33.730 GMT [11109] STATEMENT:  /*create schema*/
+	CREATE SCHEMA online_banking;
+2022-12-09 11:48:33.731 GMT [11109] ERROR:  syntax error at or near ")" at character 246
+2022-12-09 11:48:33.731 GMT [11109] STATEMENT:  /*create a table customer with their address as an array*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*create a table account with a foreign key to customer*/
+	CREATE TABLE account (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    customer_id INTEGER REFERENCES customer(id),
+	);
+2022-12-09 11:48:33.737 GMT [11109] ERROR:  relation "account" does not exist
+2022-12-09 11:48:33.737 GMT [11109] STATEMENT:  /*create a table savings_account with a foreign key to account*/
+	CREATE TABLE savings_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:48:33.741 GMT [11109] ERROR:  relation "account" does not exist
+2022-12-09 11:48:33.741 GMT [11109] STATEMENT:  /*create a table credit_account with a foreign key to account*/
+	CREATE TABLE credit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    credit_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:48:33.747 GMT [11109] ERROR:  relation "credit_account" does not exist
+2022-12-09 11:48:33.747 GMT [11109] STATEMENT:  /*create a table credit_account_application with a foreign key to credit_account*/
+	CREATE TABLE credit_account_application (
+	    id SERIAL PRIMARY KEY,
+	    credit_account_id INTEGER REFERENCES credit_account(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:48:33.752 GMT [11109] ERROR:  relation "account" does not exist
+2022-12-09 11:48:33.752 GMT [11109] STATEMENT:  /*create a table debit_account with a foreign key to account*/
+	CREATE TABLE debit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    overdraft_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:48:33.757 GMT [11109] ERROR:  relation "account" does not exist
+2022-12-09 11:48:33.757 GMT [11109] STATEMENT:  /*create a table loan with a foreign key to account*/
+	CREATE TABLE loan (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2),
+	    loan_amount NUMERIC(10,2),
+	    loan_term INTEGER,
+	    loan_start_date DATE,
+	    loan_end_date DATE
+	);
+2022-12-09 11:48:33.762 GMT [11109] ERROR:  relation "loan" does not exist
+2022-12-09 11:48:33.762 GMT [11109] STATEMENT:  /*create a table loan_application with a foreign key to loan*/
+	CREATE TABLE loan_application (
+	    id SERIAL PRIMARY KEY,
+	    loan_id INTEGER REFERENCES loan(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:48:33.768 GMT [11109] ERROR:  relation "account" does not exist
+2022-12-09 11:48:33.768 GMT [11109] STATEMENT:  /*create a table transaction with a foreign key to account*/
+	CREATE TABLE transaction (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    transaction_date DATE,
+	    transaction_type VARCHAR(255),
+	    transaction_amount NUMERIC(10,2)
+	);
+2022-12-09 11:48:33.772 GMT [11109] ERROR:  relation "account" does not exist
+2022-12-09 11:48:33.772 GMT [11109] STATEMENT:  /*create a table to log all actions*/
+	CREATE TABLE log (
+	    id SERIAL PRIMARY KEY,
+	    date DATE,
+	    action VARCHAR(255),
+	    customer_id INTEGER REFERENCES customer(id),
+	    account_id INTEGER REFERENCES account(id)
+	);
+2022-12-09 11:48:33.774 GMT [11109] ERROR:  relation "account" does not exist at character 64
+2022-12-09 11:48:33.774 GMT [11109] STATEMENT:  /*insert 10 elements of sample data into account*/
+	INSERT INTO account (init_date, customer_id)
+	VALUES
+	    ('2019-01-01', 1),
+	    ('2019-01-01', 2),
+	    ('2019-01-01', 3),
+	    ('2019-01-01', 4),
+	    ('2019-01-01', 5),
+	    ('2019-01-01', 6),
+	    ('2019-01-01', 7),
+	    ('2019-01-01', 8),
+	    ('2019-01-01', 9),
+	    ('2019-01-01', 10);
+2022-12-09 11:48:33.775 GMT [11109] ERROR:  relation "savings_account" does not exist at character 113
+2022-12-09 11:48:33.775 GMT [11109] STATEMENT:  /*insert 8 elements of sample data into savings_account with different amounts and interest rates*/
+	INSERT INTO savings_account (account_id, current_balance, interest_rate)
+	VALUES
+	    (1, 1000.00, 0.01),
+	    (2, 2000.00, 0.02),
+	    (3, 3000.00, 0.03),
+	    (4, 4000.00, 0.04),
+	    (5, 5000.00, 0.05),
+	    (6, 6000.00, 0.06),
+	    (7, 7000.00, 0.07),
+	    (8, 8000.00, 0.08);
+2022-12-09 11:48:33.775 GMT [11109] ERROR:  relation "credit_account" does not exist at character 128
+2022-12-09 11:48:33.775 GMT [11109] STATEMENT:  /*insert 8 elements of sample data into credit_account with different amounts, credit limits, and interest rates*/
+	INSERT INTO credit_account (account_id, current_balance, credit_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:48:33.775 GMT [11109] ERROR:  relation "debit_account" does not exist at character 130
+2022-12-09 11:48:33.775 GMT [11109] STATEMENT:  /*insert 8 elements of sample data into debit_account with different amounts, overdraft limits, and interest rates*/
+	INSERT INTO debit_account (account_id, current_balance, overdraft_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:48:33.776 GMT [11109] ERROR:  relation "loan" does not exist at character 141
+2022-12-09 11:48:33.776 GMT [11109] STATEMENT:  /*insert 8 elements of sample data into loan with different amounts, interest rates, loan terms, and loan start and end dates*/
+	INSERT INTO loan (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date)
+	VALUES
+	    (1, 1000.00, 0.01, 12, '2019-01-01', '2020-01-01'),
+	    (2, 2000.00, 0.02, 12, '2019-01-01', '2020-01-01'),
+	    (3, 3000.00, 0.03, 12, '2019-01-01', '2020-01-01'),
+	    (4, 4000.00, 0.04, 12, '2019-01-01', '2020-01-01'),
+	    (5, 5000.00, 0.05, 12, '2019-01-01', '2020-01-01'),
+	    (6, 6000.00, 0.06, 12, '2019-01-01', '2020-01-01'),
+	    (7, 7000.00, 0.07, 12, '2019-01-01', '2020-01-01'),
+	    (8, 8000.00, 0.08, 12, '2019-01-01', '2020-01-01');
+2022-12-09 11:48:58.066 GMT [11255] ERROR:  schema "online_banking" already exists
+2022-12-09 11:48:58.066 GMT [11255] STATEMENT:  /*create schema*/
+	CREATE SCHEMA online_banking;
+2022-12-09 11:48:58.069 GMT [11255] ERROR:  relation "customer" already exists
+2022-12-09 11:48:58.069 GMT [11255] STATEMENT:  /*create a table customer with their address as an array*/
+	CREATE TABLE customer (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    first_name VARCHAR(255),
+	    last_name VARCHAR(255),
+	    date_of_birth DATE,
+	    phone_number VARCHAR(255),
+	    address VARCHAR(255) []
+	);
+2022-12-09 11:48:58.075 GMT [11255] ERROR:  relation "account" does not exist
+2022-12-09 11:48:58.075 GMT [11255] STATEMENT:  /*create a table account with a foreign key to customer*/
+	
+	
+	
+	
+	
+	/*create a table savings_account with a foreign key to account*/
+	CREATE TABLE savings_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:48:58.079 GMT [11255] ERROR:  relation "account" does not exist
+2022-12-09 11:48:58.079 GMT [11255] STATEMENT:  /*create a table credit_account with a foreign key to account*/
+	CREATE TABLE credit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    credit_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:48:58.084 GMT [11255] ERROR:  relation "credit_account" does not exist
+2022-12-09 11:48:58.084 GMT [11255] STATEMENT:  /*create a table credit_account_application with a foreign key to credit_account*/
+	CREATE TABLE credit_account_application (
+	    id SERIAL PRIMARY KEY,
+	    credit_account_id INTEGER REFERENCES credit_account(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:48:58.090 GMT [11255] ERROR:  relation "account" does not exist
+2022-12-09 11:48:58.090 GMT [11255] STATEMENT:  /*create a table debit_account with a foreign key to account*/
+	CREATE TABLE debit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    overdraft_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:48:58.094 GMT [11255] ERROR:  relation "account" does not exist
+2022-12-09 11:48:58.094 GMT [11255] STATEMENT:  /*create a table loan with a foreign key to account*/
+	CREATE TABLE loan (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2),
+	    loan_amount NUMERIC(10,2),
+	    loan_term INTEGER,
+	    loan_start_date DATE,
+	    loan_end_date DATE
+	);
+2022-12-09 11:48:58.103 GMT [11255] ERROR:  relation "loan" does not exist
+2022-12-09 11:48:58.103 GMT [11255] STATEMENT:  /*create a table loan_application with a foreign key to loan*/
+	CREATE TABLE loan_application (
+	    id SERIAL PRIMARY KEY,
+	    loan_id INTEGER REFERENCES loan(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:48:58.107 GMT [11255] ERROR:  relation "account" does not exist
+2022-12-09 11:48:58.107 GMT [11255] STATEMENT:  /*create a table transaction with a foreign key to account*/
+	CREATE TABLE transaction (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    transaction_date DATE,
+	    transaction_type VARCHAR(255),
+	    transaction_amount NUMERIC(10,2)
+	);
+2022-12-09 11:48:58.112 GMT [11255] ERROR:  relation "account" does not exist
+2022-12-09 11:48:58.112 GMT [11255] STATEMENT:  /*create a table to log all actions*/
+	CREATE TABLE log (
+	    id SERIAL PRIMARY KEY,
+	    date DATE,
+	    action VARCHAR(255),
+	    customer_id INTEGER REFERENCES customer(id),
+	    account_id INTEGER REFERENCES account(id)
+	);
+2022-12-09 11:48:58.114 GMT [11255] ERROR:  relation "account" does not exist at character 64
+2022-12-09 11:48:58.114 GMT [11255] STATEMENT:  /*insert 10 elements of sample data into account*/
+	INSERT INTO account (init_date, customer_id)
+	VALUES
+	    ('2019-01-01', 1),
+	    ('2019-01-01', 2),
+	    ('2019-01-01', 3),
+	    ('2019-01-01', 4),
+	    ('2019-01-01', 5),
+	    ('2019-01-01', 6),
+	    ('2019-01-01', 7),
+	    ('2019-01-01', 8),
+	    ('2019-01-01', 9),
+	    ('2019-01-01', 10);
+2022-12-09 11:48:58.115 GMT [11255] ERROR:  relation "savings_account" does not exist at character 113
+2022-12-09 11:48:58.115 GMT [11255] STATEMENT:  /*insert 8 elements of sample data into savings_account with different amounts and interest rates*/
+	INSERT INTO savings_account (account_id, current_balance, interest_rate)
+	VALUES
+	    (1, 1000.00, 0.01),
+	    (2, 2000.00, 0.02),
+	    (3, 3000.00, 0.03),
+	    (4, 4000.00, 0.04),
+	    (5, 5000.00, 0.05),
+	    (6, 6000.00, 0.06),
+	    (7, 7000.00, 0.07),
+	    (8, 8000.00, 0.08);
+2022-12-09 11:48:58.115 GMT [11255] ERROR:  relation "credit_account" does not exist at character 128
+2022-12-09 11:48:58.115 GMT [11255] STATEMENT:  /*insert 8 elements of sample data into credit_account with different amounts, credit limits, and interest rates*/
+	INSERT INTO credit_account (account_id, current_balance, credit_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:48:58.115 GMT [11255] ERROR:  relation "debit_account" does not exist at character 130
+2022-12-09 11:48:58.115 GMT [11255] STATEMENT:  /*insert 8 elements of sample data into debit_account with different amounts, overdraft limits, and interest rates*/
+	INSERT INTO debit_account (account_id, current_balance, overdraft_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:48:58.115 GMT [11255] ERROR:  relation "loan" does not exist at character 141
+2022-12-09 11:48:58.115 GMT [11255] STATEMENT:  /*insert 8 elements of sample data into loan with different amounts, interest rates, loan terms, and loan start and end dates*/
+	INSERT INTO loan (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date)
+	VALUES
+	    (1, 1000.00, 0.01, 12, '2019-01-01', '2020-01-01'),
+	    (2, 2000.00, 0.02, 12, '2019-01-01', '2020-01-01'),
+	    (3, 3000.00, 0.03, 12, '2019-01-01', '2020-01-01'),
+	    (4, 4000.00, 0.04, 12, '2019-01-01', '2020-01-01'),
+	    (5, 5000.00, 0.05, 12, '2019-01-01', '2020-01-01'),
+	    (6, 6000.00, 0.06, 12, '2019-01-01', '2020-01-01'),
+	    (7, 7000.00, 0.07, 12, '2019-01-01', '2020-01-01'),
+	    (8, 8000.00, 0.08, 12, '2019-01-01', '2020-01-01');
+2022-12-09 11:49:38.773 GMT [11430] ERROR:  schema "online_banking" already exists
+2022-12-09 11:49:38.773 GMT [11430] STATEMENT:  /*create schema*/
+	CREATE SCHEMA online_banking;
+2022-12-09 11:49:38.776 GMT [11430] ERROR:  relation "customer" already exists
+2022-12-09 11:49:38.776 GMT [11430] STATEMENT:  /*create a table customer with their address as an array*/
+	CREATE TABLE customer (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    first_name VARCHAR(255),
+	    last_name VARCHAR(255),
+	    date_of_birth DATE,
+	    phone_number VARCHAR(255),
+	    address VARCHAR(255) []
+	);
+2022-12-09 11:49:38.776 GMT [11430] ERROR:  syntax error at or near ")" at character 178
+2022-12-09 11:49:38.776 GMT [11430] STATEMENT:  /*create a table account with a foreign key to customer*/
+	CREATE TABLE account (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    customer_id INTEGER REFERENCES customer(id),
+	);
+2022-12-09 11:49:38.783 GMT [11430] ERROR:  relation "account" does not exist
+2022-12-09 11:49:38.783 GMT [11430] STATEMENT:  /*create a table savings_account with a foreign key to account*/
+	CREATE TABLE savings_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:49:38.788 GMT [11430] ERROR:  relation "account" does not exist
+2022-12-09 11:49:38.788 GMT [11430] STATEMENT:  /*create a table credit_account with a foreign key to account*/
+	CREATE TABLE credit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    credit_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:49:38.792 GMT [11430] ERROR:  relation "credit_account" does not exist
+2022-12-09 11:49:38.792 GMT [11430] STATEMENT:  /*create a table credit_account_application with a foreign key to credit_account*/
+	CREATE TABLE credit_account_application (
+	    id SERIAL PRIMARY KEY,
+	    credit_account_id INTEGER REFERENCES credit_account(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:49:38.798 GMT [11430] ERROR:  relation "account" does not exist
+2022-12-09 11:49:38.798 GMT [11430] STATEMENT:  /*create a table debit_account with a foreign key to account*/
+	CREATE TABLE debit_account (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    overdraft_limit NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2)
+	);
+2022-12-09 11:49:38.802 GMT [11430] ERROR:  relation "account" does not exist
+2022-12-09 11:49:38.802 GMT [11430] STATEMENT:  /*create a table loan with a foreign key to account*/
+	CREATE TABLE loan (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    current_balance NUMERIC(10,2),
+	    interest_rate NUMERIC(5,2),
+	    loan_amount NUMERIC(10,2),
+	    loan_term INTEGER,
+	    loan_start_date DATE,
+	    loan_end_date DATE
+	);
+2022-12-09 11:49:38.806 GMT [11430] ERROR:  relation "loan" does not exist
+2022-12-09 11:49:38.806 GMT [11430] STATEMENT:  /*create a table loan_application with a foreign key to loan*/
+	CREATE TABLE loan_application (
+	    id SERIAL PRIMARY KEY,
+	    loan_id INTEGER REFERENCES loan(id),
+	    is_approved BOOLEAN,
+	    application_date DATE,
+	    status VARCHAR(255)
+	);
+2022-12-09 11:49:38.812 GMT [11430] ERROR:  relation "account" does not exist
+2022-12-09 11:49:38.812 GMT [11430] STATEMENT:  /*create a table transaction with a foreign key to account*/
+	CREATE TABLE transaction (
+	    id SERIAL PRIMARY KEY,
+	    account_id INTEGER REFERENCES account(id),
+	    transaction_date DATE,
+	    transaction_type VARCHAR(255),
+	    transaction_amount NUMERIC(10,2)
+	);
+2022-12-09 11:49:38.817 GMT [11430] ERROR:  relation "account" does not exist
+2022-12-09 11:49:38.817 GMT [11430] STATEMENT:  /*create a table to log all actions*/
+	CREATE TABLE log (
+	    id SERIAL PRIMARY KEY,
+	    date DATE,
+	    action VARCHAR(255),
+	    customer_id INTEGER REFERENCES customer(id),
+	    account_id INTEGER REFERENCES account(id)
+	);
+2022-12-09 11:49:38.820 GMT [11430] ERROR:  relation "account" does not exist at character 64
+2022-12-09 11:49:38.820 GMT [11430] STATEMENT:  /*insert 10 elements of sample data into account*/
+	INSERT INTO account (init_date, customer_id)
+	VALUES
+	    ('2019-01-01', 1),
+	    ('2019-01-01', 2),
+	    ('2019-01-01', 3),
+	    ('2019-01-01', 4),
+	    ('2019-01-01', 5),
+	    ('2019-01-01', 6),
+	    ('2019-01-01', 7),
+	    ('2019-01-01', 8),
+	    ('2019-01-01', 9),
+	    ('2019-01-01', 10);
+2022-12-09 11:49:38.820 GMT [11430] ERROR:  relation "savings_account" does not exist at character 113
+2022-12-09 11:49:38.820 GMT [11430] STATEMENT:  /*insert 8 elements of sample data into savings_account with different amounts and interest rates*/
+	INSERT INTO savings_account (account_id, current_balance, interest_rate)
+	VALUES
+	    (1, 1000.00, 0.01),
+	    (2, 2000.00, 0.02),
+	    (3, 3000.00, 0.03),
+	    (4, 4000.00, 0.04),
+	    (5, 5000.00, 0.05),
+	    (6, 6000.00, 0.06),
+	    (7, 7000.00, 0.07),
+	    (8, 8000.00, 0.08);
+2022-12-09 11:49:38.820 GMT [11430] ERROR:  relation "credit_account" does not exist at character 128
+2022-12-09 11:49:38.820 GMT [11430] STATEMENT:  /*insert 8 elements of sample data into credit_account with different amounts, credit limits, and interest rates*/
+	INSERT INTO credit_account (account_id, current_balance, credit_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:49:38.821 GMT [11430] ERROR:  relation "debit_account" does not exist at character 130
+2022-12-09 11:49:38.821 GMT [11430] STATEMENT:  /*insert 8 elements of sample data into debit_account with different amounts, overdraft limits, and interest rates*/
+	INSERT INTO debit_account (account_id, current_balance, overdraft_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-09 11:49:38.821 GMT [11430] ERROR:  relation "loan" does not exist at character 141
+2022-12-09 11:49:38.821 GMT [11430] STATEMENT:  /*insert 8 elements of sample data into loan with different amounts, interest rates, loan terms, and loan start and end dates*/
+	INSERT INTO loan (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date)
+	VALUES
+	    (1, 1000.00, 0.01, 12, '2019-01-01', '2020-01-01'),
+	    (2, 2000.00, 0.02, 12, '2019-01-01', '2020-01-01'),
+	    (3, 3000.00, 0.03, 12, '2019-01-01', '2020-01-01'),
+	    (4, 4000.00, 0.04, 12, '2019-01-01', '2020-01-01'),
+	    (5, 5000.00, 0.05, 12, '2019-01-01', '2020-01-01'),
+	    (6, 6000.00, 0.06, 12, '2019-01-01', '2020-01-01'),
+	    (7, 7000.00, 0.07, 12, '2019-01-01', '2020-01-01'),
+	    (8, 8000.00, 0.08, 12, '2019-01-01', '2020-01-01');
+2022-12-09 11:49:58.485 GMT [11533] ERROR:  schema "online_banking" already exists
+2022-12-09 11:49:58.485 GMT [11533] STATEMENT:  /*create schema*/
+	CREATE SCHEMA online_banking;
+2022-12-09 11:49:58.487 GMT [11533] ERROR:  relation "customer" already exists
+2022-12-09 11:49:58.487 GMT [11533] STATEMENT:  /*create a table customer with their address as an array*/
+	CREATE TABLE customer (
+	    id SERIAL PRIMARY KEY,
+	    init_date DATE,
+	    first_name VARCHAR(255),
+	    last_name VARCHAR(255),
+	    date_of_birth DATE,
+	    phone_number VARCHAR(255),
+	    address VARCHAR(255) []
+	);
+2022-12-09 11:55:01.374 GMT [12612] ERROR:  relation "account" does not exist at character 15
+2022-12-09 11:55:01.374 GMT [12612] STATEMENT:  SELECT * FROM account;
+2022-12-09 11:56:10.718 GMT [8796] LOG:  received fast shutdown request
+2022-12-09 11:56:10.720 GMT [8796] LOG:  aborting any active transactions
+2022-12-09 11:56:10.725 GMT [8796] LOG:  background worker "logical replication launcher" (PID 8803) exited with exit code 1
+2022-12-09 11:56:10.727 GMT [8798] LOG:  shutting down
+2022-12-09 11:56:10.747 GMT [8796] LOG:  database system is shut down
+2022-12-09 11:56:22.126 GMT [13056] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-09 11:56:22.126 GMT [13056] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-09 11:56:22.128 GMT [13056] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-09 11:56:22.134 GMT [13057] LOG:  database system was shut down at 2022-12-09 11:56:21 GMT
+2022-12-09 11:56:22.139 GMT [13056] LOG:  database system is ready to accept connections
+2022-12-09 13:53:06.385 GMT [25292] ERROR:  syntax error at or near "NOT" at character 49
+2022-12-09 13:53:06.385 GMT [25292] STATEMENT:  /*Drop all tables if they exist*/
+	DROP TABLE IF NOT EXISTS customer;
+2022-12-09 13:53:06.386 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.386 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS account;
+2022-12-09 13:53:06.386 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.386 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS savings_account;
+2022-12-09 13:53:06.386 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.386 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS credit_account;
+2022-12-09 13:53:06.387 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.387 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS credit_account_application;
+2022-12-09 13:53:06.387 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.387 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS debit_account;
+2022-12-09 13:53:06.387 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.387 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS loan;
+2022-12-09 13:53:06.387 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.387 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS loan_application;
+2022-12-09 13:53:06.387 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.387 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS transaction;
+2022-12-09 13:53:06.387 GMT [25292] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:06.387 GMT [25292] STATEMENT:  DROP TABLE IF NOT EXISTS log;
+2022-12-09 13:53:13.162 GMT [25363] ERROR:  syntax error at or near "NOT" at character 49
+2022-12-09 13:53:13.162 GMT [25363] STATEMENT:  /*Drop all tables if they exist*/
+	DROP TABLE IF NOT EXISTS customer;
+2022-12-09 13:53:13.162 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.162 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS account;
+2022-12-09 13:53:13.162 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.162 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS savings_account;
+2022-12-09 13:53:13.163 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.163 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS credit_account;
+2022-12-09 13:53:13.163 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.163 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS credit_account_application;
+2022-12-09 13:53:13.163 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.163 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS debit_account;
+2022-12-09 13:53:13.163 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.163 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS loan;
+2022-12-09 13:53:13.164 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.164 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS loan_application;
+2022-12-09 13:53:13.164 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.164 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS transaction;
+2022-12-09 13:53:13.164 GMT [25363] ERROR:  syntax error at or near "NOT" at character 15
+2022-12-09 13:53:13.164 GMT [25363] STATEMENT:  DROP TABLE IF NOT EXISTS log;
+2022-12-09 13:57:05.405 GMT [26125] ERROR:  cannot drop table customer because other objects depend on it
+2022-12-09 13:57:05.405 GMT [26125] DETAIL:  constraint account_customer_id_fkey on table account depends on table customer
+	constraint log_customer_id_fkey on table log depends on table customer
+2022-12-09 13:57:05.405 GMT [26125] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2022-12-09 13:57:05.405 GMT [26125] STATEMENT:  /*Drop all tables if they exist*/
+	DROP TABLE IF EXISTS customer;
+2022-12-09 13:57:05.407 GMT [26125] ERROR:  cannot drop table account because other objects depend on it
+2022-12-09 13:57:05.407 GMT [26125] DETAIL:  constraint savings_account_account_id_fkey on table savings_account depends on table account
+	constraint credit_account_account_id_fkey on table credit_account depends on table account
+	constraint debit_account_account_id_fkey on table debit_account depends on table account
+	constraint loan_account_id_fkey on table loan depends on table account
+	constraint transaction_account_id_fkey on table transaction depends on table account
+	constraint log_account_id_fkey on table log depends on table account
+2022-12-09 13:57:05.407 GMT [26125] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2022-12-09 13:57:05.407 GMT [26125] STATEMENT:  DROP TABLE IF EXISTS account;
+2022-12-09 13:57:05.416 GMT [26125] ERROR:  cannot drop table credit_account because other objects depend on it
+2022-12-09 13:57:05.416 GMT [26125] DETAIL:  constraint credit_account_application_credit_account_id_fkey on table credit_account_application depends on table credit_account
+2022-12-09 13:57:05.416 GMT [26125] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2022-12-09 13:57:05.416 GMT [26125] STATEMENT:  DROP TABLE IF EXISTS credit_account;
+2022-12-09 13:57:05.420 GMT [26125] ERROR:  cannot drop table loan because other objects depend on it
+2022-12-09 13:57:05.420 GMT [26125] DETAIL:  constraint loan_application_loan_id_fkey on table loan_application depends on table loan
+2022-12-09 13:57:05.420 GMT [26125] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2022-12-09 13:57:05.420 GMT [26125] STATEMENT:  DROP TABLE IF EXISTS loan;
+2022-12-09 14:21:00.609 GMT [30632] ERROR:  cannot drop table customer because other objects depend on it
+2022-12-09 14:21:00.609 GMT [30632] DETAIL:  constraint account_customer_id_fkey on table account depends on table customer
+	constraint log_customer_id_fkey on table log depends on table customer
+2022-12-09 14:21:00.609 GMT [30632] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2022-12-09 14:21:00.609 GMT [30632] STATEMENT:  /*Drop all tables if they exist*/
+	DROP TABLE IF EXISTS customer;
+2022-12-09 14:21:00.611 GMT [30632] ERROR:  cannot drop table account because other objects depend on it
+2022-12-09 14:21:00.611 GMT [30632] DETAIL:  constraint credit_account_account_id_fkey on table credit_account depends on table account
+	constraint loan_account_id_fkey on table loan depends on table account
+	constraint savings_account_account_id_fkey on table savings_account depends on table account
+	constraint debit_account_account_id_fkey on table debit_account depends on table account
+	constraint transaction_account_id_fkey on table transaction depends on table account
+	constraint log_account_id_fkey on table log depends on table account
+2022-12-09 14:21:00.611 GMT [30632] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2022-12-09 14:21:00.611 GMT [30632] STATEMENT:  DROP TABLE IF EXISTS account;
+2022-12-09 14:21:00.615 GMT [30632] ERROR:  cannot drop table credit_account because other objects depend on it
+2022-12-09 14:21:00.615 GMT [30632] DETAIL:  constraint credit_account_application_credit_account_id_fkey on table credit_account_application depends on table credit_account
+2022-12-09 14:21:00.615 GMT [30632] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2022-12-09 14:21:00.615 GMT [30632] STATEMENT:  DROP TABLE IF EXISTS credit_account;
+2022-12-09 14:21:00.620 GMT [30632] ERROR:  cannot drop table loan because other objects depend on it
+2022-12-09 14:21:00.620 GMT [30632] DETAIL:  constraint loan_application_loan_id_fkey on table loan_application depends on table loan
+2022-12-09 14:21:00.620 GMT [30632] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2022-12-09 14:21:00.620 GMT [30632] STATEMENT:  DROP TABLE IF EXISTS loan;
+2022-12-09 14:23:19.655 GMT [13056] LOG:  received fast shutdown request
+2022-12-09 14:23:19.660 GMT [13056] LOG:  aborting any active transactions
+2022-12-09 14:23:19.664 GMT [13056] LOG:  background worker "logical replication launcher" (PID 13063) exited with exit code 1
+2022-12-09 14:23:19.665 GMT [13058] LOG:  shutting down
+2022-12-09 14:23:19.695 GMT [13056] LOG:  database system is shut down
+2022-12-09 14:23:26.307 GMT [31154] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-09 14:23:26.307 GMT [31154] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-09 14:23:26.309 GMT [31154] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-09 14:23:26.315 GMT [31155] LOG:  database system was shut down at 2022-12-09 14:23:26 GMT
+2022-12-09 14:23:26.320 GMT [31154] LOG:  database system is ready to accept connections
+2022-12-09 15:40:56.326 GMT [31154] LOG:  received smart shutdown request
+2022-12-09 15:40:56.344 GMT [31154] LOG:  received SIGHUP, reloading configuration files
+2022-12-09 15:40:56.371 GMT [31154] LOG:  background worker "logical replication launcher" (PID 31161) exited with exit code 1
+2022-12-09 15:40:56.397 GMT [31156] LOG:  shutting down
+2022-12-09 15:40:56.413 GMT [31154] LOG:  database system is shut down
+2022-12-21 10:45:29.262 GMT [9903] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-21 10:45:29.265 GMT [9903] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-21 10:45:29.266 GMT [9903] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-21 10:45:29.270 GMT [9904] LOG:  database system was shut down at 2022-12-21 10:45:29 GMT
+2022-12-21 10:45:29.275 GMT [9903] LOG:  database system is ready to accept connections
+2022-12-21 10:45:29.838 GMT [9929] ERROR:  syntax error at or near "passwd" at character 329
+2022-12-21 10:45:29.838 GMT [9929] STATEMENT:  CREATE OR REPLACE FUNCTION add_account(customer_id INTEGER, username TEXT, passwd TEXT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	BEGIN
+	    INSERT INTO account (init_date, customer_id, username, passwd)
+	    VALUES (current_date, customer_id, username, DIGEST(passwd, 'sha256'));
+	    CREATE ROLE username WITH LOGIN PASSWORD passwd;
+	    INSERT INTO log (log_date, log_message, customer_id)
+	    VALUES (current_date, 'Account added', customer_id);
+	    passed := true;
+	    RETURN passed;
+	END;
+	$$ LANGUAGE plpgsql;
+2022-12-21 11:19:48.349 GMT [9903] LOG:  received fast shutdown request
+2022-12-21 11:19:48.351 GMT [9903] LOG:  aborting any active transactions
+2022-12-21 11:19:48.355 GMT [9903] LOG:  background worker "logical replication launcher" (PID 9910) exited with exit code 1
+2022-12-21 11:19:48.356 GMT [9905] LOG:  shutting down
+2022-12-21 11:19:48.369 GMT [9903] LOG:  database system is shut down
+2022-12-21 11:19:58.223 GMT [15790] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-21 11:19:58.223 GMT [15790] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-21 11:19:58.224 GMT [15790] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-21 11:19:58.228 GMT [15791] LOG:  database system was shut down at 2022-12-21 11:19:57 GMT
+2022-12-21 11:19:58.234 GMT [15790] LOG:  database system is ready to accept connections
+2022-12-21 11:20:46.015 GMT [15790] LOG:  received fast shutdown request
+2022-12-21 11:20:46.016 GMT [15790] LOG:  aborting any active transactions
+2022-12-21 11:20:46.019 GMT [15790] LOG:  background worker "logical replication launcher" (PID 15797) exited with exit code 1
+2022-12-21 11:20:46.023 GMT [15792] LOG:  shutting down
+2022-12-21 11:20:46.056 GMT [15790] LOG:  database system is shut down
+2022-12-21 11:20:49.043 GMT [16071] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-21 11:20:49.044 GMT [16071] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-21 11:20:49.045 GMT [16071] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-21 11:20:49.049 GMT [16072] LOG:  database system was shut down at 2022-12-21 11:20:48 GMT
+2022-12-21 11:20:49.055 GMT [16071] LOG:  database system is ready to accept connections
+2022-12-21 11:20:49.606 GMT [16115] ERROR:  syntax error at or near "DIGEST" at character 329
+2022-12-21 11:20:49.606 GMT [16115] STATEMENT:  CREATE OR REPLACE FUNCTION add_account(customer_id INTEGER, username TEXT, passwd TEXT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	BEGIN
+	    INSERT INTO account (init_date, customer_id, username, passwd)
+	    VALUES (current_date, customer_id, username, DIGEST(passwd, 'sha256'));
+	    CREATE ROLE username WITH LOGIN PASSWORD DIGEST(passwd, 'sha256');
+	    INSERT INTO log (log_date, log_message, customer_id)
+	    VALUES (current_date, 'Account added', customer_id);
+	    passed := true;
+	    RETURN passed;
+	END;
+	$$ LANGUAGE plpgsql;
+2022-12-22 13:48:08.835 GMT [16071] LOG:  received smart shutdown request
+2022-12-22 13:48:08.842 GMT [16071] LOG:  background worker "logical replication launcher" (PID 16078) exited with exit code 1
+2022-12-22 13:48:08.848 GMT [16071] LOG:  received SIGHUP, reloading configuration files
+2022-12-22 13:48:08.855 GMT [16073] LOG:  shutting down
+2022-12-22 13:48:08.903 GMT [16071] LOG:  database system is shut down
+2022-12-23 10:19:55.804 GMT [5354] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:19:55.807 GMT [5354] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:19:55.809 GMT [5354] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:19:55.813 GMT [5355] LOG:  database system was shut down at 2022-12-23 10:19:55 GMT
+2022-12-23 10:19:55.820 GMT [5354] LOG:  database system is ready to accept connections
+2022-12-23 10:19:56.580 GMT [5388] ERROR:  "passed" is not a known variable at character 405
+2022-12-23 10:19:56.580 GMT [5388] STATEMENT:  CREATE OR REPLACE FUNCTION add_account_role(username TEXT, passwd TEXT)
+	RETURNS BOOLEAN AS $$
+	BEGIN
+	    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = username) THEN
+	        EXECUTE format(
+	            'CREATE USER %I WITH
+	                LOGIN
+	                PASSWORD %L'
+	            , username
+	            , passwd
+	        );
+	        RAISE NOTICE 'CREATED USER "%"', username;
+	        passed := true;
+	        RETURN passed;
+	    ELSE
+	        RAISE NOTICE 'USER ALREADY EXISTS';
+	    END IF;
+	END;
+	$$ LANGUAGE plpgsql;
+2022-12-23 10:19:56.581 GMT [5388] ERROR:  syntax error at or near "DIGEST" at character 329
+2022-12-23 10:19:56.581 GMT [5388] STATEMENT:  CREATE OR REPLACE FUNCTION add_account(customer_id INTEGER, username TEXT, passwd TEXT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	BEGIN
+	    INSERT INTO account (init_date, customer_id, username, passwd)
+	    VALUES (current_date, customer_id, username, DIGEST(passwd, 'sha256'));
+	    CREATE ROLE username WITH LOGIN PASSWORD DIGEST(passwd, 'sha256');
+	    SELECT add_account_role()
+	    INSERT INTO log (log_date, log_message, customer_id)
+	    VALUES (current_date, 'Account added', customer_id);
+	    passed := true;
+	    RETURN passed;
+	END;
+	$$ LANGUAGE plpgsql;
+2022-12-23 10:23:50.206 GMT [5354] LOG:  received fast shutdown request
+2022-12-23 10:23:50.208 GMT [5354] LOG:  aborting any active transactions
+2022-12-23 10:23:50.215 GMT [5354] LOG:  background worker "logical replication launcher" (PID 5361) exited with exit code 1
+2022-12-23 10:23:50.216 GMT [5356] LOG:  shutting down
+2022-12-23 10:23:50.265 GMT [5354] LOG:  database system is shut down
+2022-12-23 10:23:53.105 GMT [6170] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:23:53.106 GMT [6170] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:23:53.107 GMT [6170] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:23:53.111 GMT [6171] LOG:  database system was shut down at 2022-12-23 10:23:52 GMT
+2022-12-23 10:23:53.117 GMT [6170] LOG:  database system is ready to accept connections
+2022-12-23 10:24:35.556 GMT [6170] LOG:  received fast shutdown request
+2022-12-23 10:24:35.557 GMT [6170] LOG:  aborting any active transactions
+2022-12-23 10:24:35.561 GMT [6170] LOG:  background worker "logical replication launcher" (PID 6177) exited with exit code 1
+2022-12-23 10:24:35.563 GMT [6172] LOG:  shutting down
+2022-12-23 10:24:35.604 GMT [6170] LOG:  database system is shut down
+2022-12-23 10:24:38.656 GMT [6448] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:24:38.656 GMT [6448] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:24:38.658 GMT [6448] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:24:38.663 GMT [6449] LOG:  database system was shut down at 2022-12-23 10:24:38 GMT
+2022-12-23 10:24:38.669 GMT [6448] LOG:  database system is ready to accept connections
+2022-12-23 10:24:39.361 GMT [6474] ERROR:  syntax error at or near "PERFORM" at character 1
+2022-12-23 10:24:39.361 GMT [6474] STATEMENT:  PERFORM add_account(0, 'hello', 'pass');
+2022-12-23 10:28:56.606 GMT [6448] LOG:  received fast shutdown request
+2022-12-23 10:28:56.609 GMT [6448] LOG:  aborting any active transactions
+2022-12-23 10:28:56.614 GMT [6448] LOG:  background worker "logical replication launcher" (PID 6455) exited with exit code 1
+2022-12-23 10:28:56.616 GMT [6450] LOG:  shutting down
+2022-12-23 10:28:56.660 GMT [6448] LOG:  database system is shut down
+2022-12-23 10:28:59.250 GMT [7309] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:28:59.251 GMT [7309] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:28:59.252 GMT [7309] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:28:59.257 GMT [7310] LOG:  database system was shut down at 2022-12-23 10:28:58 GMT
+2022-12-23 10:28:59.264 GMT [7309] LOG:  database system is ready to accept connections
+2022-12-23 10:28:59.987 GMT [7338] ERROR:  function digest(text, unknown) does not exist at character 113
+2022-12-23 10:28:59.987 GMT [7338] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-12-23 10:28:59.987 GMT [7338] QUERY:  INSERT INTO account (init_date, customer_id, username, passwd)
+	    VALUES (current_date, customer_id, username, DIGEST(passwd, 'sha256'))
+2022-12-23 10:28:59.987 GMT [7338] CONTEXT:  PL/pgSQL function add_account(integer,text,text) line 4 at SQL statement
+2022-12-23 10:28:59.987 GMT [7338] STATEMENT:  SELECT * FROM add_account(0, 'hello', 'pass');
+2022-12-23 10:36:11.697 GMT [7309] LOG:  received fast shutdown request
+2022-12-23 10:36:11.699 GMT [7309] LOG:  aborting any active transactions
+2022-12-23 10:36:11.704 GMT [7309] LOG:  background worker "logical replication launcher" (PID 7316) exited with exit code 1
+2022-12-23 10:36:11.705 GMT [7311] LOG:  shutting down
+2022-12-23 10:36:11.722 GMT [7309] LOG:  database system is shut down
+2022-12-23 10:36:14.543 GMT [8597] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:36:14.543 GMT [8597] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:36:14.545 GMT [8597] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:36:14.549 GMT [8598] LOG:  database system was shut down at 2022-12-23 10:36:14 GMT
+2022-12-23 10:36:14.556 GMT [8597] LOG:  database system is ready to accept connections
+2022-12-23 10:36:15.303 GMT [8623] ERROR:  insert or update on table "account" violates foreign key constraint "account_customer_id_fkey"
+2022-12-23 10:36:15.303 GMT [8623] DETAIL:  Key (customer_id)=(0) is not present in table "customer".
+2022-12-23 10:36:15.303 GMT [8623] CONTEXT:  SQL statement "INSERT INTO account (init_date, customer_id, username, passwd)
+	    VALUES (current_date, customer_id, username, DIGEST(passwd, 'sha256'))"
+	PL/pgSQL function add_account(integer,text,text) line 4 at SQL statement
+2022-12-23 10:36:15.303 GMT [8623] STATEMENT:  SELECT * FROM add_account(0, 'hello', 'pass');
+2022-12-23 10:40:36.530 GMT [8597] LOG:  received fast shutdown request
+2022-12-23 10:40:36.532 GMT [8597] LOG:  aborting any active transactions
+2022-12-23 10:40:36.534 GMT [8597] LOG:  background worker "logical replication launcher" (PID 8604) exited with exit code 1
+2022-12-23 10:40:36.538 GMT [8599] LOG:  shutting down
+2022-12-23 10:40:36.588 GMT [8597] LOG:  database system is shut down
+2022-12-23 10:40:39.138 GMT [9452] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:40:39.138 GMT [9452] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:40:39.140 GMT [9452] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:40:39.145 GMT [9453] LOG:  database system was shut down at 2022-12-23 10:40:38 GMT
+2022-12-23 10:40:39.152 GMT [9452] LOG:  database system is ready to accept connections
+2022-12-23 10:40:39.861 GMT [9478] ERROR:  function add_account(unknown, integer, unknown, unknown) does not exist at character 15
+2022-12-23 10:40:39.861 GMT [9478] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-12-23 10:40:39.861 GMT [9478] STATEMENT:  SELECT * FROM add_account('2019-01-01', 0, 'hello', 'pass');
+2022-12-23 10:41:55.651 GMT [9452] LOG:  received fast shutdown request
+2022-12-23 10:41:55.652 GMT [9452] LOG:  aborting any active transactions
+2022-12-23 10:41:55.657 GMT [9452] LOG:  background worker "logical replication launcher" (PID 9459) exited with exit code 1
+2022-12-23 10:41:55.659 GMT [9454] LOG:  shutting down
+2022-12-23 10:41:55.710 GMT [9452] LOG:  database system is shut down
+2022-12-23 10:41:58.002 GMT [9809] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:41:58.002 GMT [9809] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:41:58.004 GMT [9809] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:41:58.010 GMT [9810] LOG:  database system was shut down at 2022-12-23 10:41:57 GMT
+2022-12-23 10:41:58.017 GMT [9809] LOG:  database system is ready to accept connections
+2022-12-23 10:41:58.747 GMT [9835] ERROR:  column "2019-01-01" does not exist at character 27
+2022-12-23 10:41:58.747 GMT [9835] STATEMENT:  SELECT * FROM add_account("2019-01-01", 0, "hello", "pass");
+2022-12-23 10:42:31.732 GMT [9809] LOG:  received fast shutdown request
+2022-12-23 10:42:31.733 GMT [9809] LOG:  aborting any active transactions
+2022-12-23 10:42:31.737 GMT [9809] LOG:  background worker "logical replication launcher" (PID 9816) exited with exit code 1
+2022-12-23 10:42:31.741 GMT [9811] LOG:  shutting down
+2022-12-23 10:42:31.787 GMT [9809] LOG:  database system is shut down
+2022-12-23 10:42:34.887 GMT [10051] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:42:34.887 GMT [10051] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:42:34.889 GMT [10051] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:42:34.894 GMT [10052] LOG:  database system was shut down at 2022-12-23 10:42:34 GMT
+2022-12-23 10:42:34.899 GMT [10051] LOG:  database system is ready to accept connections
+2022-12-23 10:42:35.589 GMT [10080] ERROR:  column "hello" does not exist at character 44
+2022-12-23 10:42:35.589 GMT [10080] STATEMENT:  SELECT * FROM add_account('2019-01-01', 0, "hello", "pass");
+2022-12-23 10:43:00.107 GMT [10051] LOG:  received fast shutdown request
+2022-12-23 10:43:00.109 GMT [10051] LOG:  aborting any active transactions
+2022-12-23 10:43:00.115 GMT [10051] LOG:  background worker "logical replication launcher" (PID 10058) exited with exit code 1
+2022-12-23 10:43:00.116 GMT [10053] LOG:  shutting down
+2022-12-23 10:43:00.162 GMT [10051] LOG:  database system is shut down
+2022-12-23 10:43:02.423 GMT [10239] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:43:02.423 GMT [10239] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:43:02.425 GMT [10239] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:43:02.430 GMT [10240] LOG:  database system was shut down at 2022-12-23 10:43:02 GMT
+2022-12-23 10:43:02.436 GMT [10239] LOG:  database system is ready to accept connections
+2022-12-23 10:43:03.151 GMT [10268] ERROR:  column "pass" does not exist at character 53
+2022-12-23 10:43:03.151 GMT [10268] STATEMENT:  SELECT * FROM add_account('2019-01-01', 0, 'hello', "pass");
+2022-12-23 10:43:11.561 GMT [10239] LOG:  received fast shutdown request
+2022-12-23 10:43:11.563 GMT [10239] LOG:  aborting any active transactions
+2022-12-23 10:43:11.568 GMT [10239] LOG:  background worker "logical replication launcher" (PID 10246) exited with exit code 1
+2022-12-23 10:43:11.568 GMT [10241] LOG:  shutting down
+2022-12-23 10:43:11.619 GMT [10239] LOG:  database system is shut down
+2022-12-23 10:43:14.018 GMT [10387] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:43:14.018 GMT [10387] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:43:14.020 GMT [10387] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:43:14.024 GMT [10388] LOG:  database system was shut down at 2022-12-23 10:43:13 GMT
+2022-12-23 10:43:14.044 GMT [10387] LOG:  database system is ready to accept connections
+2022-12-23 10:43:14.722 GMT [10416] ERROR:  function add_account(unknown, integer, unknown, unknown) does not exist at character 15
+2022-12-23 10:43:14.722 GMT [10416] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-12-23 10:43:14.722 GMT [10416] STATEMENT:  SELECT * FROM add_account('2019-01-01', 0, 'hello', 'pass');
+2022-12-23 10:44:26.345 GMT [10387] LOG:  received fast shutdown request
+2022-12-23 10:44:26.346 GMT [10387] LOG:  aborting any active transactions
+2022-12-23 10:44:26.352 GMT [10387] LOG:  background worker "logical replication launcher" (PID 10394) exited with exit code 1
+2022-12-23 10:44:26.353 GMT [10389] LOG:  shutting down
+2022-12-23 10:44:26.402 GMT [10387] LOG:  database system is shut down
+2022-12-23 10:44:28.649 GMT [10712] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:44:28.649 GMT [10712] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:44:28.650 GMT [10712] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:44:28.656 GMT [10713] LOG:  database system was shut down at 2022-12-23 10:44:28 GMT
+2022-12-23 10:44:28.663 GMT [10712] LOG:  database system is ready to accept connections
+2022-12-23 10:44:29.380 GMT [10738] ERROR:  function add_account(date, integer, text, text) does not exist at character 15
+2022-12-23 10:44:29.380 GMT [10738] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2022-12-23 10:44:29.380 GMT [10738] STATEMENT:  SELECT * FROM add_account(DATE '2019-01-01', 0, TEXT 'hello', TEXT 'pass');
+2022-12-23 10:44:56.885 GMT [10712] LOG:  received fast shutdown request
+2022-12-23 10:44:56.886 GMT [10712] LOG:  aborting any active transactions
+2022-12-23 10:44:56.891 GMT [10712] LOG:  background worker "logical replication launcher" (PID 10719) exited with exit code 1
+2022-12-23 10:44:56.893 GMT [10714] LOG:  shutting down
+2022-12-23 10:44:56.945 GMT [10712] LOG:  database system is shut down
+2022-12-23 10:44:59.756 GMT [10931] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:44:59.756 GMT [10931] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:44:59.757 GMT [10931] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:44:59.770 GMT [10935] LOG:  database system was shut down at 2022-12-23 10:44:59 GMT
+2022-12-23 10:44:59.776 GMT [10931] LOG:  database system is ready to accept connections
+2022-12-23 10:45:00.464 GMT [10964] ERROR:  insert or update on table "account" violates foreign key constraint "account_customer_id_fkey"
+2022-12-23 10:45:00.464 GMT [10964] DETAIL:  Key (customer_id)=(0) is not present in table "customer".
+2022-12-23 10:45:00.464 GMT [10964] CONTEXT:  SQL statement "INSERT INTO account (init_date, customer_id, username, passwd)
+	    VALUES (current_date, customer_id, username, DIGEST(passwd, 'sha256'))"
+	PL/pgSQL function add_account(integer,text,text) line 4 at SQL statement
+2022-12-23 10:45:00.464 GMT [10964] STATEMENT:  SELECT * FROM add_account(0, TEXT 'hello', TEXT 'pass');
+2022-12-23 10:47:02.477 GMT [10931] LOG:  received fast shutdown request
+2022-12-23 10:47:02.480 GMT [10931] LOG:  aborting any active transactions
+2022-12-23 10:47:02.485 GMT [10931] LOG:  background worker "logical replication launcher" (PID 10941) exited with exit code 1
+2022-12-23 10:47:02.485 GMT [10936] LOG:  shutting down
+2022-12-23 10:47:02.538 GMT [10931] LOG:  database system is shut down
+2022-12-23 10:47:04.771 GMT [11381] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:47:04.771 GMT [11381] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:47:04.773 GMT [11381] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:47:04.778 GMT [11382] LOG:  database system was shut down at 2022-12-23 10:47:04 GMT
+2022-12-23 10:47:04.784 GMT [11381] LOG:  database system is ready to accept connections
+2022-12-23 10:47:05.516 GMT [11407] ERROR:  column "log_date" of relation "log" does not exist at character 18
+2022-12-23 10:47:05.516 GMT [11407] QUERY:  INSERT INTO log (log_date, log_message, customer_id)
+	    VALUES (current_date, 'Account added', customer_id)
+2022-12-23 10:47:05.516 GMT [11407] CONTEXT:  PL/pgSQL function add_account(integer,text,text) line 7 at SQL statement
+2022-12-23 10:47:05.516 GMT [11407] STATEMENT:  SELECT * FROM add_account(1, TEXT 'hello', TEXT 'pass');
+2022-12-23 10:48:46.217 GMT [11381] LOG:  received fast shutdown request
+2022-12-23 10:48:46.218 GMT [11381] LOG:  aborting any active transactions
+2022-12-23 10:48:46.223 GMT [11381] LOG:  background worker "logical replication launcher" (PID 11388) exited with exit code 1
+2022-12-23 10:48:46.223 GMT [11383] LOG:  shutting down
+2022-12-23 10:48:46.269 GMT [11381] LOG:  database system is shut down
+2022-12-23 10:48:48.618 GMT [11807] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 10:48:48.618 GMT [11807] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 10:48:48.620 GMT [11807] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 10:48:48.625 GMT [11808] LOG:  database system was shut down at 2022-12-23 10:48:48 GMT
+2022-12-23 10:48:48.630 GMT [11807] LOG:  database system is ready to accept connections
+2022-12-23 10:58:31.689 GMT [13621] ERROR:  relation "account" does not exist at character 15
+2022-12-23 10:58:31.689 GMT [13621] STATEMENT:  select * from account;
+2022-12-23 11:04:58.433 GMT [11807] LOG:  received fast shutdown request
+2022-12-23 11:04:58.435 GMT [11807] LOG:  aborting any active transactions
+2022-12-23 11:04:58.440 GMT [11807] LOG:  background worker "logical replication launcher" (PID 11814) exited with exit code 1
+2022-12-23 11:04:58.440 GMT [11809] LOG:  shutting down
+2022-12-23 11:04:58.457 GMT [11807] LOG:  database system is shut down
+2022-12-23 11:05:15.238 GMT [14953] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-23 11:05:15.238 GMT [14953] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-23 11:05:15.240 GMT [14953] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-23 11:05:15.245 GMT [14954] LOG:  database system was shut down at 2022-12-23 11:05:14 GMT
+2022-12-23 11:05:15.252 GMT [14953] LOG:  database system is ready to accept connections
+2022-12-24 21:00:36.319 GMT [14958] LOG:  statistics collector's time 2022-12-24 21:00:38.499932+00 is later than backend local time 2022-12-24 21:00:36.173166+00
+2022-12-24 21:00:36.320 GMT [14958] LOG:  statistics collector's time 2022-12-24 21:00:38.499932+00 is later than backend local time 2022-12-24 21:00:36.320171+00
+2022-12-24 21:00:36.652 GMT [14959] LOG:  stats_timestamp 2022-12-24 21:00:38.499932+00 is later than collector's time 2022-12-24 21:00:36.651979+00 for database 0
+2022-12-28 12:36:57.529 GMT [24390] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-28 12:36:57.532 GMT [24390] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-28 12:36:57.534 GMT [24390] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-28 12:36:57.539 GMT [24391] LOG:  database system was shut down at 2022-12-28 12:36:57 GMT
+2022-12-28 12:36:57.544 GMT [24390] LOG:  database system is ready to accept connections
+2022-12-28 12:36:58.152 GMT [24416] ERROR:  syntax error at or near "INTO" at character 147
+2022-12-28 12:36:58.152 GMT [24416] STATEMENT:  CREATE OR REPLACE VIEW view_accounts AS
+	SELECT id, init_date, customer_id
+	FROM account
+	/*insert 10 elements of sample data into customer*/
+	INSERT INTO customer (init_date, first_name, last_name, date_of_birth, phone_number, address)
+	VALUES
+	    ('2019-01-01', 'John', 'Smith', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'Jane', 'Doe', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'Bob', 'Smith', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'Alice', 'Doe', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'John', 'Doe', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'Jane', 'Smith', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'Bob', 'Doe', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'Alice', 'Smith', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'John', 'Dee', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}'),
+	    ('2019-01-01', 'Jane', 'Dee', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}');
+2022-12-28 12:36:58.156 GMT [24416] ERROR:  insert or update on table "account" violates foreign key constraint "account_customer_id_fkey"
+2022-12-28 12:36:58.156 GMT [24416] DETAIL:  Key (customer_id)=(1) is not present in table "customer".
+2022-12-28 12:36:58.156 GMT [24416] STATEMENT:  /*insert elements of sample data into account*/
+	INSERT INTO account (init_date, customer_id, username, passwd)
+	VALUES
+	    ('2019-01-01', 1, 'JohnSmith', '4e1b8f5bacb39b35f0a97f962871b2d4d5b5e935c34db051b45e3cc5f5b5d5c5'),
+	    ('2017-01-01', 2, 'JaneDoe', 'f0d5d3c9cf9b5b8c3b3e5e5ce5b5d5c8f5e5b5c5d9d5c5f5b5b5b5f5b5d5b5b5'),
+	    ('2018-01-01', 3, 'BobSmith', 'e4e9b5b5b5b5e9e9e9b5b5b5e9e9b5b5b5b5b5b5e9e9e9e9b5b5b5e9b5b5b5b5'),
+	    ('2015-01-01', 4, 'AliceDoe', 'c5d5d5b5b5b5b5b5b5d5d5d5d5b5b5b5b5b5b5d5d5d5d5b5b5b5b5b5b5b5b5'),
+	    ('2016-01-01', 5, 'JohnDoe', 'a9d9b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5'),
+	    ('2016-01-01', 6, 'JaneSmith', 'f5e9e9e9b5b5b5e9e9e9e9b5b5b5e9e9e9e9b5b5b5e9e9e9e9b5b5b5e9e9e9'),
+	    ('2017-01-01', 7, 'BobDoe', 'd5d5d5d5b5b5b5b5b5d5d5d5d5b5b5b5b5b5d5d5d5d5b5b5b5b5b5b5b5b5b5'),
+	    ('2014-01-01', 8, 'AliceSmith', 'b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5'),
+	    ('2016-01-01', 9, 'JohnDee', 'e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5'),
+	    ('2017-01-01', 10, 'JaneDee', 'c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5');
+2022-12-28 12:36:58.157 GMT [24416] ERROR:  insert or update on table "savings_account" violates foreign key constraint "savings_account_account_id_fkey"
+2022-12-28 12:36:58.157 GMT [24416] DETAIL:  Key (account_id)=(1) is not present in table "account".
+2022-12-28 12:36:58.157 GMT [24416] STATEMENT:  /*insert 8 elements of sample data into savings_account with different amounts and interest rates*/
+	INSERT INTO savings_account (account_id, current_balance, interest_rate)
+	VALUES
+	    (1, 1000.00, 0.01),
+	    (2, 2000.00, 0.02),
+	    (3, 3000.00, 0.03),
+	    (4, 4000.00, 0.04),
+	    (5, 5000.00, 0.05),
+	    (6, 6000.00, 0.06),
+	    (7, 7000.00, 0.07),
+	    (8, 8000.00, 0.08);
+2022-12-28 12:36:58.159 GMT [24416] ERROR:  insert or update on table "credit_account" violates foreign key constraint "credit_account_account_id_fkey"
+2022-12-28 12:36:58.159 GMT [24416] DETAIL:  Key (account_id)=(1) is not present in table "account".
+2022-12-28 12:36:58.159 GMT [24416] STATEMENT:  /*insert 8 elements of sample data into credit_account with different amounts, credit limits, and interest rates*/
+	INSERT INTO credit_account (account_id, current_balance, credit_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-28 12:36:58.162 GMT [24416] ERROR:  insert or update on table "debit_account" violates foreign key constraint "debit_account_account_id_fkey"
+2022-12-28 12:36:58.162 GMT [24416] DETAIL:  Key (account_id)=(1) is not present in table "account".
+2022-12-28 12:36:58.162 GMT [24416] STATEMENT:  /*insert 8 elements of sample data into debit_account with different amounts, overdraft limits, and interest rates*/
+	INSERT INTO debit_account (account_id, current_balance, overdraft_limit, interest_rate)
+	VALUES
+	    (1, 1000.00, 10000.00, 0.01),
+	    (2, 2000.00, 20000.00, 0.02),
+	    (3, 3000.00, 30000.00, 0.03),
+	    (4, 4000.00, 40000.00, 0.04),
+	    (5, 5000.00, 50000.00, 0.05),
+	    (6, 6000.00, 60000.00, 0.06),
+	    (7, 7000.00, 70000.00, 0.07),
+	    (8, 8000.00, 80000.00, 0.08);
+2022-12-28 12:36:58.164 GMT [24416] ERROR:  insert or update on table "loan" violates foreign key constraint "loan_account_id_fkey"
+2022-12-28 12:36:58.164 GMT [24416] DETAIL:  Key (account_id)=(1) is not present in table "account".
+2022-12-28 12:36:58.164 GMT [24416] STATEMENT:  /*insert 8 elements of sample data into loan with different amounts, interest rates, loan terms, and loan start and end dates*/
+	INSERT INTO loan (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date)
+	VALUES
+	    (1, 1000.00, 0.01, 12, '2019-01-01', '2020-01-01'),
+	    (2, 2000.00, 0.02, 12, '2019-01-01', '2020-01-01'),
+	    (3, 3000.00, 0.03, 12, '2019-01-01', '2020-01-01'),
+	    (4, 4000.00, 0.04, 12, '2019-01-01', '2020-01-01'),
+	    (5, 5000.00, 0.05, 12, '2019-01-01', '2020-01-01'),
+	    (6, 6000.00, 0.06, 12, '2019-01-01', '2020-01-01'),
+	    (7, 7000.00, 0.07, 12, '2019-01-01', '2020-01-01'),
+	    (8, 8000.00, 0.08, 12, '2019-01-01', '2020-01-01');
+2022-12-28 12:36:58.182 GMT [24416] ERROR:  insert or update on table "account" violates foreign key constraint "account_customer_id_fkey"
+2022-12-28 12:36:58.182 GMT [24416] DETAIL:  Key (customer_id)=(1) is not present in table "customer".
+2022-12-28 12:36:58.182 GMT [24416] CONTEXT:  SQL statement "INSERT INTO account (init_date, customer_id, username, passwd)
+	    VALUES (current_date, customer_id, username, DIGEST(passwd, 'sha256'))"
+	PL/pgSQL function add_account(integer,text,text) line 4 at SQL statement
+2022-12-28 12:36:58.182 GMT [24416] STATEMENT:  SELECT * FROM add_account(1, TEXT 'hello', TEXT 'pass');
+2022-12-28 12:38:42.477 GMT [24721] ERROR:  syntax error at or near "select" at character 35
+2022-12-28 12:38:42.477 GMT [24721] STATEMENT:  set search_path to online_banking
+	select * from customer;
+2022-12-28 12:39:15.530 GMT [24721] ERROR:  relation "bank" does not exist at character 15
+2022-12-28 12:39:15.530 GMT [24721] STATEMENT:  select * from bank
+	;
+2022-12-28 12:39:24.236 GMT [24721] ERROR:  relation "customer" does not exist at character 15
+2022-12-28 12:39:24.236 GMT [24721] STATEMENT:  select * from customer;
+2022-12-28 12:44:39.839 GMT [24721] ERROR:  syntax error at or near "inset" at character 1
+2022-12-28 12:44:39.839 GMT [24721] STATEMENT:  inset into online_banking.customer
+	('2019-01-01', 'john', 'smith', '1990-01-01','122-145-7896', '{"123 Main St", "Apt 1", "New York, NY 10001"});
+	';
+	)
+	;
+2022-12-28 12:45:07.984 GMT [24721] ERROR:  syntax error at or near "'2019-01-01'" at character 38
+2022-12-28 12:45:07.984 GMT [24721] STATEMENT:  insert into online_banking.customer
+	('2019-01-01', 'john', 'smith', '1990-01-01','122-145-7896', '{"123 Main St", "Apt 1", "New York, NY 10001"}');
+2022-12-28 12:47:52.800 GMT [24390] LOG:  received fast shutdown request
+2022-12-28 12:47:52.802 GMT [24390] LOG:  aborting any active transactions
+2022-12-28 12:47:52.805 GMT [24390] LOG:  background worker "logical replication launcher" (PID 24397) exited with exit code 1
+2022-12-28 12:47:52.806 GMT [24392] LOG:  shutting down
+2022-12-28 12:47:52.821 GMT [24390] LOG:  database system is shut down
+2022-12-28 12:47:58.094 GMT [27915] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-28 12:47:58.094 GMT [27915] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-28 12:47:58.096 GMT [27915] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-28 12:47:58.100 GMT [27916] LOG:  database system was shut down at 2022-12-28 12:47:57 GMT
+2022-12-28 12:47:58.110 GMT [27915] LOG:  database system is ready to accept connections
+2022-12-28 17:03:07.782 GMT [27915] LOG:  received SIGHUP, reloading configuration files
+2022-12-28 17:03:07.784 GMT [27915] LOG:  received smart shutdown request
+2022-12-28 17:03:07.900 GMT [27915] LOG:  background worker "logical replication launcher" (PID 27922) exited with exit code 1
+2022-12-28 17:03:07.900 GMT [27917] LOG:  shutting down
+2022-12-28 17:03:07.974 GMT [27915] LOG:  database system is shut down
+2022-12-29 10:55:08.264 GMT [12197] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 10:55:08.267 GMT [12197] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 10:55:08.269 GMT [12197] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 10:55:08.275 GMT [12198] LOG:  database system was shut down at 2022-12-29 10:55:07 GMT
+2022-12-29 10:55:08.281 GMT [12197] LOG:  database system is ready to accept connections
+2022-12-29 10:56:55.656 GMT [12197] LOG:  received fast shutdown request
+2022-12-29 10:56:55.658 GMT [12197] LOG:  aborting any active transactions
+2022-12-29 10:56:55.663 GMT [12197] LOG:  background worker "logical replication launcher" (PID 12204) exited with exit code 1
+2022-12-29 10:56:55.664 GMT [12199] LOG:  shutting down
+2022-12-29 10:56:55.724 GMT [12197] LOG:  database system is shut down
+2022-12-29 10:56:58.614 GMT [12627] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 10:56:58.614 GMT [12627] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 10:56:58.616 GMT [12627] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 10:56:58.621 GMT [12628] LOG:  database system was shut down at 2022-12-29 10:56:58 GMT
+2022-12-29 10:56:58.627 GMT [12627] LOG:  database system is ready to accept connections
+2022-12-29 10:56:59.337 GMT [12656] ERROR:  column "id" specified more than once
+2022-12-29 10:56:59.337 GMT [12656] STATEMENT:  CREATE OR REPLACE VIEW view_savings_accounts AS
+	SELECT account.id, savings_account.id, savings_account.account_id, savings_account.interest_rate
+	FROM savings_account
+	LEFT JOIN account ON savings_account.account_id = account.id;
+2022-12-29 10:56:59.403 GMT [12656] ERROR:  relation "view_savings_accounts" does not exist at character 15
+2022-12-29 10:56:59.403 GMT [12656] STATEMENT:  SELECT * FROM view_savings_accounts;
+2022-12-29 10:57:38.493 GMT [12627] LOG:  received fast shutdown request
+2022-12-29 10:57:38.494 GMT [12627] LOG:  aborting any active transactions
+2022-12-29 10:57:38.499 GMT [12627] LOG:  background worker "logical replication launcher" (PID 12634) exited with exit code 1
+2022-12-29 10:57:38.501 GMT [12629] LOG:  shutting down
+2022-12-29 10:57:38.550 GMT [12627] LOG:  database system is shut down
+2022-12-29 10:57:40.726 GMT [12861] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 10:57:40.726 GMT [12861] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 10:57:40.728 GMT [12861] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 10:57:40.733 GMT [12862] LOG:  database system was shut down at 2022-12-29 10:57:40 GMT
+2022-12-29 10:57:40.740 GMT [12861] LOG:  database system is ready to accept connections
+2022-12-29 10:57:41.441 GMT [12887] ERROR:  column "account_id" specified more than once
+2022-12-29 10:57:41.441 GMT [12887] STATEMENT:  CREATE OR REPLACE VIEW view_savings_accounts AS
+	SELECT account.id AS account_id, savings_account.id, savings_account.account_id, savings_account.interest_rate
+	FROM savings_account
+	LEFT JOIN account ON savings_account.account_id = account.id;
+2022-12-29 10:57:41.506 GMT [12887] ERROR:  relation "view_savings_accounts" does not exist at character 15
+2022-12-29 10:57:41.506 GMT [12887] STATEMENT:  SELECT * FROM view_savings_accounts;
+2022-12-29 10:58:00.606 GMT [12861] LOG:  received fast shutdown request
+2022-12-29 10:58:00.608 GMT [12861] LOG:  aborting any active transactions
+2022-12-29 10:58:00.614 GMT [12861] LOG:  background worker "logical replication launcher" (PID 12868) exited with exit code 1
+2022-12-29 10:58:00.614 GMT [12863] LOG:  shutting down
+2022-12-29 10:58:00.667 GMT [12861] LOG:  database system is shut down
+2022-12-29 10:58:02.746 GMT [13037] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 10:58:02.746 GMT [13037] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 10:58:02.748 GMT [13037] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 10:58:02.753 GMT [13038] LOG:  database system was shut down at 2022-12-29 10:58:02 GMT
+2022-12-29 10:58:02.760 GMT [13037] LOG:  database system is ready to accept connections
+2022-12-29 13:49:25.146 GMT [13037] LOG:  received fast shutdown request
+2022-12-29 13:49:25.149 GMT [13037] LOG:  aborting any active transactions
+2022-12-29 13:49:25.154 GMT [13037] LOG:  background worker "logical replication launcher" (PID 13044) exited with exit code 1
+2022-12-29 13:49:25.154 GMT [13039] LOG:  shutting down
+2022-12-29 13:49:25.170 GMT [13037] LOG:  database system is shut down
+2022-12-29 13:49:32.282 GMT [22820] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 13:49:32.283 GMT [22820] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 13:49:32.285 GMT [22820] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 13:49:32.290 GMT [22821] LOG:  database system was shut down at 2022-12-29 13:49:31 GMT
+2022-12-29 13:49:32.296 GMT [22820] LOG:  database system is ready to accept connections
+2022-12-29 13:56:27.074 GMT [22820] LOG:  received fast shutdown request
+2022-12-29 13:56:27.076 GMT [22820] LOG:  aborting any active transactions
+2022-12-29 13:56:27.081 GMT [22820] LOG:  background worker "logical replication launcher" (PID 22827) exited with exit code 1
+2022-12-29 13:56:27.082 GMT [22822] LOG:  shutting down
+2022-12-29 13:56:27.098 GMT [22820] LOG:  database system is shut down
+2022-12-29 13:56:29.695 GMT [24272] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 13:56:29.696 GMT [24272] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 13:56:29.698 GMT [24272] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 13:56:29.702 GMT [24273] LOG:  database system was shut down at 2022-12-29 13:56:29 GMT
+2022-12-29 13:56:29.708 GMT [24272] LOG:  database system is ready to accept connections
+2022-12-29 13:56:30.436 GMT [24301] ERROR:  table name "loan" specified more than once
+2022-12-29 13:56:30.436 GMT [24301] STATEMENT:  CREATE OR REPLACE VIEW view_loans AS
+	SELECT customer.first_name, customer.last_name, loans.customer_id, loans.account_id, loans.loan_start_date FROM customer
+	INNER JOIN
+	    (SELECT account.customer_id, loan.id, loan.account_id, loan.loan_start_date
+	    FROM loan
+	    INNER JOIN loan ON loan.account_id = account.account_id) AS loans
+	ON customer.id = loans.customer_id;
+2022-12-29 13:56:30.563 GMT [24301] ERROR:  relation "view_loans" does not exist at character 15
+2022-12-29 13:56:30.563 GMT [24301] STATEMENT:  SELECT * FROM view_loans;
+2022-12-29 13:57:53.107 GMT [24272] LOG:  received fast shutdown request
+2022-12-29 13:57:53.110 GMT [24272] LOG:  aborting any active transactions
+2022-12-29 13:57:53.116 GMT [24272] LOG:  background worker "logical replication launcher" (PID 24279) exited with exit code 1
+2022-12-29 13:57:53.116 GMT [24274] LOG:  shutting down
+2022-12-29 13:57:53.170 GMT [24272] LOG:  database system is shut down
+2022-12-29 13:57:55.116 GMT [24613] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 13:57:55.117 GMT [24613] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 13:57:55.118 GMT [24613] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 13:57:55.123 GMT [24614] LOG:  database system was shut down at 2022-12-29 13:57:54 GMT
+2022-12-29 13:57:55.129 GMT [24613] LOG:  database system is ready to accept connections
+2022-12-29 13:57:55.862 GMT [24639] ERROR:  column account.account_id does not exist at character 308
+2022-12-29 13:57:55.862 GMT [24639] STATEMENT:  CREATE OR REPLACE VIEW view_loans AS
+	SELECT customer.first_name, customer.last_name, loans.customer_id, loans.account_id, loans.loan_start_date FROM customer
+	INNER JOIN
+	    (SELECT account.customer_id, loan.id, loan.account_id, loan.loan_start_date
+	    FROM loan
+	    INNER JOIN account ON loan.account_id = account.account_id) AS loans
+	ON customer.id = loans.customer_id;
+2022-12-29 13:57:55.956 GMT [24639] ERROR:  relation "view_loans" does not exist at character 15
+2022-12-29 13:57:55.956 GMT [24639] STATEMENT:  SELECT * FROM view_loans;
+2022-12-29 13:58:32.304 GMT [24613] LOG:  received fast shutdown request
+2022-12-29 13:58:32.307 GMT [24613] LOG:  aborting any active transactions
+2022-12-29 13:58:32.313 GMT [24613] LOG:  background worker "logical replication launcher" (PID 24620) exited with exit code 1
+2022-12-29 13:58:32.313 GMT [24615] LOG:  shutting down
+2022-12-29 13:58:32.375 GMT [24613] LOG:  database system is shut down
+2022-12-29 13:58:34.265 GMT [24828] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 13:58:34.266 GMT [24828] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 13:58:34.267 GMT [24828] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 13:58:34.272 GMT [24829] LOG:  database system was shut down at 2022-12-29 13:58:33 GMT
+2022-12-29 13:58:34.279 GMT [24828] LOG:  database system is ready to accept connections
+2022-12-29 14:07:09.371 GMT [24828] LOG:  received fast shutdown request
+2022-12-29 14:07:09.372 GMT [24828] LOG:  aborting any active transactions
+2022-12-29 14:07:09.380 GMT [24828] LOG:  background worker "logical replication launcher" (PID 24835) exited with exit code 1
+2022-12-29 14:07:09.380 GMT [24830] LOG:  shutting down
+2022-12-29 14:07:09.401 GMT [24828] LOG:  database system is shut down
+2022-12-29 14:07:11.553 GMT [26450] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 14:07:11.553 GMT [26450] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 14:07:11.554 GMT [26450] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 14:07:11.560 GMT [26451] LOG:  database system was shut down at 2022-12-29 14:07:11 GMT
+2022-12-29 14:07:11.568 GMT [26450] LOG:  database system is ready to accept connections
+2022-12-29 14:07:12.287 GMT [26479] ERROR:  column loan.loan_id does not exist at character 324
+2022-12-29 14:07:12.287 GMT [26479] STATEMENT:  CREATE OR REPLACE VIEW view_loans AS
+	SELECT customer.first_name, customer.last_name, loans.customer_id, loans.account_id, loans.loan_start_date FROM customer
+	INNER JOIN
+	    (SELECT account.customer_id, loan.id, loan.account_id, loan.loan_start_date
+	    FROM (
+	        SELECT loan.id, loan.account_id, loan.loan_start_date, loan.loan_id, loan.is_approved FROM loan
+	        INNER JOIN loan_application ON loan.id = loan_application.loan_id
+	    ) AS loan
+	    INNER JOIN account ON loan.account_id = account.id) AS loans
+	ON customer.id = loans.customer_id;
+2022-12-29 14:07:12.353 GMT [26479] ERROR:  relation "view_loans" does not exist at character 15
+2022-12-29 14:07:12.353 GMT [26479] STATEMENT:  SELECT * FROM view_loans;
+2022-12-29 14:07:49.381 GMT [26450] LOG:  received fast shutdown request
+2022-12-29 14:07:49.382 GMT [26450] LOG:  aborting any active transactions
+2022-12-29 14:07:49.389 GMT [26450] LOG:  background worker "logical replication launcher" (PID 26457) exited with exit code 1
+2022-12-29 14:07:49.389 GMT [26452] LOG:  shutting down
+2022-12-29 14:07:49.444 GMT [26450] LOG:  database system is shut down
+2022-12-29 14:07:51.285 GMT [26682] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 14:07:51.285 GMT [26682] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 14:07:51.286 GMT [26682] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 14:07:51.292 GMT [26685] LOG:  database system was shut down at 2022-12-29 14:07:50 GMT
+2022-12-29 14:07:51.297 GMT [26682] LOG:  database system is ready to accept connections
+2022-12-29 14:11:21.415 GMT [26682] LOG:  received fast shutdown request
+2022-12-29 14:11:21.417 GMT [26682] LOG:  aborting any active transactions
+2022-12-29 14:11:21.421 GMT [26682] LOG:  background worker "logical replication launcher" (PID 26692) exited with exit code 1
+2022-12-29 14:11:21.421 GMT [26687] LOG:  shutting down
+2022-12-29 14:11:21.466 GMT [26682] LOG:  database system is shut down
+2022-12-29 14:11:23.366 GMT [27482] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 14:11:23.366 GMT [27482] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 14:11:23.368 GMT [27482] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 14:11:23.372 GMT [27483] LOG:  database system was shut down at 2022-12-29 14:11:23 GMT
+2022-12-29 14:11:23.376 GMT [27482] LOG:  database system is ready to accept connections
+2022-12-29 14:12:05.649 GMT [27482] LOG:  received fast shutdown request
+2022-12-29 14:12:05.650 GMT [27482] LOG:  aborting any active transactions
+2022-12-29 14:12:05.655 GMT [27482] LOG:  background worker "logical replication launcher" (PID 27489) exited with exit code 1
+2022-12-29 14:12:05.656 GMT [27484] LOG:  shutting down
+2022-12-29 14:12:05.697 GMT [27482] LOG:  database system is shut down
+2022-12-29 14:12:07.593 GMT [27715] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 14:12:07.594 GMT [27715] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 14:12:07.595 GMT [27715] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 14:12:07.601 GMT [27722] LOG:  database system was shut down at 2022-12-29 14:12:07 GMT
+2022-12-29 14:12:07.606 GMT [27715] LOG:  database system is ready to accept connections
+2022-12-29 14:12:08.190 GMT [27751] ERROR:  missing FROM-clause entry for table "loan" at character 146
+2022-12-29 14:12:08.190 GMT [27751] STATEMENT:  CREATE OR REPLACE VIEW view_loans AS
+	SELECT customer.first_name, customer.last_name, loans.customer_id, loans.account_id, loans.loan_start_date, loan.is_approved FROM customer
+	INNER JOIN
+	    (SELECT account.customer_id, loan.id, loan.account_id, loan.loan_start_date
+	    FROM (
+	        SELECT loan.id, loan.account_id, loan.loan_start_date, loan_application.loan_id, loan_application.is_approved FROM loan
+	        INNER JOIN loan_application ON loan.id = loan_application.loan_id
+	    ) AS loan
+	    INNER JOIN account ON loan.account_id = account.id) AS loans
+	ON customer.id = loans.customer_id;
+2022-12-29 14:12:08.246 GMT [27751] ERROR:  relation "view_loans" does not exist at character 15
+2022-12-29 14:12:08.246 GMT [27751] STATEMENT:  SELECT * FROM view_loans;
+2022-12-29 14:13:16.320 GMT [27715] LOG:  received fast shutdown request
+2022-12-29 14:13:16.321 GMT [27715] LOG:  aborting any active transactions
+2022-12-29 14:13:16.325 GMT [27715] LOG:  background worker "logical replication launcher" (PID 27729) exited with exit code 1
+2022-12-29 14:13:16.325 GMT [27724] LOG:  shutting down
+2022-12-29 14:13:16.363 GMT [27715] LOG:  database system is shut down
+2022-12-29 14:13:18.061 GMT [28028] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 14:13:18.062 GMT [28028] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 14:13:18.063 GMT [28028] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 14:13:18.068 GMT [28029] LOG:  database system was shut down at 2022-12-29 14:13:17 GMT
+2022-12-29 14:13:18.075 GMT [28028] LOG:  database system is ready to accept connections
+2022-12-29 14:14:08.899 GMT [28028] LOG:  received fast shutdown request
+2022-12-29 14:14:08.901 GMT [28028] LOG:  aborting any active transactions
+2022-12-29 14:14:08.905 GMT [28028] LOG:  background worker "logical replication launcher" (PID 28036) exited with exit code 1
+2022-12-29 14:14:08.905 GMT [28030] LOG:  shutting down
+2022-12-29 14:14:08.942 GMT [28028] LOG:  database system is shut down
+2022-12-29 14:14:10.836 GMT [28335] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 14:14:10.837 GMT [28335] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 14:14:10.838 GMT [28335] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 14:14:10.843 GMT [28336] LOG:  database system was shut down at 2022-12-29 14:14:10 GMT
+2022-12-29 14:14:10.849 GMT [28335] LOG:  database system is ready to accept connections
+2022-12-29 14:28:55.849 GMT [28335] LOG:  received fast shutdown request
+2022-12-29 14:28:55.851 GMT [28335] LOG:  aborting any active transactions
+2022-12-29 14:28:55.855 GMT [28335] LOG:  background worker "logical replication launcher" (PID 28342) exited with exit code 1
+2022-12-29 14:28:55.855 GMT [28337] LOG:  shutting down
+2022-12-29 14:28:55.869 GMT [28335] LOG:  database system is shut down
+2022-12-29 14:28:57.760 GMT [31336] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 14:28:57.760 GMT [31336] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 14:28:57.762 GMT [31336] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 14:28:57.766 GMT [31337] LOG:  database system was shut down at 2022-12-29 14:28:57 GMT
+2022-12-29 14:28:57.770 GMT [31336] LOG:  database system is ready to accept connections
+2022-12-29 14:28:58.407 GMT [31376] ERROR:  column credit_account_application.credit_account_i does not exist at character 580
+2022-12-29 14:28:58.407 GMT [31376] HINT:  Perhaps you meant to reference the column "credit_account_application.credit_account_id".
+2022-12-29 14:28:58.407 GMT [31376] STATEMENT:  CREATE OR REPLACE VIEW view_credit_accounts AS
+	SELECT customer.first_name, customer.last_name, credit_accounts.customer_id, credit_accounts.id, credit_accounts.is_approved FROM customer
+	INNER JOIN
+	    (SELECT account.customer_id, credit_account.id, credit_account.account_id, credit_account.is_approved
+	    FROM (
+	        SELECT credit_account.id, credit_account.account_id, credit_account.interest_rate, credit_account_application.credit_account_id, credit_account_application.is_approved FROM credit_account
+	        INNER JOIN credit_account_application ON credit_account.id = credit_account_application.credit_account_i
+	    ) AS credit_account
+	    INNER JOIN account on credit_account.account_id = account.id) AS credit_accounts
+	ON customer.id = credit_accounts.customer_id
+	ORDER BY customer.last_name ASC;
+2022-12-29 14:35:36.783 GMT [31336] LOG:  received fast shutdown request
+2022-12-29 14:35:36.785 GMT [31336] LOG:  aborting any active transactions
+2022-12-29 14:35:36.788 GMT [31336] LOG:  background worker "logical replication launcher" (PID 31343) exited with exit code 1
+2022-12-29 14:35:36.793 GMT [31338] LOG:  shutting down
+2022-12-29 14:35:36.806 GMT [31336] LOG:  database system is shut down
+2022-12-29 14:35:38.640 GMT [32653] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 14:35:38.640 GMT [32653] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 14:35:38.642 GMT [32653] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 14:35:38.646 GMT [32654] LOG:  database system was shut down at 2022-12-29 14:35:38 GMT
+2022-12-29 14:35:38.652 GMT [32653] LOG:  database system is ready to accept connections
+2022-12-29 15:02:28.429 GMT [32653] LOG:  received fast shutdown request
+2022-12-29 15:02:28.431 GMT [32653] LOG:  aborting any active transactions
+2022-12-29 15:02:28.433 GMT [32653] LOG:  background worker "logical replication launcher" (PID 32660) exited with exit code 1
+2022-12-29 15:02:28.435 GMT [32655] LOG:  shutting down
+2022-12-29 15:02:28.451 GMT [32653] LOG:  database system is shut down
+2022-12-29 15:02:40.462 GMT [37653] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2022-12-29 15:02:40.462 GMT [37653] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2022-12-29 15:02:40.464 GMT [37653] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2022-12-29 15:02:40.469 GMT [37654] LOG:  database system was shut down at 2022-12-29 15:02:40 GMT
+2022-12-29 15:02:40.473 GMT [37653] LOG:  database system is ready to accept connections
+2022-12-29 15:02:41.092 GMT [37699] ERROR:  syntax error at or near "EXEC" at character 1
+2022-12-29 15:02:41.092 GMT [37699] STATEMENT:  EXEC add_account(1, TEXT 'hello', TEXT 'pass');
