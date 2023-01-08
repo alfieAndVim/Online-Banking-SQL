@@ -1904,3 +1904,187 @@
 2022-12-29 15:02:40.473 GMT [37653] LOG:  database system is ready to accept connections
 2022-12-29 15:02:41.092 GMT [37699] ERROR:  syntax error at or near "EXEC" at character 1
 2022-12-29 15:02:41.092 GMT [37699] STATEMENT:  EXEC add_account(1, TEXT 'hello', TEXT 'pass');
+2022-12-29 15:20:59.746 GMT [37653] LOG:  received smart shutdown request
+2022-12-29 15:20:59.756 GMT [37653] LOG:  background worker "logical replication launcher" (PID 37660) exited with exit code 1
+2022-12-29 15:20:59.757 GMT [37655] LOG:  shutting down
+2022-12-29 15:20:59.764 GMT [37653] LOG:  received SIGHUP, reloading configuration files
+2022-12-29 15:20:59.776 GMT [37653] LOG:  database system is shut down
+2023-01-06 12:15:00.516 GMT [17876] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-06 12:15:00.517 GMT [17876] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-06 12:15:00.528 GMT [17876] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-06 12:15:00.534 GMT [17888] LOG:  database system was shut down at 2023-01-06 12:15:00 GMT
+2023-01-06 12:15:00.539 GMT [17876] LOG:  database system is ready to accept connections
+2023-01-06 12:15:01.101 GMT [17913] ERROR:  syntax error at or near "CREATE" at character 166
+2023-01-06 12:15:01.101 GMT [17913] STATEMENT:  CREATE TABLE IF NOT EXISTS customer_account (
+	    customer_id SERIAL PRIMARY KEY REFERENCES customer(id),
+	    account_id SERIAL PRIMARY KEY REFERENCES account(id)
+	)
+	CREATE TABLE IF NOT EXISTS account (
+	    id SERIAL PRIMARY KEY,
+	    open_date DATE,
+	    account_balance INT,
+	    account_type TINYINT
+	)
+	CREATE ROLE manager LOGIN WITH PASSWORD 'manager';
+2023-01-06 12:15:01.101 GMT [17913] ERROR:  syntax error at or near "WITH" at character 29
+2023-01-06 12:15:01.101 GMT [17913] STATEMENT:  CREATE ROLE employee1 LOGIN WITH PASSWORD 'employee1';
+2023-01-06 12:15:01.102 GMT [17913] ERROR:  syntax error at or near "WITH" at character 29
+2023-01-06 12:15:01.102 GMT [17913] STATEMENT:  CREATE ROLE employee2 LOGIN WITH PASSWORD 'employee2';
+2023-01-06 12:15:01.102 GMT [17913] ERROR:  syntax error at or near "WITH" at character 29
+2023-01-06 12:15:01.102 GMT [17913] STATEMENT:  CREATE ROLE employee3 LOGIN WITH PASSWORD 'employee3';
+2023-01-06 12:15:01.103 GMT [17913] ERROR:  syntax error at or near "WITH" at character 29
+2023-01-06 12:15:01.103 GMT [17913] STATEMENT:  CREATE ROLE employee4 LOGIN WITH PASSWORD 'employee4';
+2023-01-06 12:15:01.103 GMT [17913] ERROR:  syntax error at or near "WITH" at character 29
+2023-01-06 12:15:01.103 GMT [17913] STATEMENT:  CREATE ROLE employee5 LOGIN WITH PASSWORD 'employee5';
+2023-01-06 12:15:40.217 GMT [17876] LOG:  received fast shutdown request
+2023-01-06 12:15:40.219 GMT [17876] LOG:  aborting any active transactions
+2023-01-06 12:15:40.224 GMT [17876] LOG:  background worker "logical replication launcher" (PID 17894) exited with exit code 1
+2023-01-06 12:15:40.224 GMT [17889] LOG:  shutting down
+2023-01-06 12:15:40.251 GMT [17876] LOG:  database system is shut down
+2023-01-06 12:15:42.545 GMT [18116] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-06 12:15:42.546 GMT [18116] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-06 12:15:42.550 GMT [18116] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-06 12:15:42.555 GMT [18117] LOG:  database system was shut down at 2023-01-06 12:15:42 GMT
+2023-01-06 12:15:42.560 GMT [18116] LOG:  database system is ready to accept connections
+2023-01-06 12:15:43.057 GMT [18157] ERROR:  syntax error at or near "CREATE" at character 166
+2023-01-06 12:15:43.057 GMT [18157] STATEMENT:  CREATE TABLE IF NOT EXISTS customer_account (
+	    customer_id SERIAL PRIMARY KEY REFERENCES customer(id),
+	    account_id SERIAL PRIMARY KEY REFERENCES account(id)
+	)
+	CREATE TABLE IF NOT EXISTS account (
+	    id SERIAL PRIMARY KEY,
+	    open_date DATE,
+	    account_balance INT,
+	    account_type TINYINT
+	)
+	CREATE ROLE manager WITH LOGIN PASSWORD 'manager';
+2023-01-06 12:16:40.683 GMT [18116] LOG:  received fast shutdown request
+2023-01-06 12:16:40.685 GMT [18116] LOG:  aborting any active transactions
+2023-01-06 12:16:40.690 GMT [18116] LOG:  background worker "logical replication launcher" (PID 18123) exited with exit code 1
+2023-01-06 12:16:40.690 GMT [18118] LOG:  shutting down
+2023-01-06 12:16:40.725 GMT [18116] LOG:  database system is shut down
+2023-01-06 12:16:42.879 GMT [18451] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-06 12:16:42.879 GMT [18451] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-06 12:16:42.880 GMT [18451] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-06 12:16:42.885 GMT [18457] LOG:  database system was shut down at 2023-01-06 12:16:42 GMT
+2023-01-06 12:16:42.892 GMT [18451] LOG:  database system is ready to accept connections
+2023-01-06 12:16:43.468 GMT [18485] ERROR:  multiple primary keys for table "customer_account" are not allowed at character 129
+2023-01-06 12:16:43.468 GMT [18485] STATEMENT:  CREATE TABLE IF NOT EXISTS customer_account (
+	    customer_id SERIAL PRIMARY KEY REFERENCES customer(id),
+	    account_id SERIAL PRIMARY KEY REFERENCES account(id)
+	);
+2023-01-06 12:16:43.468 GMT [18485] ERROR:  type "tinyint" does not exist at character 127
+2023-01-06 12:16:43.468 GMT [18485] STATEMENT:  CREATE TABLE IF NOT EXISTS account (
+	    id SERIAL PRIMARY KEY,
+	    open_date DATE,
+	    account_balance INT,
+	    account_type TINYINT
+	);
+2023-01-06 12:18:53.443 GMT [18451] LOG:  received fast shutdown request
+2023-01-06 12:18:53.445 GMT [18451] LOG:  aborting any active transactions
+2023-01-06 12:18:53.448 GMT [18451] LOG:  background worker "logical replication launcher" (PID 18463) exited with exit code 1
+2023-01-06 12:18:53.451 GMT [18458] LOG:  shutting down
+2023-01-06 12:18:53.483 GMT [18451] LOG:  database system is shut down
+2023-01-06 12:18:55.264 GMT [18976] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-06 12:18:55.264 GMT [18976] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-06 12:18:55.265 GMT [18976] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-06 12:18:55.272 GMT [18981] LOG:  database system was shut down at 2023-01-06 12:18:54 GMT
+2023-01-06 12:18:55.312 GMT [18976] LOG:  database system is ready to accept connections
+2023-01-06 12:18:55.818 GMT [19017] ERROR:  multiple primary keys for table "customer_account" are not allowed at character 129
+2023-01-06 12:18:55.818 GMT [19017] STATEMENT:  CREATE TABLE IF NOT EXISTS customer_account (
+	    customer_id SERIAL PRIMARY KEY REFERENCES customer(id),
+	    account_id SERIAL PRIMARY KEY REFERENCES account(id)
+	);
+2023-01-06 17:17:26.469 GMT [18976] LOG:  received fast shutdown request
+2023-01-06 17:17:26.472 GMT [18976] LOG:  aborting any active transactions
+2023-01-06 17:17:26.482 GMT [18976] LOG:  background worker "logical replication launcher" (PID 18990) exited with exit code 1
+2023-01-06 17:17:26.483 GMT [18985] LOG:  shutting down
+2023-01-06 17:17:26.520 GMT [18976] LOG:  database system is shut down
+2023-01-06 17:17:35.900 GMT [68045] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-06 17:17:35.900 GMT [68045] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-06 17:17:35.903 GMT [68045] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-06 17:17:35.908 GMT [68046] LOG:  database system was shut down at 2023-01-06 17:17:35 GMT
+2023-01-06 17:17:35.917 GMT [68045] LOG:  database system is ready to accept connections
+2023-01-06 17:17:36.593 GMT [68074] ERROR:  syntax error at or near "." at character 153
+2023-01-06 17:17:36.593 GMT [68074] STATEMENT:  CREATE TABLE IF NOT EXISTS debit_overdraft (
+	    id SERIAL PRIMARY KEY,
+	    overdraft_usage INT,
+	    overdraft_limit INT,
+	    interest_rate NUMERIC(5,2).
+	    debit_account_id INT REFERENCES debit_account(id)
+	);
+2023-01-06 17:17:36.594 GMT [68074] ERROR:  syntax error at or near "dest_account_id" at character 99
+2023-01-06 17:17:36.594 GMT [68074] STATEMENT:  CREATE TABLE IF NOT EXISTS transaction (
+	    id SERIAL PRIMARY KEY,
+	    origin_account_id INT
+	    dest_account_id INT,
+	    amount INT,
+	    date DATE,
+	    savings_statement_id INT REFERENCES savings_statement(id),
+	    credit_statement_id INT REFERENCES credit_statement(id),
+	    debit_statement_id INT REFERENCES debit_statement(id)
+	);
+2023-01-06 17:17:36.610 GMT [68074] ERROR:  syntax error at or near "CREATE" at character 146
+2023-01-06 17:17:36.610 GMT [68074] STATEMENT:  CREATE TABLE IF NOT EXISTS external_account (
+	    account_id SERIAL PRIMARY KEY REFERENCES online_account(id),
+	    external_account_number INT
+	)
+	CREATE TABLE IF NOT EXISTS authentication_log (
+	    id SERIAL PRIMARY KEY,
+	    log_description VARCHAR,
+	    log_date DATE
+	)
+	CREATE TABLE IF NOT EXISTS management_log (
+	    id SERIAL PRIMARY KEY,
+	    log_description VARCHAR,
+	    log_date DATE
+	)
+	CREATE ROLE manager WITH LOGIN PASSWORD 'manager';
+2023-01-06 17:21:56.120 GMT [68045] LOG:  received fast shutdown request
+2023-01-06 17:21:56.123 GMT [68045] LOG:  aborting any active transactions
+2023-01-06 17:21:56.127 GMT [68045] LOG:  background worker "logical replication launcher" (PID 68052) exited with exit code 1
+2023-01-06 17:21:56.131 GMT [68047] LOG:  shutting down
+2023-01-06 17:21:56.173 GMT [68045] LOG:  database system is shut down
+2023-01-06 17:21:58.772 GMT [68928] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-06 17:21:58.772 GMT [68928] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-06 17:21:58.773 GMT [68928] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-06 17:21:58.777 GMT [68930] LOG:  database system was shut down at 2023-01-06 17:21:58 GMT
+2023-01-06 17:21:58.783 GMT [68928] LOG:  database system is ready to accept connections
+2023-01-06 17:21:59.525 GMT [68955] ERROR:  syntax error at or near "dest_account_id" at character 99
+2023-01-06 17:21:59.525 GMT [68955] STATEMENT:  CREATE TABLE IF NOT EXISTS transaction (
+	    id SERIAL PRIMARY KEY,
+	    origin_account_id INT
+	    dest_account_id INT,
+	    amount INT,
+	    date DATE,
+	    savings_statement_id INT REFERENCES savings_statement(id),
+	    credit_statement_id INT REFERENCES credit_statement(id),
+	    debit_statement_id INT REFERENCES debit_statement(id)
+	);
+2023-01-06 17:22:21.626 GMT [68928] LOG:  received fast shutdown request
+2023-01-06 17:22:21.628 GMT [68928] LOG:  aborting any active transactions
+2023-01-06 17:22:21.631 GMT [68928] LOG:  background worker "logical replication launcher" (PID 68936) exited with exit code 1
+2023-01-06 17:22:21.635 GMT [68931] LOG:  shutting down
+2023-01-06 17:22:21.674 GMT [68928] LOG:  database system is shut down
+2023-01-06 17:22:23.745 GMT [69114] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-06 17:22:23.745 GMT [69114] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-06 17:22:23.749 GMT [69114] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-06 17:22:23.755 GMT [69115] LOG:  database system was shut down at 2023-01-06 17:22:23 GMT
+2023-01-06 17:22:23.761 GMT [69114] LOG:  database system is ready to accept connections
+2023-01-06 17:23:04.638 GMT [69114] LOG:  received fast shutdown request
+2023-01-06 17:23:04.640 GMT [69114] LOG:  aborting any active transactions
+2023-01-06 17:23:04.644 GMT [69114] LOG:  background worker "logical replication launcher" (PID 69121) exited with exit code 1
+2023-01-06 17:23:04.646 GMT [69116] LOG:  shutting down
+2023-01-06 17:23:04.686 GMT [69114] LOG:  database system is shut down
+2023-01-06 17:23:06.413 GMT [69355] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-06 17:23:06.414 GMT [69355] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-06 17:23:06.415 GMT [69355] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-06 17:23:06.419 GMT [69356] LOG:  database system was shut down at 2023-01-06 17:23:06 GMT
+2023-01-06 17:23:06.426 GMT [69355] LOG:  database system is ready to accept connections
+2023-01-06 17:23:07.191 GMT [69381] ERROR:  syntax error at or near "CREATE" at character 51
+2023-01-06 17:23:07.191 GMT [69381] STATEMENT:  CREATE ROLE manager WITH LOGIN PASSWORD 'manager' CREATE ROLE;
+2023-01-06 17:23:25.479 GMT [69355] LOG:  received fast shutdown request
+2023-01-06 17:23:25.482 GMT [69355] LOG:  aborting any active transactions
+2023-01-06 17:23:25.488 GMT [69355] LOG:  background worker "logical replication launcher" (PID 69362) exited with exit code 1
+2023-01-06 17:23:25.489 GMT [69357] LOG:  shutting down
+2023-01-06 17:23:25.536 GMT [69355] LOG:  database system is shut down

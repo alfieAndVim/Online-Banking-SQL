@@ -55,4 +55,4 @@ psql -d online_banking -c "GRANT ALL PRIVILEGES ON DATABASE online_banking TO po
 psql -d online_banking -c "ALTER DATABASE online_banking OWNER TO postgres;"
 
 #load sql file into database
-psql -U postgres -d online_banking -f online_banking.sql
+psql -U postgres -d online_banking -f online_bank.sql

@@ -6,7 +6,7 @@ SET search_path TO online_banking;
 
 /*Drop all tables if they exist*/
 DROP TABLE IF EXISTS customer;
-DROP TABLE IF EXISTS account;
+DROP TABLE IF EXISTS online_account;
 DROP TABLE IF EXISTS savings_account;
 DROP TABLE IF EXISTS credit_account;
 DROP TABLE IF EXISTS credit_account_application;
@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS customer (
     address VARCHAR(255) []
 );
 
-/*create a table account with a foreign key to customer*/
-CREATE TABLE IF NOT EXISTS account (
+/*create a table online_account with a foreign key to customer*/
+CREATE TABLE IF NOT EXISTS online_account (
     id SERIAL PRIMARY KEY,
     init_date DATE,
     customer_id INTEGER REFERENCES customer(id),
@@ -36,18 +36,29 @@ CREATE TABLE IF NOT EXISTS account (
     passwd VARCHAR(255)
 );
 
-/*create a table savings_account with a foreign key to account*/
+-- Create a table account with a foreign key to online_account
+CREATE TABLE IF NOT EXISTS account (
+    id SERIAL PRIMARY KEY,
+    online_account_id  INTEGER REFERENCES online_account(id),
+    date_opened DATE,
+    account_type VARCHAR(255)
+
+)
+
+/*create a table savings_account with a foreign key to online_account*/
 CREATE TABLE IF NOT EXISTS savings_account (
     id SERIAL PRIMARY KEY,
-    account_id INTEGER REFERENCES account(id),
+    account_id INTEGER REFERENCES online_account(id),
     current_balance NUMERIC(10,2),
     interest_rate NUMERIC(5,2)
 );
 
-/*create a table credit_account with a foreign key to account*/
+CREATE TABLE IF NOT EXISTS savings_account_statement
+
+/*create a table credit_account with a foreign key to online_account*/
 CREATE TABLE IF NOT EXISTS credit_account (
     id SERIAL PRIMARY KEY,
-    account_id INTEGER REFERENCES account(id),
+    account_id INTEGER REFERENCES online_account(id),
     current_balance NUMERIC(10,2),
     credit_limit NUMERIC(10,2),
     interest_rate NUMERIC(5,2)
@@ -62,19 +73,19 @@ CREATE TABLE IF NOT EXISTS credit_account_application (
     status VARCHAR(255)
 );
 
-/*create a table debit_account with a foreign key to account*/
+/*create a table debit_account with a foreign key to online_account*/
 CREATE TABLE IF NOT EXISTS debit_account (
     id SERIAL PRIMARY KEY,
-    account_id INTEGER REFERENCES account(id),
+    account_id INTEGER REFERENCES online_account(id),
     current_balance NUMERIC(10,2),
     overdraft_limit NUMERIC(10,2),
     interest_rate NUMERIC(5,2)
 );
 
-/*create a table loan with a foreign key to account*/
+/*create a table loan with a foreign key to online_account*/
 CREATE TABLE IF NOT EXISTS loan (
     id SERIAL PRIMARY KEY,
-    account_id INTEGER REFERENCES account(id),
+    account_id INTEGER REFERENCES online_account(id),
     current_balance NUMERIC(10,2),
     interest_rate NUMERIC(5,2),
     loan_amount NUMERIC(10,2),
@@ -92,10 +103,10 @@ CREATE TABLE IF NOT EXISTS loan_application (
     status VARCHAR(255)
 );
 
-/*create a table transaction with a foreign key to account*/
+/*create a table transaction with a foreign key to online_account*/
 CREATE TABLE IF NOT EXISTS transaction (
     id SERIAL PRIMARY KEY,
-    account_id INTEGER REFERENCES account(id),
+    account_id INTEGER REFERENCES online_account(id),
     transaction_date DATE,
     transaction_type VARCHAR(255),
     transaction_amount NUMERIC(10,2)
@@ -107,55 +118,55 @@ CREATE TABLE IF NOT EXISTS log (
     log_date DATE,
     log_message VARCHAR(255),
     customer_id INTEGER REFERENCES customer(id),
-    account_id INTEGER REFERENCES account(id)
+    account_id INTEGER REFERENCES online_account(id)
 );
 
 CREATE OR REPLACE VIEW view_accounts AS
 SELECT id, init_date, customer_id, username
-FROM account;
+FROM online_account;
 
 CREATE OR REPLACE VIEW view_account AS
 SELECT id, init_date, customer_id, username
-FROM account
+FROM online_account
 WHERE username = current_user;
 
 -- Create a view that only the current user is able to see their loan information
 CREATE OR REPLACE VIEW view_loan AS
-SELECT account.customer_id, loan.id, loan.account_id, loan.loan_start_date, loan.is_approved
+SELECT online_account.customer_id, loan.id, loan.account_id, loan.loan_start_date, loan.is_approved
     FROM (
         SELECT loan.id, loan.account_id, loan.loan_start_date, loan_application.loan_id, loan_application.is_approved FROM loan
         INNER JOIN loan_application ON loan.id = loan_application.loan_id
     ) AS loan
-INNER JOIN account ON loan.account_id = account.id
-WHERE account.username = current_user;
+INNER JOIN online_account ON loan.account_id = online_account.id
+WHERE online_account.username = current_user;
 
--- Create a view where only the current user is able to see their credit account information
+-- Create a view where only the current user is able to see their credit online_account information
 CREATE OR REPLACE VIEW view_credit_account AS
-SELECT account.customer_id, credit_account.id, credit_account.account_id, credit_account.is_approved
+SELECT online_account.customer_id, credit_account.id, credit_account.account_id, credit_account.is_approved
     FROM (
         SELECT credit_account.id, credit_account.account_id, credit_account.interest_rate, credit_account_application.credit_account_id, credit_account_application.is_approved FROM credit_account
         INNER JOIN credit_account_application ON credit_account.id = credit_account_application.credit_account_id
     ) AS credit_account
-INNER JOIN account on credit_account.account_id = account.id
-WHERE account.username = current_user;
+INNER JOIN online_account on credit_account.account_id = online_account.id
+WHERE online_account.username = current_user;
 
--- Create a view where only the current user is able to see their savings account
+-- Create a view where only the current user is able to see their savings online_account
 CREATE OR REPLACE VIEW view_savings_account AS
-SELECT account.customer_id, savings_account.id, savings_account.account_id, savings_account.interest_rate
+SELECT online_account.customer_id, savings_account.id, savings_account.account_id, savings_account.interest_rate
     FROM savings_account
-INNER JOIN account ON savings_account.account_id = account.id
-WHERE account.username = current_user;
+INNER JOIN online_account ON savings_account.account_id = online_account.id
+WHERE online_account.username = current_user;
 
 -- Allows a user with significant permissions to read all of the loans that are available
 CREATE OR REPLACE VIEW view_loans AS
 SELECT customer.first_name, customer.last_name, loans.customer_id, loans.account_id, loans.loan_start_date, loans.is_approved FROM customer
 INNER JOIN
-    (SELECT account.customer_id, loan.id, loan.account_id, loan.loan_start_date, loan.is_approved
+    (SELECT online_account.customer_id, loan.id, loan.account_id, loan.loan_start_date, loan.is_approved
     FROM (
         SELECT loan.id, loan.account_id, loan.loan_start_date, loan_application.loan_id, loan_application.is_approved FROM loan
         INNER JOIN loan_application ON loan.id = loan_application.loan_id
     ) AS loan
-    INNER JOIN account ON loan.account_id = account.id) AS loans
+    INNER JOIN online_account ON loan.account_id = online_account.id) AS loans
 ON customer.id = loans.customer_id
 ORDER BY customer.last_name ASC;
 
@@ -163,12 +174,12 @@ ORDER BY customer.last_name ASC;
 CREATE OR REPLACE VIEW view_credit_accounts AS
 SELECT customer.first_name, customer.last_name, credit_accounts.customer_id, credit_accounts.id, credit_accounts.is_approved FROM customer
 INNER JOIN
-    (SELECT account.customer_id, credit_account.id, credit_account.account_id, credit_account.is_approved
+    (SELECT online_account.customer_id, credit_account.id, credit_account.account_id, credit_account.is_approved
     FROM (
         SELECT credit_account.id, credit_account.account_id, credit_account.interest_rate, credit_account_application.credit_account_id, credit_account_application.is_approved FROM credit_account
         INNER JOIN credit_account_application ON credit_account.id = credit_account_application.credit_account_id
     ) AS credit_account
-    INNER JOIN account on credit_account.account_id = account.id) AS credit_accounts
+    INNER JOIN online_account on credit_account.account_id = online_account.id) AS credit_accounts
 ON customer.id = credit_accounts.customer_id
 ORDER BY customer.last_name ASC;
 
@@ -177,9 +188,9 @@ ORDER BY customer.last_name ASC;
 CREATE OR REPLACE VIEW view_debit_accounts AS
 SELECT customer.first_name, customer.last_name, debit_accounts.customer_id, debit_accounts.interest_rate FROM customer
 INNER JOIN
-    (SELECT account.customer_id, debit_account.id, debit_account.account_id, debit_account.interest_rate
+    (SELECT online_account.customer_id, debit_account.id, debit_account.account_id, debit_account.interest_rate
     FROM debit_account
-    INNER JOIN account ON debit_account.account_id = account.id) AS debit_accounts
+    INNER JOIN online_account ON debit_account.account_id = online_account.id) AS debit_accounts
 ON customer.id = debit_accounts.customer_id;
 
 
@@ -187,9 +198,9 @@ ON customer.id = debit_accounts.customer_id;
 CREATE OR REPLACE VIEW view_savings_accounts AS
 SELECT customer.first_name, customer.last_name, savings.customer_id, savings.account_id, savings.interest_rate FROM customer
 INNER JOIN
-    (SELECT account.customer_id, savings_account.id, savings_account.account_id, savings_account.interest_rate
+    (SELECT online_account.customer_id, savings_account.id, savings_account.account_id, savings_account.interest_rate
     FROM savings_account
-    INNER JOIN account ON savings_account.account_id = account.id) AS savings
+    INNER JOIN online_account ON savings_account.account_id = online_account.id) AS savings
 ON customer.id = savings.customer_id;
 
 
@@ -208,8 +219,8 @@ VALUES
     ('2019-01-01', 'Jane', 'Dee', '1990-01-01', '123-456-7890', '{"123 Main St", "Apt 1", "New York, NY 10001"}');
 
 
-/*insert elements of sample data into account*/
-INSERT INTO account (init_date, customer_id, username, passwd)
+/*insert elements of sample data into online_account*/
+INSERT INTO online_account (init_date, customer_id, username, passwd)
 VALUES
     ('2019-01-01', 1, 'JohnSmith', '4e1b8f5bacb39b35f0a97f962871b2d4d5b5e935c34db051b45e3cc5f5b5d5c5'),
     ('2017-01-01', 2, 'JaneDoe', 'f0d5d3c9cf9b5b8c3b3e5e5ce5b5d5c8f5e5b5c5d9d5c5f5b5b5b5f5b5d5b5b5'),
@@ -330,11 +341,11 @@ CREATE OR REPLACE FUNCTION add_account(customer_id INTEGER, username TEXT, passw
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 BEGIN
-    INSERT INTO account (init_date, customer_id, username, passwd)
+    INSERT INTO online_account (init_date, customer_id, username, passwd)
     VALUES (current_date, customer_id, username, DIGEST(passwd, 'sha256'));
     PERFORM add_account_role(username, passwd);
     INSERT INTO log (log_date, log_message, customer_id)
-    VALUES (current_date, 'Account added', customer_id);
+    VALUES (current_date, 'online_account added', customer_id);
     passed := true;
     RETURN passed;
 END;
@@ -349,7 +360,7 @@ BEGIN
     INSERT INTO savings_account (account_id, current_balance, interest_rate)
     VALUES (account_id, current_balance, interest_rate);
     INSERT INTO log (log_date, log_message, customer_id)
-    VALUES (current_date, 'Savings account added', (SELECT customer_id FROM account WHERE account_id = account_id));
+    VALUES (current_date, 'Savings online_account added', (SELECT customer_id FROM online_account WHERE account_id = account_id));
     passed := true;
     RETURN passed;
 END;
@@ -364,7 +375,7 @@ BEGIN
     INSERT INTO credit_account (account_id, current_balance, credit_limit, interest_rate)
     VALUES (account_id, current_balance, credit_limit, interest_rate);
     INSERT INTO log (log_date, log_message, customer_id)
-    VALUES (current_date, 'Credit account added', (SELECT customer_id FROM account WHERE account_id = account_id));
+    VALUES (current_date, 'Credit online_account added', (SELECT customer_id FROM online_account WHERE account_id = account_id));
     passed := true;
     RETURN passed;
 END;
@@ -378,7 +389,7 @@ BEGIN
     INSERT INTO credit_account_application (credit_account_id, is_approved, application_date, status)
     VALUES (credit_account_id, is_approved, current_date, "pending");
     INSERT INTO log (log_date, log_message, customer_id)
-    VALUES (current_date, 'Credit account application added', (SELECT customer_id FROM account WHERE account_id = credit_account_id));
+    VALUES (current_date, 'Credit online_account application added', (SELECT customer_id FROM online_account WHERE account_id = credit_account_id));
     passed := true;
     RETURN passed;
 END;
@@ -404,7 +415,7 @@ BEGIN
     INSERT INTO debit_account (account_id, current_balance, overdraft_limit, interest_rate)
     VALUES (account_id, current_balance, overdraft_limit, interest_rate);
     INSERT INTO log (log_date, log_message, customer_id)
-    VALUES (current_date, 'Debit account added', (SELECT customer_id FROM account WHERE account_id = account_id));
+    VALUES (current_date, 'Debit online_account added', (SELECT customer_id FROM online_account WHERE account_id = account_id));
     passed := true;
     RETURN passed;
 END;
@@ -419,7 +430,7 @@ BEGIN
     INSERT INTO loan (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date)
     VALUES (account_id, loan_amount, interest_rate, loan_term, loan_start_date, loan_end_date);
     INSERT INTO log (log_date, log_message, customer_id)
-    VALUES (current_date, 'Loan added', (SELECT customer_id FROM account WHERE account_id = account_id));
+    VALUES (current_date, 'Loan added', (SELECT customer_id FROM online_account WHERE account_id = account_id));
     passed := true;
     RETURN passed;
 END;
@@ -434,7 +445,7 @@ BEGIN
     INSERT INTO loan_application (loan_id, is_approved, application_date, status)
     VALUES (loan_id, is_approved, application_date, status);
     INSERT INTO log (log_date, log_message, customer_id)
-    VALUES (current_date, 'Loan application added', (SELECT customer_id FROM account WHERE account_id = (SELECT account_id FROM loan WHERE loan_id = loan_id)));
+    VALUES (current_date, 'Loan application added', (SELECT customer_id FROM online_account WHERE account_id = (SELECT account_id FROM loan WHERE loan_id = loan_id)));
     passed := true;
     RETURN passed;
 END;
@@ -442,5 +453,3 @@ $$ LANGUAGE plpgsql;
 
 
 \dt
-
-SELECT * FROM view_debit_accounts;
