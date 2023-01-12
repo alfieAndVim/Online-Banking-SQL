@@ -5561,3 +5561,1671 @@
 2023-01-11 09:33:43.408 GMT [34310] LOG:  database system is ready to accept connections
 2023-01-11 09:33:44.319 GMT [34353] ERROR:  permission denied for table customer
 2023-01-11 09:33:44.319 GMT [34353] STATEMENT:  SELECT * FROM customer;
+2023-01-11 10:02:39.205 GMT [39544] ERROR:  role "l1" already exists
+2023-01-11 10:02:39.205 GMT [39544] STATEMENT:  CREATE ROLE l1 WITH CREATEDB CREATEROLE SUPERUSER;
+2023-01-11 10:02:39.206 GMT [39544] ERROR:  role "l2" already exists
+2023-01-11 10:02:39.206 GMT [39544] STATEMENT:  CREATE ROLE l2 WITH CREATEROLE;
+2023-01-11 10:02:39.206 GMT [39544] ERROR:  role "l3" already exists
+2023-01-11 10:02:39.206 GMT [39544] STATEMENT:  CREATE ROLE l3 WITH CREATEROLE;
+2023-01-11 10:02:39.206 GMT [39544] ERROR:  role "l4" already exists
+2023-01-11 10:02:39.206 GMT [39544] STATEMENT:  CREATE ROLE l4;
+2023-01-11 10:02:39.207 GMT [39544] ERROR:  role "l5" already exists
+2023-01-11 10:02:39.207 GMT [39544] STATEMENT:  CREATE ROLE l5;
+2023-01-11 10:02:39.208 GMT [39544] ERROR:  role "manager" already exists
+2023-01-11 10:02:39.208 GMT [39544] STATEMENT:  CREATE ROLE manager WITH LOGIN PASSWORD 'manager';
+2023-01-11 10:02:39.208 GMT [39544] ERROR:  role "employee1" already exists
+2023-01-11 10:02:39.208 GMT [39544] STATEMENT:  CREATE ROLE employee1 WITH LOGIN PASSWORD 'employee1';
+2023-01-11 10:02:39.209 GMT [39544] ERROR:  role "employee2" already exists
+2023-01-11 10:02:39.209 GMT [39544] STATEMENT:  CREATE ROLE employee2 WITH LOGIN PASSWORD 'employee2';
+2023-01-11 10:02:39.209 GMT [39544] ERROR:  role "employee3" already exists
+2023-01-11 10:02:39.209 GMT [39544] STATEMENT:  CREATE ROLE employee3 WITH LOGIN PASSWORD 'employee3';
+2023-01-11 10:02:39.209 GMT [39544] ERROR:  role "employee4" already exists
+2023-01-11 10:02:39.209 GMT [39544] STATEMENT:  CREATE ROLE employee4 WITH LOGIN PASSWORD 'employee4';
+2023-01-11 10:02:39.209 GMT [39544] ERROR:  role "employee5" already exists
+2023-01-11 10:02:39.209 GMT [39544] STATEMENT:  CREATE ROLE employee5 WITH LOGIN PASSWORD 'employee5';
+2023-01-11 10:02:39.209 GMT [39544] ERROR:  role "unauthenticated" already exists
+2023-01-11 10:02:39.209 GMT [39544] STATEMENT:  CREATE ROLE unauthenticated WITH LOGIN PASSWORD 'unauthenticated';
+2023-01-11 10:02:39.215 GMT [39544] ERROR:  cannot drop table customer because other objects depend on it
+2023-01-11 10:02:39.215 GMT [39544] DETAIL:  constraint online_account_customer_id_fkey on table online_account depends on table customer
+	view client.client_personal_information depends on table customer
+	view unauthenticated.unauthenticated_personal_information depends on table customer
+	view unauthenticated.unauthenticated_customer depends on table customer
+2023-01-11 10:02:39.215 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.215 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS customer;
+2023-01-11 10:02:39.217 GMT [39544] ERROR:  cannot drop table online_account because other objects depend on it
+2023-01-11 10:02:39.217 GMT [39544] DETAIL:  constraint user_login_account_id_fkey on table user_login depends on table online_account
+	constraint savings_account_account_id_fkey on table savings_account depends on table online_account
+	constraint credit_account_account_id_fkey on table credit_account depends on table online_account
+	constraint debit_account_account_id_fkey on table debit_account depends on table online_account
+	constraint loan_account_id_fkey on table loan depends on table online_account
+	constraint external_account_account_id_fkey on table external_account depends on table online_account
+	view client.client_online_account_details depends on table online_account
+	view client.client_personal_information depends on view client.client_online_account_details
+	view client.client_loans depends on view client.client_online_account_details
+	view client.client_loan_applications depends on view client.client_loans
+	view client.client_loan_statements depends on view client.client_loans
+	view client.client_savings_account depends on view client.client_online_account_details
+	view client.client_savings_account_statements depends on view client.client_savings_account
+	view client.client_savings_account_statement depends on view client.client_savings_account_statements
+	view client.client_credit_accounts depends on view client.client_online_account_details
+	view client.client_credit_account_applications depends on view client.client_credit_accounts
+	view client.client_credit_account_statements depends on view client.client_credit_accounts
+	view client.client_credit_account_statement depends on view client.client_credit_account_statements
+	view client.client_debit_accounts depends on view client.client_online_account_details
+	view client.client_debit_account_statements depends on view client.client_debit_accounts
+	view client.client_debit_account_statement depends on view client.client_debit_account_statements
+2023-01-11 10:02:39.217 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.217 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS online_account;
+2023-01-11 10:02:39.218 GMT [39544] ERROR:  cannot drop table user_login because other objects depend on it
+2023-01-11 10:02:39.218 GMT [39544] DETAIL:  constraint user_login_security_question_login_id_fkey on table user_login_security_question depends on table user_login
+	view client.view_login depends on table user_login
+	view client.client_security_questions depends on view client.view_login
+	view client.client_online_account_details depends on view client.view_login
+	view client.client_personal_information depends on view client.client_online_account_details
+	view client.client_loans depends on view client.client_online_account_details
+	view client.client_loan_applications depends on view client.client_loans
+	view client.client_loan_statements depends on view client.client_loans
+	view client.client_savings_account depends on view client.client_online_account_details
+	view client.client_savings_account_statements depends on view client.client_savings_account
+	view client.client_savings_account_statement depends on view client.client_savings_account_statements
+	view client.client_credit_accounts depends on view client.client_online_account_details
+	view client.client_credit_account_applications depends on view client.client_credit_accounts
+	view client.client_credit_account_statements depends on view client.client_credit_accounts
+	view client.client_credit_account_statement depends on view client.client_credit_account_statements
+	view client.client_debit_accounts depends on view client.client_online_account_details
+	view client.client_debit_account_statements depends on view client.client_debit_accounts
+	view client.client_debit_account_statement depends on view client.client_debit_account_statements
+	view unauthenticated.unauthenticated_login depends on table user_login
+2023-01-11 10:02:39.218 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.218 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS user_login;
+2023-01-11 10:02:39.219 GMT [39544] ERROR:  cannot drop table user_login_security_question because other objects depend on it
+2023-01-11 10:02:39.219 GMT [39544] DETAIL:  constraint security_question_answer_question_id_fkey on table security_question_answer depends on table user_login_security_question
+	view client.client_security_questions depends on table user_login_security_question
+2023-01-11 10:02:39.219 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.219 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS user_login_security_question;
+2023-01-11 10:02:39.219 GMT [39544] ERROR:  cannot drop table security_question_option because other objects depend on it
+2023-01-11 10:02:39.219 GMT [39544] DETAIL:  constraint user_login_security_question_question_choice_id_fkey on table user_login_security_question depends on table security_question_option
+	view client.client_security_questions depends on table security_question_option
+2023-01-11 10:02:39.219 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.219 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS security_question_option;
+2023-01-11 10:02:39.220 GMT [39544] ERROR:  cannot drop table security_question_answer because other objects depend on it
+2023-01-11 10:02:39.220 GMT [39544] DETAIL:  view client.client_security_questions depends on table security_question_answer
+2023-01-11 10:02:39.220 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.220 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS security_question_answer;
+2023-01-11 10:02:39.221 GMT [39544] ERROR:  cannot drop table savings_account because other objects depend on it
+2023-01-11 10:02:39.221 GMT [39544] DETAIL:  constraint savings_statement_account_id_fkey on table savings_statement depends on table savings_account
+	view client.client_savings_account depends on table savings_account
+	view client.client_savings_account_statements depends on view client.client_savings_account
+	view client.client_savings_account_statement depends on view client.client_savings_account_statements
+2023-01-11 10:02:39.221 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.221 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS savings_account;
+2023-01-11 10:02:39.222 GMT [39544] ERROR:  cannot drop table credit_account because other objects depend on it
+2023-01-11 10:02:39.222 GMT [39544] DETAIL:  constraint credit_account_application_account_id_fkey on table credit_account_application depends on table credit_account
+	constraint credit_statement_account_id_fkey on table credit_statement depends on table credit_account
+	view client.client_credit_accounts depends on table credit_account
+	view client.client_credit_account_applications depends on view client.client_credit_accounts
+	view client.client_credit_account_statements depends on view client.client_credit_accounts
+	view client.client_credit_account_statement depends on view client.client_credit_account_statements
+2023-01-11 10:02:39.222 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.222 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS credit_account;
+2023-01-11 10:02:39.222 GMT [39544] ERROR:  cannot drop table debit_account because other objects depend on it
+2023-01-11 10:02:39.222 GMT [39544] DETAIL:  constraint debit_statement_account_id_fkey on table debit_statement depends on table debit_account
+	constraint debit_overdraft_account_id_fkey on table debit_overdraft depends on table debit_account
+	view client.client_debit_accounts depends on table debit_account
+	view client.client_debit_account_statements depends on view client.client_debit_accounts
+	view client.client_debit_account_statement depends on view client.client_debit_account_statements
+2023-01-11 10:02:39.222 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.222 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS debit_account;
+2023-01-11 10:02:39.223 GMT [39544] ERROR:  cannot drop table loan because other objects depend on it
+2023-01-11 10:02:39.223 GMT [39544] DETAIL:  constraint loan_application_loan_id_fkey on table loan_application depends on table loan
+	constraint loan_statement_loan_id_fkey on table loan_statement depends on table loan
+	view client.client_loans depends on table loan
+	view client.client_loan_applications depends on view client.client_loans
+	view client.client_loan_statements depends on view client.client_loans
+2023-01-11 10:02:39.223 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.223 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS loan;
+2023-01-11 10:02:39.224 GMT [39544] ERROR:  cannot drop table savings_statement because other objects depend on it
+2023-01-11 10:02:39.224 GMT [39544] DETAIL:  constraint transaction_savings_statement_id_fkey on table transaction depends on table savings_statement
+	view client.client_savings_account_statements depends on table savings_statement
+	view client.client_savings_account_statement depends on view client.client_savings_account_statements
+2023-01-11 10:02:39.224 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.224 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS savings_statement;
+2023-01-11 10:02:39.224 GMT [39544] ERROR:  cannot drop table credit_account_application because other objects depend on it
+2023-01-11 10:02:39.224 GMT [39544] DETAIL:  view client.client_credit_account_applications depends on table credit_account_application
+2023-01-11 10:02:39.224 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.224 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS credit_account_application;
+2023-01-11 10:02:39.225 GMT [39544] ERROR:  cannot drop table credit_statement because other objects depend on it
+2023-01-11 10:02:39.225 GMT [39544] DETAIL:  constraint transaction_credit_statement_id_fkey on table transaction depends on table credit_statement
+	view client.client_credit_account_statements depends on table credit_statement
+	view client.client_credit_account_statement depends on view client.client_credit_account_statements
+2023-01-11 10:02:39.225 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.225 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS credit_statement;
+2023-01-11 10:02:39.225 GMT [39544] ERROR:  cannot drop table debit_statement because other objects depend on it
+2023-01-11 10:02:39.225 GMT [39544] DETAIL:  constraint transaction_debit_statement_id_fkey on table transaction depends on table debit_statement
+	view client.client_debit_account_statements depends on table debit_statement
+	view client.client_debit_account_statement depends on view client.client_debit_account_statements
+2023-01-11 10:02:39.225 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.225 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS debit_statement;
+2023-01-11 10:02:39.231 GMT [39544] ERROR:  cannot drop table transaction because other objects depend on it
+2023-01-11 10:02:39.231 GMT [39544] DETAIL:  view client.client_savings_account_statement depends on table transaction
+	view client.client_credit_account_statement depends on table transaction
+	view client.client_debit_account_statement depends on table transaction
+2023-01-11 10:02:39.231 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.231 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS transaction;
+2023-01-11 10:02:39.233 GMT [39544] ERROR:  cannot drop table loan_application because other objects depend on it
+2023-01-11 10:02:39.233 GMT [39544] DETAIL:  view client.client_loan_applications depends on table loan_application
+2023-01-11 10:02:39.233 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.233 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS loan_application;
+2023-01-11 10:02:39.234 GMT [39544] ERROR:  cannot drop table loan_statement because other objects depend on it
+2023-01-11 10:02:39.234 GMT [39544] DETAIL:  view client.client_loan_statements depends on table loan_statement
+2023-01-11 10:02:39.234 GMT [39544] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-01-11 10:02:39.234 GMT [39544] STATEMENT:  DROP TABLE IF EXISTS loan_statement;
+2023-01-11 10:02:39.323 GMT [39544] ERROR:  syntax error at or near "DECLARE" at character 685
+2023-01-11 10:02:39.323 GMT [39544] STATEMENT:  CREATE OR REPLACE FUNCTION client.close_online_account()
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	BEGIN
+	
+	    EXECUTE format('DROP USER %I', (SELECT username FROM client.view_login));
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	
+	    DELETE FROM user_login WHERE id = (SELECT id FROM client.view_login);
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	
+	    DELETE FROM client_online_account_details WHERE id = (SELECT id FROM client.view_login);
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	
+	    RETURN passed;
+	
+	    SET ROLE unauthenticated;
+	
+	END;
+	
+	CREATE OR REPLACE FUNCTION client.open_debit_account()
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-11 10:02:39.323 GMT [39544] ERROR:  syntax error at or near "INSERT" at character 11
+2023-01-11 10:02:39.323 GMT [39544] STATEMENT:  BEGIN
+	    INSERT INTO debit_account (account_id, current_balance, interest_rate) VALUES ((SELECT id FROM client.view_login), 0, 0.01);
+2023-01-11 10:02:39.323 GMT [39544] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 10:02:39.323 GMT [39544] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 10:02:39.323 GMT [39544] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 10:02:39.323 GMT [39544] STATEMENT:  RETURN passed;
+2023-01-11 10:02:39.323 GMT [39544] WARNING:  there is no transaction in progress
+2023-01-11 10:02:39.360 GMT [39544] ERROR:  role "johnsmith" already exists
+2023-01-11 10:02:39.360 GMT [39544] STATEMENT:  CREATE ROLE johnsmith WITH LOGIN PASSWORD '123456';
+2023-01-11 10:02:39.366 GMT [39544] ERROR:  permission denied for table customer
+2023-01-11 10:02:39.366 GMT [39544] STATEMENT:  SELECT * FROM customer;
+2023-01-11 10:28:51.798 GMT [34310] LOG:  received smart shutdown request
+2023-01-11 10:28:51.811 GMT [34310] LOG:  background worker "logical replication launcher" (PID 34321) exited with exit code 1
+2023-01-11 10:28:51.813 GMT [34316] LOG:  shutting down
+2023-01-11 10:28:51.817 GMT [34310] LOG:  received SIGHUP, reloading configuration files
+2023-01-11 10:28:51.832 GMT [34310] LOG:  database system is shut down
+2023-01-11 12:29:03.628 GMT [13347] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:29:03.630 GMT [13347] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:29:03.631 GMT [13347] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:29:03.638 GMT [13348] LOG:  database system was shut down at 2023-01-11 12:29:03 GMT
+2023-01-11 12:29:03.646 GMT [13347] LOG:  database system is ready to accept connections
+2023-01-11 12:29:04.994 GMT [13384] ERROR:  syntax error at or near "CREATE" at character 94
+2023-01-11 12:29:04.994 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.view_login AS
+	SELECT id, account_id, username
+	FROM user_login
+	
+	CREATE OR REPLACE VIEW client.client_security_questions AS
+	SELECT security_question_option.question_description, security_question_answer.question_answer
+	FROM user_login_security_question
+	INNER JOIN security_question_option ON user_login_security_question.question_choice_id = security_question_option.id
+	INNER JOIN security_question_answer ON user_login_security_question.id = security_question_answer.question_id
+	INNER JOIN view_login ON user_login_security_question.login_id = view_login.id;
+2023-01-11 12:29:04.994 GMT [13384] ERROR:  relation "view_login" does not exist at character 206
+2023-01-11 12:29:04.994 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_online_account_details AS
+	SELECT online_account.id, online_account.date_opened, online_account.sort_code, online_account.customer_id
+	    FROM online_account
+	INNER JOIN view_login ON online_account.id = view_login.id;
+2023-01-11 12:29:04.995 GMT [13384] ERROR:  relation "client_online_account_details" does not exist at character 105
+2023-01-11 12:29:04.995 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_personal_information AS
+	SELECT customer.* FROM customer
+	INNER JOIN client_online_account_details ON customer.id = client_online_account_details.customer_id;
+2023-01-11 12:29:04.997 GMT [13384] ERROR:  relation "client_online_account_details" does not exist at character 137
+2023-01-11 12:29:04.997 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_loans AS
+	SELECT loan.id, loan.loan_amount, loan.loan_end_date, loan.loan_type
+	FROM loan
+	INNER JOIN client_online_account_details ON loan.account_id = client_online_account_details.id;
+2023-01-11 12:29:04.997 GMT [13384] ERROR:  relation "client_loans" does not exist at character 133
+2023-01-11 12:29:04.997 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_loan_applications AS
+	SELECT loan_application.application_status, loan_application.loan_id
+	FROM client_loans
+	INNER JOIN loan_application ON client_loans.id = loan_application.loan_id;
+2023-01-11 12:29:04.998 GMT [13384] ERROR:  relation "client_loans" does not exist at character 145
+2023-01-11 12:29:04.998 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_loan_statements AS
+	SELECT loan_statement.starting_date, loan_statement.amount, loan_statement.loan_id
+	FROM client_loans
+	INNER JOIN loan_statement ON client_loans.id = loan_statement.loan_id;
+2023-01-11 12:29:04.998 GMT [13384] ERROR:  relation "client_online_account_details" does not exist at character 179
+2023-01-11 12:29:04.998 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_savings_account AS
+	SELECT savings_account.id, savings_account.current_balance, savings_account.interest_rate
+	FROM savings_account
+	INNER JOIN client_online_account_details ON savings_account.account_id = client_online_account_details.id;
+2023-01-11 12:29:04.998 GMT [13384] ERROR:  relation "client_savings_account" does not exist at character 218
+2023-01-11 12:29:04.998 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_savings_account_statements AS
+	SELECT savings_statement.id, savings_statement.starting_date, savings_statement.end_date, savings_statement.amount, savings_statement.account_id
+	FROM client_savings_account
+	INNER JOIN savings_statement ON client_savings_account.id = savings_statement.account_id;
+2023-01-11 12:29:04.999 GMT [13384] ERROR:  relation "client_savings_account_statements" does not exist at character 210
+2023-01-11 12:29:04.999 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_savings_account_statement AS
+	SELECT transaction.origin_account_id, transaction.dest_account_id, transaction.amount, transaction.date, transaction.savings_statement_id
+	FROM client_savings_account_statements
+	INNER JOIN transaction ON client_savings_account_statements.id = transaction.savings_statement_id;
+2023-01-11 12:29:04.999 GMT [13384] ERROR:  relation "client_online_account_details" does not exist at character 208
+2023-01-11 12:29:04.999 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_credit_accounts AS
+	SELECT credit_account.id, credit_account.outstanding_balance, credit_account.credit_limit, credit_account.interest_rate
+	FROM credit_account
+	INNER JOIN client_online_account_details ON credit_account.account_id = client_online_account_details.id;
+2023-01-11 12:29:04.999 GMT [13384] ERROR:  relation "client_credit_accounts" does not exist at character 166
+2023-01-11 12:29:04.999 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_credit_account_applications AS
+	SELECT credit_account_application.application_status, credit_account_application.account_id
+	FROM client_credit_accounts
+	INNER JOIN credit_account_application ON client_credit_accounts.id = credit_account_application.account_id;
+2023-01-11 12:29:05.000 GMT [13384] ERROR:  relation "client_credit_accounts" does not exist at character 289
+2023-01-11 12:29:05.000 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_credit_account_statements AS
+	SELECT credit_statement.id, credit_statement.starting_date, credit_statement.end_date, credit_statement.amount, credit_statement.minimum_payment, credit_statement.minimum_payment_due_date, credit_statement.account_id
+	FROM client_credit_accounts
+	INNER JOIN credit_statement ON client_credit_accounts.id = credit_statement.account_id;
+2023-01-11 12:29:05.000 GMT [13384] ERROR:  relation "client_credit_account_statements" does not exist at character 208
+2023-01-11 12:29:05.000 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_credit_account_statement AS
+	SELECT transaction.origin_account_id, transaction.dest_account_id, transaction.amount, transaction.date, transaction.credit_statement_id
+	FROM client_credit_account_statements
+	INNER JOIN transaction ON client_credit_account_statements.id = transaction.credit_statement_id;
+2023-01-11 12:29:05.000 GMT [13384] ERROR:  relation "client_online_account_details" does not exist at character 170
+2023-01-11 12:29:05.000 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_debit_accounts AS
+	SELECT debit_account.id, debit_account.current_balance, debit_account.interest_rate
+	FROM debit_account
+	INNER JOIN client_online_account_details ON debit_account.account_id = client_online_account_details.id;
+2023-01-11 12:29:05.002 GMT [13384] ERROR:  relation "client_debit_accounts" does not exist at character 206
+2023-01-11 12:29:05.002 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_debit_account_statements AS
+	SELECT debit_statement.id, debit_statement.starting_date, debit_statement.end_date, debit_statement.amount, debit_statement.account_id
+	FROM client_debit_accounts
+	INNER JOIN debit_statement ON client_debit_accounts.id = debit_statement.account_id;
+2023-01-11 12:29:05.004 GMT [13384] ERROR:  relation "client_debit_account_statements" does not exist at character 207
+2023-01-11 12:29:05.004 GMT [13384] STATEMENT:  CREATE OR REPLACE VIEW client.client_debit_account_statement AS
+	SELECT transaction.origin_account_id, transaction.dest_account_id, transaction.amount, transaction.date, transaction.credit_statement_id
+	FROM client_debit_account_statements
+	INNER JOIN transaction ON client_debit_account_statements.id = transaction.debit_statement_id;
+2023-01-11 12:29:05.004 GMT [13384] ERROR:  syntax error at or near "DECLARE" at character 727
+2023-01-11 12:29:05.004 GMT [13384] STATEMENT:  CREATE OR REPLACE FUNCTION client.get_customer_id(username TEXT, password TEXT)
+	RETURNS INTEGER AS $$
+	DECLARE customer_id INTEGER;
+	BEGIN
+	    SELECT online_account_details.customer_id FROM client_online_account_details AS online_account_details
+	    INNER JOIN client.view_login ON online_account_details.id = client.view_login.id
+	    WHERE client.view_login.username = username AND hashtext(client.view_login.password) = password;
+	END;
+	
+	CREATE OR REPLACE FUNCTION client.update_personal_information(first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT, username TEXT, password TEXT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-11 12:29:05.004 GMT [13384] ERROR:  syntax error at or near "UPDATE" at character 11
+2023-01-11 12:29:05.004 GMT [13384] STATEMENT:  BEGIN
+	    UPDATE customer SET first_name = first_name, last_name = last_name, date_of_birth = date_of_birth, phone_number = phone_number, email_address = email_address, address_street = address_street, address_city = address_city, address_county = address_county, address_postcode = address_postcode
+	    WHERE id = (SELECT * FROM get_customer_id(username, password));
+2023-01-11 12:29:05.004 GMT [13384] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:29:05.004 GMT [13384] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:29:05.005 GMT [13384] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:29:05.005 GMT [13384] STATEMENT:  RETURN passed;
+2023-01-11 12:29:05.005 GMT [13384] WARNING:  there is no transaction in progress
+2023-01-11 12:29:05.005 GMT [13384] ERROR:  syntax error at or near "$$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION client.update_login_information(username TEXT, password TEXT)
+	RETURNS BOOLEAN AS $$" at character 1
+2023-01-11 12:29:05.005 GMT [13384] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION client.update_login_information(username TEXT, password TEXT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-11 12:29:05.005 GMT [13384] ERROR:  syntax error at or near "UPDATE" at character 11
+2023-01-11 12:29:05.005 GMT [13384] STATEMENT:  BEGIN
+	    UPDATE user_login SET username = username
+	    WHERE id = (SELECT id FROM client.view_login);
+2023-01-11 12:29:05.005 GMT [13384] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:29:05.005 GMT [13384] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:29:05.006 GMT [13384] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:29:05.006 GMT [13384] STATEMENT:  EXECUTE format('ALTER USER %I WITH PASSWORD %L', username, password);
+2023-01-11 12:29:05.007 GMT [13384] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:29:05.007 GMT [13384] STATEMENT:  RETURN passed;
+2023-01-11 12:29:05.007 GMT [13384] WARNING:  there is no transaction in progress
+2023-01-11 12:29:05.007 GMT [13384] ERROR:  syntax error at or near "$$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION client.close_online_account()
+	RETURNS BOOLEAN AS $$" at character 1
+2023-01-11 12:29:05.007 GMT [13384] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION client.close_online_account()
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-11 12:29:05.007 GMT [13384] ERROR:  syntax error at or near "EXECUTE" at character 11
+2023-01-11 12:29:05.007 GMT [13384] STATEMENT:  BEGIN
+	    EXECUTE format('DROP USER %I', (SELECT username FROM client.view_login));
+2023-01-11 12:29:05.007 GMT [13384] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:29:05.007 GMT [13384] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:29:05.007 GMT [13384] ERROR:  relation "client.view_login" does not exist at character 51
+2023-01-11 12:29:05.007 GMT [13384] STATEMENT:  DELETE FROM user_login WHERE id = (SELECT id FROM client.view_login);
+2023-01-11 12:29:05.008 GMT [13384] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:29:05.008 GMT [13384] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:29:05.009 GMT [13384] ERROR:  relation "client_online_account_details" does not exist at character 13
+2023-01-11 12:29:05.009 GMT [13384] STATEMENT:  DELETE FROM client_online_account_details WHERE id = (SELECT id FROM client.view_login);
+2023-01-11 12:29:05.009 GMT [13384] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:29:05.009 GMT [13384] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:29:05.009 GMT [13384] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:29:05.009 GMT [13384] STATEMENT:  RETURN passed;
+2023-01-11 12:29:05.011 GMT [13384] WARNING:  there is no transaction in progress
+2023-01-11 12:29:05.011 GMT [13384] ERROR:  syntax error at or near "DECLARE" at character 1185
+2023-01-11 12:29:05.011 GMT [13384] STATEMENT:  CREATE OR REPLACE FUNCTION client.open_debit_account()
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	BEGIN
+	    INSERT INTO debit_account (account_id, current_balance, interest_rate) VALUES ((SELECT id FROM client.view_login), 0, 0.01);
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	    RETURN passed;
+	END;
+	
+	
+	CREATE SCHEMA IF NOT EXISTS unauthenticated;
+	SET search_path TO unauthenticated, public;
+	
+	CREATE OR REPLACE VIEW unauthenticated.unauthenticated_personal_information AS
+	SELECT id, hashtext(first_name) AS first_name, hashtext(last_name) AS last_name, hashtext(email_address) AS email_address
+	FROM customer;
+	
+	CREATE OR REPLACE VIEW unauthenticated.unauthenticated_customer AS
+	SELECT * FROM customer;
+	
+	CREATE OR REPLACE VIEW unauthenticated.unauthenticated_login AS
+	SELECT hashtext(username) AS username FROM user_login;
+	
+	
+	
+	-- Allows a user to insert personal information into the online banking system
+	CREATE OR REPLACE FUNCTION unauthenticated.create_personal_info(first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT)
+	RETURNS INT AS $$
+	DECLARE success INT;
+2023-01-11 12:29:05.011 GMT [13384] ERROR:  syntax error at or near "IF" at character 11
+2023-01-11 12:29:05.011 GMT [13384] STATEMENT:  BEGIN
+	    IF NOT EXISTS (SELECT FROM unauthenticated_personal_information WHERE hashtext(first_name) = first_name AND hashtext(last_name) = last_name AND hashtext(email_address) = email_address) THEN
+	        INSERT INTO customer
+	        VALUES (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode);
+2023-01-11 12:29:05.012 GMT [13384] ERROR:  syntax error at or near "success" at character 1
+2023-01-11 12:29:05.012 GMT [13384] STATEMENT:  success = 1;
+2023-01-11 12:29:05.012 GMT [13384] ERROR:  syntax error at or near "ELSE" at character 1
+2023-01-11 12:29:05.012 GMT [13384] STATEMENT:  ELSE
+	        RAISE NOTICE 'CUSTOMER INFORMATION ALREADY PRESENT';
+2023-01-11 12:29:05.012 GMT [13384] ERROR:  syntax error at or near "success" at character 1
+2023-01-11 12:29:05.012 GMT [13384] STATEMENT:  success = 0;
+2023-01-11 12:29:05.012 GMT [13384] ERROR:  syntax error at or near "IF" at character 5
+2023-01-11 12:29:05.012 GMT [13384] STATEMENT:  END IF;
+2023-01-11 12:29:05.012 GMT [13384] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:29:05.012 GMT [13384] STATEMENT:  RETURN success;
+2023-01-11 12:29:05.012 GMT [13384] WARNING:  there is no transaction in progress
+2023-01-11 12:29:05.012 GMT [13384] ERROR:  syntax error at or near "$$ LANGUAGE plpgsql;
+	
+	-- Allows a user to fetch their respective customer id
+	CREATE OR REPLACE FUNCTION unauthenticated.get_customer_id(first_name TEXT, last_name TEXT, email_address TEXT)
+	RETURNS INT AS $$" at character 1
+2023-01-11 12:29:05.012 GMT [13384] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	-- Allows a user to fetch their respective customer id
+	CREATE OR REPLACE FUNCTION unauthenticated.get_customer_id(first_name TEXT, last_name TEXT, email_address TEXT)
+	RETURNS INT AS $$
+	DECLARE customer_id INT;
+2023-01-11 12:29:05.013 GMT [13384] ERROR:  syntax error at or near "SELECT" at character 11
+2023-01-11 12:29:05.013 GMT [13384] STATEMENT:  BEGIN
+	    SELECT id INTO customer_id FROM customer WHERE first_name = first_name AND last_name = last_name AND email_address = email_address;
+2023-01-11 12:29:05.013 GMT [13384] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:29:05.013 GMT [13384] STATEMENT:  RETURN customer_id;
+2023-01-11 12:29:05.013 GMT [13384] WARNING:  there is no transaction in progress
+2023-01-11 12:29:05.013 GMT [13384] ERROR:  syntax error at or near "$$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION unauthenticated.create_online_account_details(username TEXT, password TEXT, first_name TEXT, last_name TEXT, email_address TEXT, question_choice_ids INT[], question_answers TEXT[])
+	RETURNS INT AS $$" at character 1
+2023-01-11 12:29:05.013 GMT [13384] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION unauthenticated.create_online_account_details(username TEXT, password TEXT, first_name TEXT, last_name TEXT, email_address TEXT, question_choice_ids INT[], question_answers TEXT[])
+	RETURNS INT AS $$
+	DECLARE success INT;
+2023-01-11 12:29:05.013 GMT [13384] ERROR:  syntax error at or near "INT" at character 21
+2023-01-11 12:29:05.013 GMT [13384] STATEMENT:  DECLARE customer_id INT;
+2023-01-11 12:29:05.013 GMT [13384] ERROR:  syntax error at or near "INT" at character 20
+2023-01-11 12:29:05.013 GMT [13384] STATEMENT:  DECLARE account_id INT;
+2023-01-11 12:29:05.014 GMT [13384] ERROR:  syntax error at or near "INT" at character 27
+2023-01-11 12:29:05.014 GMT [13384] STATEMENT:  DECLARE online_account_id INT;
+2023-01-11 12:29:05.014 GMT [13384] ERROR:  syntax error at or near "INT" at character 28
+2023-01-11 12:29:05.014 GMT [13384] STATEMENT:  DECLARE question_choice_id INT;
+2023-01-11 12:29:05.015 GMT [13384] ERROR:  syntax error at or near "IF" at character 11
+2023-01-11 12:29:05.015 GMT [13384] STATEMENT:  BEGIN
+	    IF NOT EXISTS (SELECT FROM user_login WHERE username = username) THEN
+	        customer_id = unauthenticated.get_customer_id(first_name, last_name, email_address);
+2023-01-11 12:29:05.015 GMT [13384] ERROR:  syntax error at or near "INTO" at character 191
+2023-01-11 12:29:05.015 GMT [13384] STATEMENT:  INSERT INTO online_account (date_opened, sort_code, customer_id)
+	        VALUES ((SELECT now()), (SELECT num FROM GENERATE_SERIES(1, 6) AS s(num) LIMIT 1), customer_id)
+	        RETURNING id INTO account_id;
+2023-01-11 12:29:05.016 GMT [13384] ERROR:  syntax error at or near "INTO" at character 106
+2023-01-11 12:29:05.016 GMT [13384] STATEMENT:  INSERT INTO user_login (account_id, username)
+	        VALUES (account_id, username)
+	        RETURNING id INTO online_account_id;
+2023-01-11 12:29:05.016 GMT [13384] ERROR:  syntax error at or near "FOR" at character 1
+2023-01-11 12:29:05.016 GMT [13384] STATEMENT:  FOR i IN 0..2 LOOP
+	            
+	            INSERT INTO user_login_security_question (question_choice_id, login_id)
+	            VALUES (question_choice_ids[i], online_account_id)
+	            RETURNING id INTO question_choice_id;
+2023-01-11 12:29:05.017 GMT [13384] ERROR:  column "answer" of relation "security_question_answer" does not exist at character 39
+2023-01-11 12:29:05.017 GMT [13384] STATEMENT:  INSERT INTO security_question_answer (answer, question_id)
+	            VALUES (question_answers[i], question_choice_id);
+2023-01-11 12:29:05.018 GMT [13384] ERROR:  syntax error at or near "LOOP" at character 5
+2023-01-11 12:29:05.018 GMT [13384] STATEMENT:  END LOOP;
+2023-01-11 12:29:05.018 GMT [13384] ERROR:  syntax error at or near "success" at character 1
+2023-01-11 12:29:05.018 GMT [13384] STATEMENT:  success = 1;
+2023-01-11 12:29:05.018 GMT [13384] ERROR:  syntax error at or near "ELSE" at character 1
+2023-01-11 12:29:05.018 GMT [13384] STATEMENT:  ELSE
+	        RAISE NOTICE 'USERNAME ALREADY TAKEN';
+2023-01-11 12:29:05.019 GMT [13384] ERROR:  syntax error at or near "success" at character 1
+2023-01-11 12:29:05.019 GMT [13384] STATEMENT:  success = 0;
+2023-01-11 12:29:05.019 GMT [13384] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:29:05.019 GMT [13384] STATEMENT:  EXECUTE format(
+	        'CREATE ROLE %I WITH LOGIN PASSWORD %L', username, password
+	    );
+2023-01-11 12:29:05.019 GMT [13384] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:29:05.019 GMT [13384] STATEMENT:  EXECUTE format(
+	        'SET ROLE %I', username
+	    );
+2023-01-11 12:29:05.019 GMT [13384] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:29:05.019 GMT [13384] STATEMENT:  EXECUTE format(
+	        'GRANT USAGE ON SCHEMA client TO %I', username
+	    );
+2023-01-11 12:29:05.020 GMT [13384] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:29:05.020 GMT [13384] STATEMENT:  EXECUTE format(
+	        'GRANT ALL ON ALL TABLES IN SCHEMA client TO %I', username
+	    );
+2023-01-11 12:29:05.020 GMT [13384] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:29:05.020 GMT [13384] STATEMENT:  EXECUTE format(
+	        'REVOKE ALL ON ALL TABLES IN SCHEMA public TO %I', username
+	    );
+2023-01-11 12:29:05.020 GMT [13384] ERROR:  syntax error at or near "IF" at character 5
+2023-01-11 12:29:05.020 GMT [13384] STATEMENT:  END IF;
+2023-01-11 12:29:05.020 GMT [13384] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:29:05.020 GMT [13384] STATEMENT:  RETURN success;
+2023-01-11 12:29:05.020 GMT [13384] WARNING:  there is no transaction in progress
+2023-01-11 12:29:05.021 GMT [13384] ERROR:  unterminated dollar-quoted string at or near "$$ LANGUAGE plpgsql;
+	
+	
+	-- sample data for customers
+	INSERT INTO customer (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
+	VALUES ('John', 'Smith', '1990-01-01', '01234567890', 'example@gmail.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX'),
+	('Jane', 'Doe', '1990-01-01', '01234567890', 'test@gmail.com', '1 Test Street', 'Test City', 'Test County', 'TE1 1ST'),
+	('Joe', 'Bloggs', '1990-01-01', '01234567890', 'example@gmail.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX'),
+	('John', 'Bloggs', '1990-01-01', '01234567890', 'hello@yahoo.com', '1 Hello Street', 'Hello City', 'Hello County', 'HE1 1LO'),
+	('Jane', 'Bloggs', '1990-01-01', '01234567890', 'test@outlook.com', '1 Test Street', 'Test City', 'Test County', 'TE1 1ST'),
+	('Joe', 'Doe', '1990-01-01', '01234567890', 'hello@outlook.com', '1 Hello Street', 'Hello City', 'Hello County', 'HE1 1LO'),
+	('John', 'Doe', '1990-01-01', '01234567890', 'mybankemail@icloud.com', '1 My Bank Street', 'My Bank City', 'My Bank County', 'MB1 1NK'),
+	('Jane', 'Smith', '1990-01-01', '01234567890', 'bankemail@outlook.com', '1 Bank Street', 'Bank City', 'Bank County', 'BA1 1NK'),
+	('Joe', 'Smith', '1990-01-01', '01234567890', 'example@icloud.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX');
+	
+	-- sample data for online account
+	INSERT INTO online_account (date_opened, sort_code, customer_id)
+	VALUES ('2020-01-01', '123456', 1),
+	('2019-01-01', '123456', 2),
+	('2018-01-01', '123456', 3),
+	('2017-01-01', '123456', 4),
+	('2016-01-01', '123456', 5),
+	('2017-02-03', '123456', 6),
+	('2018-02-04', '123456', 7),
+	('2020-01-01', '123456', 8),
+	('2020-01-01', '123456', 9);
+	
+	-- sample data for user login
+	INSERT INTO user_login (account_id, username)
+	VALUES (1, 'johnsmith'),
+	(2, 'janedoe'),
+	(3, 'joebloggs'),
+	(4, 'johnbloggs'),
+	(5, 'janebloggs'),
+	(6, 'joedoe'),
+	(7, 'johndoe'),
+	(8, 'joesmith'),
+	(9, 'janesmith');
+	
+	-- sample data for security question option
+	INSERT INTO security_question_option (question_description)
+	VALUES ('What is your favourite colour?'),
+	('What is your favourite food?'),
+	('What is your favourite animal?'),
+	('What is your favourite sport?'),
+	('What is your favourite movie?'),
+	('What is your favourite book?'),
+	('What is your favourite song?'),
+	('What is your favourite band?'),
+	('What is your favourite game?'),
+	('What is your favourite TV show?');
+	
+	--sample data for user login security question
+	INSERT INTO user_login_security_question (question_choice_id, login_id)
+	VALUES (1, 1),
+	(2, 2),
+	(3, 3),
+	(4, 4),
+	(5, 5),
+	(6, 6),
+	(7, 7),
+	(8, 8),
+	(9, 9);
+	
+	-- sample data for security question answer
+	INSERT INTO security_question_answer (question_answer, question_id)
+	VALUES ('Red', 1),
+	('Blue', 2),
+	('Green', 3),
+	('Yellow', 4),
+	('Orange', 5),
+	('Purple', 6),
+	('Pink', 7),
+	('Black', 8),
+	('White', 9);
+	
+	-- sample data for savings account
+	INSERT INTO savings_account (current_balance, interest_rate, account_id)
+	VALUES (2000.00, 2.05, 1),
+	(1000.00, 2.05, 2),
+	(5000.00, 2.05, 3),
+	(10000.00, 2.05, 4),
+	(20000.00, 2.05, 5),
+	(50000.00, 2.05, 6),
+	(100000.00, 2.05, 7),
+	(200000.00, 2.05, 8);
+	
+	-- sample data for credit account
+	INSERT INTO credit_account (outstanding_balance, credit_limit, interest_rate, account_id)
+	VALUES (55.43, 2000.00, 4.22, 1),
+	(100.00, 1000.00, 4.22, 2),
+	(200.00, 5000.00, 4.22, 3),
+	(300.00, 10000.00, 4.22, 4),
+	(400.00, 20000.00, 4.22, 5),
+	(500.00, 50000.00, 4.22, 6),
+	(600.00, 100000.00, 4.22, 7),
+	(700.00, 200000.00, 4.22, 8);
+	
+	-- sample data for debit account
+	INSERT INTO debit_account (current_balance, interest_rate, account_id)
+	VALUES (3465.43, 0.05, 1),
+	(1000.00, 0.05, 1),
+	(5000.00, 0.05, 2),
+	(10000.00, 0.05, 3),
+	(20000.00, 0.05, 4),
+	(50000.00, 0.05, 5),
+	(100000.00, 0.05, 6),
+	(200000.00, 0.05, 9);
+	
+	-- sample data for loan
+	INSERT INTO loan (loan_end_date, loan_amount, loan_type, account_id)
+	VALUES ('2024-01-01', 10000, 'vehicle', 8),
+	('2023-03-04', 300000, 'mortgage', 8),
+	('2035-03-03', 400000, 'mortgage', 1),
+	('2025-04-05', 25000, 'vehicle', 1),
+	('2026-05-05', 34000, 'vehicle', 1),
+	('2023-06-07', 500000, 'mortgage', 2),
+	('2026-04-04', 60000, 'vehicle', 2),
+	('2024-03-03', 70000, 'vehicle', 2),
+	('2023-02-02', 800000, 'mortgage', 3),
+	('2022-01-01', 90000, 'vehicle', 3),
+	('2021-01-01', 100000, 'vehicle', 3),
+	('2020-01-01', 110000, 'mortgage', 4),
+	('2020-01-01', 12000, 'vehicle', 4),
+	('2020-01-01', 13000, 'vehicle', 4),
+	('2020-01-01', 140000, 'mortgage', 5),
+	('2020-01-01', 15000, 'vehicle', 5),
+	('2020-01-01', 16000, 'vehicle', 5),
+	('2020-01-01', 170000, 'mortgage', 6),
+	('2020-01-01', 18000, 'vehicle', 6),
+	('2020-01-01', 19000, 'vehicle', 6),
+	('2020-01-01', 200000, 'mortgage', 7),
+	('2020-01-01', 21000, 'vehicle', 7),
+	('2020-01-01', 22000, 'vehicle', 7);
+	
+	CREATE SCHEMA IF NOT EXISTS staff;
+	
+	SET search_path TO public, staff;" at character 1
+2023-01-11 12:29:05.021 GMT [13384] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	
+	-- sample data for customers
+	INSERT INTO customer (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
+	VALUES ('John', 'Smith', '1990-01-01', '01234567890', 'example@gmail.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX'),
+	('Jane', 'Doe', '1990-01-01', '01234567890', 'test@gmail.com', '1 Test Street', 'Test City', 'Test County', 'TE1 1ST'),
+	('Joe', 'Bloggs', '1990-01-01', '01234567890', 'example@gmail.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX'),
+	('John', 'Bloggs', '1990-01-01', '01234567890', 'hello@yahoo.com', '1 Hello Street', 'Hello City', 'Hello County', 'HE1 1LO'),
+	('Jane', 'Bloggs', '1990-01-01', '01234567890', 'test@outlook.com', '1 Test Street', 'Test City', 'Test County', 'TE1 1ST'),
+	('Joe', 'Doe', '1990-01-01', '01234567890', 'hello@outlook.com', '1 Hello Street', 'Hello City', 'Hello County', 'HE1 1LO'),
+	('John', 'Doe', '1990-01-01', '01234567890', 'mybankemail@icloud.com', '1 My Bank Street', 'My Bank City', 'My Bank County', 'MB1 1NK'),
+	('Jane', 'Smith', '1990-01-01', '01234567890', 'bankemail@outlook.com', '1 Bank Street', 'Bank City', 'Bank County', 'BA1 1NK'),
+	('Joe', 'Smith', '1990-01-01', '01234567890', 'example@icloud.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX');
+	
+	-- sample data for online account
+	INSERT INTO online_account (date_opened, sort_code, customer_id)
+	VALUES ('2020-01-01', '123456', 1),
+	('2019-01-01', '123456', 2),
+	('2018-01-01', '123456', 3),
+	('2017-01-01', '123456', 4),
+	('2016-01-01', '123456', 5),
+	('2017-02-03', '123456', 6),
+	('2018-02-04', '123456', 7),
+	('2020-01-01', '123456', 8),
+	('2020-01-01', '123456', 9);
+	
+	-- sample data for user login
+	INSERT INTO user_login (account_id, username)
+	VALUES (1, 'johnsmith'),
+	(2, 'janedoe'),
+	(3, 'joebloggs'),
+	(4, 'johnbloggs'),
+	(5, 'janebloggs'),
+	(6, 'joedoe'),
+	(7, 'johndoe'),
+	(8, 'joesmith'),
+	(9, 'janesmith');
+	
+	-- sample data for security question option
+	INSERT INTO security_question_option (question_description)
+	VALUES ('What is your favourite colour?'),
+	('What is your favourite food?'),
+	('What is your favourite animal?'),
+	('What is your favourite sport?'),
+	('What is your favourite movie?'),
+	('What is your favourite book?'),
+	('What is your favourite song?'),
+	('What is your favourite band?'),
+	('What is your favourite game?'),
+	('What is your favourite TV show?');
+	
+	--sample data for user login security question
+	INSERT INTO user_login_security_question (question_choice_id, login_id)
+	VALUES (1, 1),
+	(2, 2),
+	(3, 3),
+	(4, 4),
+	(5, 5),
+	(6, 6),
+	(7, 7),
+	(8, 8),
+	(9, 9);
+	
+	-- sample data for security question answer
+	INSERT INTO security_question_answer (question_answer, question_id)
+	VALUES ('Red', 1),
+	('Blue', 2),
+	('Green', 3),
+	('Yellow', 4),
+	('Orange', 5),
+	('Purple', 6),
+	('Pink', 7),
+	('Black', 8),
+	('White', 9);
+	
+	-- sample data for savings account
+	INSERT INTO savings_account (current_balance, interest_rate, account_id)
+	VALUES (2000.00, 2.05, 1),
+	(1000.00, 2.05, 2),
+	(5000.00, 2.05, 3),
+	(10000.00, 2.05, 4),
+	(20000.00, 2.05, 5),
+	(50000.00, 2.05, 6),
+	(100000.00, 2.05, 7),
+	(200000.00, 2.05, 8);
+	
+	-- sample data for credit account
+	INSERT INTO credit_account (outstanding_balance, credit_limit, interest_rate, account_id)
+	VALUES (55.43, 2000.00, 4.22, 1),
+	(100.00, 1000.00, 4.22, 2),
+	(200.00, 5000.00, 4.22, 3),
+	(300.00, 10000.00, 4.22, 4),
+	(400.00, 20000.00, 4.22, 5),
+	(500.00, 50000.00, 4.22, 6),
+	(600.00, 100000.00, 4.22, 7),
+	(700.00, 200000.00, 4.22, 8);
+	
+	-- sample data for debit account
+	INSERT INTO debit_account (current_balance, interest_rate, account_id)
+	VALUES (3465.43, 0.05, 1),
+	(1000.00, 0.05, 1),
+	(5000.00, 0.05, 2),
+	(10000.00, 0.05, 3),
+	(20000.00, 0.05, 4),
+	(50000.00, 0.05, 5),
+	(100000.00, 0.05, 6),
+	(200000.00, 0.05, 9);
+	
+	-- sample data for loan
+	INSERT INTO loan (loan_end_date, loan_amount, loan_type, account_id)
+	VALUES ('2024-01-01', 10000, 'vehicle', 8),
+	('2023-03-04', 300000, 'mortgage', 8),
+	('2035-03-03', 400000, 'mortgage', 1),
+	('2025-04-05', 25000, 'vehicle', 1),
+	('2026-05-05', 34000, 'vehicle', 1),
+	('2023-06-07', 500000, 'mortgage', 2),
+	('2026-04-04', 60000, 'vehicle', 2),
+	('2024-03-03', 70000, 'vehicle', 2),
+	('2023-02-02', 800000, 'mortgage', 3),
+	('2022-01-01', 90000, 'vehicle', 3),
+	('2021-01-01', 100000, 'vehicle', 3),
+	('2020-01-01', 110000, 'mortgage', 4),
+	('2020-01-01', 12000, 'vehicle', 4),
+	('2020-01-01', 13000, 'vehicle', 4),
+	('2020-01-01', 140000, 'mortgage', 5),
+	('2020-01-01', 15000, 'vehicle', 5),
+	('2020-01-01', 16000, 'vehicle', 5),
+	('2020-01-01', 170000, 'mortgage', 6),
+	('2020-01-01', 18000, 'vehicle', 6),
+	('2020-01-01', 19000, 'vehicle', 6),
+	('2020-01-01', 200000, 'mortgage', 7),
+	('2020-01-01', 21000, 'vehicle', 7),
+	('2020-01-01', 22000, 'vehicle', 7);
+	
+	CREATE SCHEMA IF NOT EXISTS staff;
+	
+	SET search_path TO public, staff;
+2023-01-11 12:30:19.053 GMT [13347] LOG:  received fast shutdown request
+2023-01-11 12:30:19.054 GMT [13347] LOG:  aborting any active transactions
+2023-01-11 12:30:19.062 GMT [13347] LOG:  background worker "logical replication launcher" (PID 13354) exited with exit code 1
+2023-01-11 12:30:19.062 GMT [13349] LOG:  shutting down
+2023-01-11 12:30:19.111 GMT [13347] LOG:  database system is shut down
+2023-01-11 12:30:21.935 GMT [13717] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:30:21.935 GMT [13717] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:30:21.937 GMT [13717] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:30:21.942 GMT [13718] LOG:  database system was shut down at 2023-01-11 12:30:21 GMT
+2023-01-11 12:30:21.948 GMT [13717] LOG:  database system is ready to accept connections
+2023-01-11 12:30:22.927 GMT [13743] ERROR:  syntax error at or near "DECLARE" at character 727
+2023-01-11 12:30:22.927 GMT [13743] STATEMENT:  CREATE OR REPLACE FUNCTION client.get_customer_id(username TEXT, password TEXT)
+	RETURNS INTEGER AS $$
+	DECLARE customer_id INTEGER;
+	BEGIN
+	    SELECT online_account_details.customer_id FROM client_online_account_details AS online_account_details
+	    INNER JOIN client.view_login ON online_account_details.id = client.view_login.id
+	    WHERE client.view_login.username = username AND hashtext(client.view_login.password) = password;
+	END;
+	
+	CREATE OR REPLACE FUNCTION client.update_personal_information(first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT, username TEXT, password TEXT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-11 12:30:22.927 GMT [13743] ERROR:  syntax error at or near "UPDATE" at character 11
+2023-01-11 12:30:22.927 GMT [13743] STATEMENT:  BEGIN
+	    UPDATE customer SET first_name = first_name, last_name = last_name, date_of_birth = date_of_birth, phone_number = phone_number, email_address = email_address, address_street = address_street, address_city = address_city, address_county = address_county, address_postcode = address_postcode
+	    WHERE id = (SELECT * FROM get_customer_id(username, password));
+2023-01-11 12:30:22.928 GMT [13743] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:30:22.928 GMT [13743] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:30:22.928 GMT [13743] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:30:22.928 GMT [13743] STATEMENT:  RETURN passed;
+2023-01-11 12:30:22.928 GMT [13743] WARNING:  there is no transaction in progress
+2023-01-11 12:30:22.928 GMT [13743] ERROR:  syntax error at or near "$$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION client.update_login_information(username TEXT, password TEXT)
+	RETURNS BOOLEAN AS $$" at character 1
+2023-01-11 12:30:22.928 GMT [13743] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION client.update_login_information(username TEXT, password TEXT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-11 12:30:22.928 GMT [13743] ERROR:  syntax error at or near "UPDATE" at character 11
+2023-01-11 12:30:22.928 GMT [13743] STATEMENT:  BEGIN
+	    UPDATE user_login SET username = username
+	    WHERE id = (SELECT id FROM client.view_login);
+2023-01-11 12:30:22.928 GMT [13743] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:30:22.928 GMT [13743] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:30:22.929 GMT [13743] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:30:22.929 GMT [13743] STATEMENT:  EXECUTE format('ALTER USER %I WITH PASSWORD %L', username, password);
+2023-01-11 12:30:22.929 GMT [13743] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:30:22.929 GMT [13743] STATEMENT:  RETURN passed;
+2023-01-11 12:30:22.929 GMT [13743] WARNING:  there is no transaction in progress
+2023-01-11 12:30:22.929 GMT [13743] ERROR:  syntax error at or near "$$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION client.close_online_account()
+	RETURNS BOOLEAN AS $$" at character 1
+2023-01-11 12:30:22.929 GMT [13743] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION client.close_online_account()
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-11 12:30:22.929 GMT [13743] ERROR:  syntax error at or near "EXECUTE" at character 11
+2023-01-11 12:30:22.929 GMT [13743] STATEMENT:  BEGIN
+	    EXECUTE format('DROP USER %I', (SELECT username FROM client.view_login));
+2023-01-11 12:30:22.929 GMT [13743] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:30:22.929 GMT [13743] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:30:22.930 GMT [13743] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:30:22.930 GMT [13743] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:30:22.933 GMT [13743] ERROR:  cannot delete from view "client_online_account_details"
+2023-01-11 12:30:22.933 GMT [13743] DETAIL:  Views that do not select from a single table or view are not automatically updatable.
+2023-01-11 12:30:22.933 GMT [13743] HINT:  To enable deleting from the view, provide an INSTEAD OF DELETE trigger or an unconditional ON DELETE DO INSTEAD rule.
+2023-01-11 12:30:22.933 GMT [13743] STATEMENT:  DELETE FROM client_online_account_details WHERE id = (SELECT id FROM client.view_login);
+2023-01-11 12:30:22.933 GMT [13743] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:30:22.933 GMT [13743] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:30:22.933 GMT [13743] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:30:22.933 GMT [13743] STATEMENT:  RETURN passed;
+2023-01-11 12:30:22.933 GMT [13743] WARNING:  there is no transaction in progress
+2023-01-11 12:30:22.934 GMT [13743] ERROR:  syntax error at or near "DECLARE" at character 1185
+2023-01-11 12:30:22.934 GMT [13743] STATEMENT:  CREATE OR REPLACE FUNCTION client.open_debit_account()
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	BEGIN
+	    INSERT INTO debit_account (account_id, current_balance, interest_rate) VALUES ((SELECT id FROM client.view_login), 0, 0.01);
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	    RETURN passed;
+	END;
+	
+	
+	CREATE SCHEMA IF NOT EXISTS unauthenticated;
+	SET search_path TO unauthenticated, public;
+	
+	CREATE OR REPLACE VIEW unauthenticated.unauthenticated_personal_information AS
+	SELECT id, hashtext(first_name) AS first_name, hashtext(last_name) AS last_name, hashtext(email_address) AS email_address
+	FROM customer;
+	
+	CREATE OR REPLACE VIEW unauthenticated.unauthenticated_customer AS
+	SELECT * FROM customer;
+	
+	CREATE OR REPLACE VIEW unauthenticated.unauthenticated_login AS
+	SELECT hashtext(username) AS username FROM user_login;
+	
+	
+	
+	-- Allows a user to insert personal information into the online banking system
+	CREATE OR REPLACE FUNCTION unauthenticated.create_personal_info(first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT)
+	RETURNS INT AS $$
+	DECLARE success INT;
+2023-01-11 12:30:22.934 GMT [13743] ERROR:  syntax error at or near "IF" at character 11
+2023-01-11 12:30:22.934 GMT [13743] STATEMENT:  BEGIN
+	    IF NOT EXISTS (SELECT FROM unauthenticated_personal_information WHERE hashtext(first_name) = first_name AND hashtext(last_name) = last_name AND hashtext(email_address) = email_address) THEN
+	        INSERT INTO customer
+	        VALUES (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode);
+2023-01-11 12:30:22.935 GMT [13743] ERROR:  syntax error at or near "success" at character 1
+2023-01-11 12:30:22.935 GMT [13743] STATEMENT:  success = 1;
+2023-01-11 12:30:22.935 GMT [13743] ERROR:  syntax error at or near "ELSE" at character 1
+2023-01-11 12:30:22.935 GMT [13743] STATEMENT:  ELSE
+	        RAISE NOTICE 'CUSTOMER INFORMATION ALREADY PRESENT';
+2023-01-11 12:30:22.935 GMT [13743] ERROR:  syntax error at or near "success" at character 1
+2023-01-11 12:30:22.935 GMT [13743] STATEMENT:  success = 0;
+2023-01-11 12:30:22.935 GMT [13743] ERROR:  syntax error at or near "IF" at character 5
+2023-01-11 12:30:22.935 GMT [13743] STATEMENT:  END IF;
+2023-01-11 12:30:22.936 GMT [13743] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:30:22.936 GMT [13743] STATEMENT:  RETURN success;
+2023-01-11 12:30:22.936 GMT [13743] WARNING:  there is no transaction in progress
+2023-01-11 12:30:22.937 GMT [13743] ERROR:  syntax error at or near "$$ LANGUAGE plpgsql;
+	
+	-- Allows a user to fetch their respective customer id
+	CREATE OR REPLACE FUNCTION unauthenticated.get_customer_id(first_name TEXT, last_name TEXT, email_address TEXT)
+	RETURNS INT AS $$" at character 1
+2023-01-11 12:30:22.937 GMT [13743] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	-- Allows a user to fetch their respective customer id
+	CREATE OR REPLACE FUNCTION unauthenticated.get_customer_id(first_name TEXT, last_name TEXT, email_address TEXT)
+	RETURNS INT AS $$
+	DECLARE customer_id INT;
+2023-01-11 12:30:22.937 GMT [13743] ERROR:  syntax error at or near "SELECT" at character 11
+2023-01-11 12:30:22.937 GMT [13743] STATEMENT:  BEGIN
+	    SELECT id INTO customer_id FROM customer WHERE first_name = first_name AND last_name = last_name AND email_address = email_address;
+2023-01-11 12:30:22.937 GMT [13743] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:30:22.937 GMT [13743] STATEMENT:  RETURN customer_id;
+2023-01-11 12:30:22.937 GMT [13743] WARNING:  there is no transaction in progress
+2023-01-11 12:30:22.938 GMT [13743] ERROR:  syntax error at or near "$$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION unauthenticated.create_online_account_details(username TEXT, password TEXT, first_name TEXT, last_name TEXT, email_address TEXT, question_choice_ids INT[], question_answers TEXT[])
+	RETURNS INT AS $$" at character 1
+2023-01-11 12:30:22.938 GMT [13743] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	CREATE OR REPLACE FUNCTION unauthenticated.create_online_account_details(username TEXT, password TEXT, first_name TEXT, last_name TEXT, email_address TEXT, question_choice_ids INT[], question_answers TEXT[])
+	RETURNS INT AS $$
+	DECLARE success INT;
+2023-01-11 12:30:22.938 GMT [13743] ERROR:  syntax error at or near "INT" at character 21
+2023-01-11 12:30:22.938 GMT [13743] STATEMENT:  DECLARE customer_id INT;
+2023-01-11 12:30:22.938 GMT [13743] ERROR:  syntax error at or near "INT" at character 20
+2023-01-11 12:30:22.938 GMT [13743] STATEMENT:  DECLARE account_id INT;
+2023-01-11 12:30:22.938 GMT [13743] ERROR:  syntax error at or near "INT" at character 27
+2023-01-11 12:30:22.938 GMT [13743] STATEMENT:  DECLARE online_account_id INT;
+2023-01-11 12:30:22.939 GMT [13743] ERROR:  syntax error at or near "INT" at character 28
+2023-01-11 12:30:22.939 GMT [13743] STATEMENT:  DECLARE question_choice_id INT;
+2023-01-11 12:30:22.939 GMT [13743] ERROR:  syntax error at or near "IF" at character 11
+2023-01-11 12:30:22.939 GMT [13743] STATEMENT:  BEGIN
+	    IF NOT EXISTS (SELECT FROM user_login WHERE username = username) THEN
+	        customer_id = unauthenticated.get_customer_id(first_name, last_name, email_address);
+2023-01-11 12:30:22.939 GMT [13743] ERROR:  syntax error at or near "INTO" at character 191
+2023-01-11 12:30:22.939 GMT [13743] STATEMENT:  INSERT INTO online_account (date_opened, sort_code, customer_id)
+	        VALUES ((SELECT now()), (SELECT num FROM GENERATE_SERIES(1, 6) AS s(num) LIMIT 1), customer_id)
+	        RETURNING id INTO account_id;
+2023-01-11 12:30:22.940 GMT [13743] ERROR:  syntax error at or near "INTO" at character 106
+2023-01-11 12:30:22.940 GMT [13743] STATEMENT:  INSERT INTO user_login (account_id, username)
+	        VALUES (account_id, username)
+	        RETURNING id INTO online_account_id;
+2023-01-11 12:30:22.940 GMT [13743] ERROR:  syntax error at or near "FOR" at character 1
+2023-01-11 12:30:22.940 GMT [13743] STATEMENT:  FOR i IN 0..2 LOOP
+	            
+	            INSERT INTO user_login_security_question (question_choice_id, login_id)
+	            VALUES (question_choice_ids[i], online_account_id)
+	            RETURNING id INTO question_choice_id;
+2023-01-11 12:30:22.940 GMT [13743] ERROR:  column "answer" of relation "security_question_answer" does not exist at character 39
+2023-01-11 12:30:22.940 GMT [13743] STATEMENT:  INSERT INTO security_question_answer (answer, question_id)
+	            VALUES (question_answers[i], question_choice_id);
+2023-01-11 12:30:22.941 GMT [13743] ERROR:  syntax error at or near "LOOP" at character 5
+2023-01-11 12:30:22.941 GMT [13743] STATEMENT:  END LOOP;
+2023-01-11 12:30:22.941 GMT [13743] ERROR:  syntax error at or near "success" at character 1
+2023-01-11 12:30:22.941 GMT [13743] STATEMENT:  success = 1;
+2023-01-11 12:30:22.941 GMT [13743] ERROR:  syntax error at or near "ELSE" at character 1
+2023-01-11 12:30:22.941 GMT [13743] STATEMENT:  ELSE
+	        RAISE NOTICE 'USERNAME ALREADY TAKEN';
+2023-01-11 12:30:22.941 GMT [13743] ERROR:  syntax error at or near "success" at character 1
+2023-01-11 12:30:22.941 GMT [13743] STATEMENT:  success = 0;
+2023-01-11 12:30:22.941 GMT [13743] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:30:22.941 GMT [13743] STATEMENT:  EXECUTE format(
+	        'CREATE ROLE %I WITH LOGIN PASSWORD %L', username, password
+	    );
+2023-01-11 12:30:22.941 GMT [13743] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:30:22.941 GMT [13743] STATEMENT:  EXECUTE format(
+	        'SET ROLE %I', username
+	    );
+2023-01-11 12:30:22.942 GMT [13743] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:30:22.942 GMT [13743] STATEMENT:  EXECUTE format(
+	        'GRANT USAGE ON SCHEMA client TO %I', username
+	    );
+2023-01-11 12:30:22.942 GMT [13743] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:30:22.942 GMT [13743] STATEMENT:  EXECUTE format(
+	        'GRANT ALL ON ALL TABLES IN SCHEMA client TO %I', username
+	    );
+2023-01-11 12:30:22.942 GMT [13743] ERROR:  prepared statement "format" does not exist
+2023-01-11 12:30:22.942 GMT [13743] STATEMENT:  EXECUTE format(
+	        'REVOKE ALL ON ALL TABLES IN SCHEMA public TO %I', username
+	    );
+2023-01-11 12:30:22.942 GMT [13743] ERROR:  syntax error at or near "IF" at character 5
+2023-01-11 12:30:22.942 GMT [13743] STATEMENT:  END IF;
+2023-01-11 12:30:22.942 GMT [13743] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:30:22.942 GMT [13743] STATEMENT:  RETURN success;
+2023-01-11 12:30:22.942 GMT [13743] WARNING:  there is no transaction in progress
+2023-01-11 12:30:22.942 GMT [13743] ERROR:  unterminated dollar-quoted string at or near "$$ LANGUAGE plpgsql;
+	
+	
+	-- sample data for customers
+	INSERT INTO customer (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
+	VALUES ('John', 'Smith', '1990-01-01', '01234567890', 'example@gmail.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX'),
+	('Jane', 'Doe', '1990-01-01', '01234567890', 'test@gmail.com', '1 Test Street', 'Test City', 'Test County', 'TE1 1ST'),
+	('Joe', 'Bloggs', '1990-01-01', '01234567890', 'example@gmail.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX'),
+	('John', 'Bloggs', '1990-01-01', '01234567890', 'hello@yahoo.com', '1 Hello Street', 'Hello City', 'Hello County', 'HE1 1LO'),
+	('Jane', 'Bloggs', '1990-01-01', '01234567890', 'test@outlook.com', '1 Test Street', 'Test City', 'Test County', 'TE1 1ST'),
+	('Joe', 'Doe', '1990-01-01', '01234567890', 'hello@outlook.com', '1 Hello Street', 'Hello City', 'Hello County', 'HE1 1LO'),
+	('John', 'Doe', '1990-01-01', '01234567890', 'mybankemail@icloud.com', '1 My Bank Street', 'My Bank City', 'My Bank County', 'MB1 1NK'),
+	('Jane', 'Smith', '1990-01-01', '01234567890', 'bankemail@outlook.com', '1 Bank Street', 'Bank City', 'Bank County', 'BA1 1NK'),
+	('Joe', 'Smith', '1990-01-01', '01234567890', 'example@icloud.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX');
+	
+	-- sample data for online account
+	INSERT INTO online_account (date_opened, sort_code, customer_id)
+	VALUES ('2020-01-01', '123456', 1),
+	('2019-01-01', '123456', 2),
+	('2018-01-01', '123456', 3),
+	('2017-01-01', '123456', 4),
+	('2016-01-01', '123456', 5),
+	('2017-02-03', '123456', 6),
+	('2018-02-04', '123456', 7),
+	('2020-01-01', '123456', 8),
+	('2020-01-01', '123456', 9);
+	
+	-- sample data for user login
+	INSERT INTO user_login (account_id, username)
+	VALUES (1, 'johnsmith'),
+	(2, 'janedoe'),
+	(3, 'joebloggs'),
+	(4, 'johnbloggs'),
+	(5, 'janebloggs'),
+	(6, 'joedoe'),
+	(7, 'johndoe'),
+	(8, 'joesmith'),
+	(9, 'janesmith');
+	
+	-- sample data for security question option
+	INSERT INTO security_question_option (question_description)
+	VALUES ('What is your favourite colour?'),
+	('What is your favourite food?'),
+	('What is your favourite animal?'),
+	('What is your favourite sport?'),
+	('What is your favourite movie?'),
+	('What is your favourite book?'),
+	('What is your favourite song?'),
+	('What is your favourite band?'),
+	('What is your favourite game?'),
+	('What is your favourite TV show?');
+	
+	--sample data for user login security question
+	INSERT INTO user_login_security_question (question_choice_id, login_id)
+	VALUES (1, 1),
+	(2, 2),
+	(3, 3),
+	(4, 4),
+	(5, 5),
+	(6, 6),
+	(7, 7),
+	(8, 8),
+	(9, 9);
+	
+	-- sample data for security question answer
+	INSERT INTO security_question_answer (question_answer, question_id)
+	VALUES ('Red', 1),
+	('Blue', 2),
+	('Green', 3),
+	('Yellow', 4),
+	('Orange', 5),
+	('Purple', 6),
+	('Pink', 7),
+	('Black', 8),
+	('White', 9);
+	
+	-- sample data for savings account
+	INSERT INTO savings_account (current_balance, interest_rate, account_id)
+	VALUES (2000.00, 2.05, 1),
+	(1000.00, 2.05, 2),
+	(5000.00, 2.05, 3),
+	(10000.00, 2.05, 4),
+	(20000.00, 2.05, 5),
+	(50000.00, 2.05, 6),
+	(100000.00, 2.05, 7),
+	(200000.00, 2.05, 8);
+	
+	-- sample data for credit account
+	INSERT INTO credit_account (outstanding_balance, credit_limit, interest_rate, account_id)
+	VALUES (55.43, 2000.00, 4.22, 1),
+	(100.00, 1000.00, 4.22, 2),
+	(200.00, 5000.00, 4.22, 3),
+	(300.00, 10000.00, 4.22, 4),
+	(400.00, 20000.00, 4.22, 5),
+	(500.00, 50000.00, 4.22, 6),
+	(600.00, 100000.00, 4.22, 7),
+	(700.00, 200000.00, 4.22, 8);
+	
+	-- sample data for debit account
+	INSERT INTO debit_account (current_balance, interest_rate, account_id)
+	VALUES (3465.43, 0.05, 1),
+	(1000.00, 0.05, 1),
+	(5000.00, 0.05, 2),
+	(10000.00, 0.05, 3),
+	(20000.00, 0.05, 4),
+	(50000.00, 0.05, 5),
+	(100000.00, 0.05, 6),
+	(200000.00, 0.05, 9);
+	
+	-- sample data for loan
+	INSERT INTO loan (loan_end_date, loan_amount, loan_type, account_id)
+	VALUES ('2024-01-01', 10000, 'vehicle', 8),
+	('2023-03-04', 300000, 'mortgage', 8),
+	('2035-03-03', 400000, 'mortgage', 1),
+	('2025-04-05', 25000, 'vehicle', 1),
+	('2026-05-05', 34000, 'vehicle', 1),
+	('2023-06-07', 500000, 'mortgage', 2),
+	('2026-04-04', 60000, 'vehicle', 2),
+	('2024-03-03', 70000, 'vehicle', 2),
+	('2023-02-02', 800000, 'mortgage', 3),
+	('2022-01-01', 90000, 'vehicle', 3),
+	('2021-01-01', 100000, 'vehicle', 3),
+	('2020-01-01', 110000, 'mortgage', 4),
+	('2020-01-01', 12000, 'vehicle', 4),
+	('2020-01-01', 13000, 'vehicle', 4),
+	('2020-01-01', 140000, 'mortgage', 5),
+	('2020-01-01', 15000, 'vehicle', 5),
+	('2020-01-01', 16000, 'vehicle', 5),
+	('2020-01-01', 170000, 'mortgage', 6),
+	('2020-01-01', 18000, 'vehicle', 6),
+	('2020-01-01', 19000, 'vehicle', 6),
+	('2020-01-01', 200000, 'mortgage', 7),
+	('2020-01-01', 21000, 'vehicle', 7),
+	('2020-01-01', 22000, 'vehicle', 7);
+	
+	CREATE SCHEMA IF NOT EXISTS staff;
+	
+	SET search_path TO public, staff;" at character 1
+2023-01-11 12:30:22.942 GMT [13743] STATEMENT:  $$ LANGUAGE plpgsql;
+	
+	
+	-- sample data for customers
+	INSERT INTO customer (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
+	VALUES ('John', 'Smith', '1990-01-01', '01234567890', 'example@gmail.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX'),
+	('Jane', 'Doe', '1990-01-01', '01234567890', 'test@gmail.com', '1 Test Street', 'Test City', 'Test County', 'TE1 1ST'),
+	('Joe', 'Bloggs', '1990-01-01', '01234567890', 'example@gmail.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX'),
+	('John', 'Bloggs', '1990-01-01', '01234567890', 'hello@yahoo.com', '1 Hello Street', 'Hello City', 'Hello County', 'HE1 1LO'),
+	('Jane', 'Bloggs', '1990-01-01', '01234567890', 'test@outlook.com', '1 Test Street', 'Test City', 'Test County', 'TE1 1ST'),
+	('Joe', 'Doe', '1990-01-01', '01234567890', 'hello@outlook.com', '1 Hello Street', 'Hello City', 'Hello County', 'HE1 1LO'),
+	('John', 'Doe', '1990-01-01', '01234567890', 'mybankemail@icloud.com', '1 My Bank Street', 'My Bank City', 'My Bank County', 'MB1 1NK'),
+	('Jane', 'Smith', '1990-01-01', '01234567890', 'bankemail@outlook.com', '1 Bank Street', 'Bank City', 'Bank County', 'BA1 1NK'),
+	('Joe', 'Smith', '1990-01-01', '01234567890', 'example@icloud.com', '1 Example Street', 'Example City', 'Example County', 'EX1 1EX');
+	
+	-- sample data for online account
+	INSERT INTO online_account (date_opened, sort_code, customer_id)
+	VALUES ('2020-01-01', '123456', 1),
+	('2019-01-01', '123456', 2),
+	('2018-01-01', '123456', 3),
+	('2017-01-01', '123456', 4),
+	('2016-01-01', '123456', 5),
+	('2017-02-03', '123456', 6),
+	('2018-02-04', '123456', 7),
+	('2020-01-01', '123456', 8),
+	('2020-01-01', '123456', 9);
+	
+	-- sample data for user login
+	INSERT INTO user_login (account_id, username)
+	VALUES (1, 'johnsmith'),
+	(2, 'janedoe'),
+	(3, 'joebloggs'),
+	(4, 'johnbloggs'),
+	(5, 'janebloggs'),
+	(6, 'joedoe'),
+	(7, 'johndoe'),
+	(8, 'joesmith'),
+	(9, 'janesmith');
+	
+	-- sample data for security question option
+	INSERT INTO security_question_option (question_description)
+	VALUES ('What is your favourite colour?'),
+	('What is your favourite food?'),
+	('What is your favourite animal?'),
+	('What is your favourite sport?'),
+	('What is your favourite movie?'),
+	('What is your favourite book?'),
+	('What is your favourite song?'),
+	('What is your favourite band?'),
+	('What is your favourite game?'),
+	('What is your favourite TV show?');
+	
+	--sample data for user login security question
+	INSERT INTO user_login_security_question (question_choice_id, login_id)
+	VALUES (1, 1),
+	(2, 2),
+	(3, 3),
+	(4, 4),
+	(5, 5),
+	(6, 6),
+	(7, 7),
+	(8, 8),
+	(9, 9);
+	
+	-- sample data for security question answer
+	INSERT INTO security_question_answer (question_answer, question_id)
+	VALUES ('Red', 1),
+	('Blue', 2),
+	('Green', 3),
+	('Yellow', 4),
+	('Orange', 5),
+	('Purple', 6),
+	('Pink', 7),
+	('Black', 8),
+	('White', 9);
+	
+	-- sample data for savings account
+	INSERT INTO savings_account (current_balance, interest_rate, account_id)
+	VALUES (2000.00, 2.05, 1),
+	(1000.00, 2.05, 2),
+	(5000.00, 2.05, 3),
+	(10000.00, 2.05, 4),
+	(20000.00, 2.05, 5),
+	(50000.00, 2.05, 6),
+	(100000.00, 2.05, 7),
+	(200000.00, 2.05, 8);
+	
+	-- sample data for credit account
+	INSERT INTO credit_account (outstanding_balance, credit_limit, interest_rate, account_id)
+	VALUES (55.43, 2000.00, 4.22, 1),
+	(100.00, 1000.00, 4.22, 2),
+	(200.00, 5000.00, 4.22, 3),
+	(300.00, 10000.00, 4.22, 4),
+	(400.00, 20000.00, 4.22, 5),
+	(500.00, 50000.00, 4.22, 6),
+	(600.00, 100000.00, 4.22, 7),
+	(700.00, 200000.00, 4.22, 8);
+	
+	-- sample data for debit account
+	INSERT INTO debit_account (current_balance, interest_rate, account_id)
+	VALUES (3465.43, 0.05, 1),
+	(1000.00, 0.05, 1),
+	(5000.00, 0.05, 2),
+	(10000.00, 0.05, 3),
+	(20000.00, 0.05, 4),
+	(50000.00, 0.05, 5),
+	(100000.00, 0.05, 6),
+	(200000.00, 0.05, 9);
+	
+	-- sample data for loan
+	INSERT INTO loan (loan_end_date, loan_amount, loan_type, account_id)
+	VALUES ('2024-01-01', 10000, 'vehicle', 8),
+	('2023-03-04', 300000, 'mortgage', 8),
+	('2035-03-03', 400000, 'mortgage', 1),
+	('2025-04-05', 25000, 'vehicle', 1),
+	('2026-05-05', 34000, 'vehicle', 1),
+	('2023-06-07', 500000, 'mortgage', 2),
+	('2026-04-04', 60000, 'vehicle', 2),
+	('2024-03-03', 70000, 'vehicle', 2),
+	('2023-02-02', 800000, 'mortgage', 3),
+	('2022-01-01', 90000, 'vehicle', 3),
+	('2021-01-01', 100000, 'vehicle', 3),
+	('2020-01-01', 110000, 'mortgage', 4),
+	('2020-01-01', 12000, 'vehicle', 4),
+	('2020-01-01', 13000, 'vehicle', 4),
+	('2020-01-01', 140000, 'mortgage', 5),
+	('2020-01-01', 15000, 'vehicle', 5),
+	('2020-01-01', 16000, 'vehicle', 5),
+	('2020-01-01', 170000, 'mortgage', 6),
+	('2020-01-01', 18000, 'vehicle', 6),
+	('2020-01-01', 19000, 'vehicle', 6),
+	('2020-01-01', 200000, 'mortgage', 7),
+	('2020-01-01', 21000, 'vehicle', 7),
+	('2020-01-01', 22000, 'vehicle', 7);
+	
+	CREATE SCHEMA IF NOT EXISTS staff;
+	
+	SET search_path TO public, staff;
+2023-01-11 12:30:50.089 GMT [13717] LOG:  received fast shutdown request
+2023-01-11 12:30:50.091 GMT [13717] LOG:  aborting any active transactions
+2023-01-11 12:30:50.096 GMT [13717] LOG:  background worker "logical replication launcher" (PID 13724) exited with exit code 1
+2023-01-11 12:30:50.097 GMT [13719] LOG:  shutting down
+2023-01-11 12:30:50.148 GMT [13717] LOG:  database system is shut down
+2023-01-11 12:30:53.711 GMT [13939] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:30:53.712 GMT [13939] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:30:53.713 GMT [13939] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:30:53.726 GMT [13940] LOG:  database system was shut down at 2023-01-11 12:30:53 GMT
+2023-01-11 12:30:53.734 GMT [13939] LOG:  database system is ready to accept connections
+2023-01-11 12:30:54.684 GMT [13968] ERROR:  syntax error at or near "DECLARE" at character 685
+2023-01-11 12:30:54.684 GMT [13968] STATEMENT:  CREATE OR REPLACE FUNCTION client.close_online_account()
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	BEGIN
+	
+	    EXECUTE format('DROP USER %I', (SELECT username FROM client.view_login));
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	
+	    DELETE FROM user_login WHERE id = (SELECT id FROM client.view_login);
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	
+	    DELETE FROM client_online_account_details WHERE id = (SELECT id FROM client.view_login);
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	
+	    RETURN passed;
+	
+	    SET ROLE unauthenticated;
+	
+	END;
+	
+	CREATE OR REPLACE FUNCTION client.open_debit_account()
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-11 12:30:54.685 GMT [13968] ERROR:  syntax error at or near "INSERT" at character 11
+2023-01-11 12:30:54.685 GMT [13968] STATEMENT:  BEGIN
+	    INSERT INTO debit_account (account_id, current_balance, interest_rate) VALUES ((SELECT id FROM client.view_login), 0, 0.01);
+2023-01-11 12:30:54.686 GMT [13968] ERROR:  syntax error at or near "passed" at character 1
+2023-01-11 12:30:54.686 GMT [13968] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-11 12:30:54.687 GMT [13968] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-11 12:30:54.687 GMT [13968] STATEMENT:  RETURN passed;
+2023-01-11 12:30:54.687 GMT [13968] WARNING:  there is no transaction in progress
+2023-01-11 12:33:21.053 GMT [13939] LOG:  received fast shutdown request
+2023-01-11 12:33:21.054 GMT [13939] LOG:  aborting any active transactions
+2023-01-11 12:33:21.059 GMT [13939] LOG:  background worker "logical replication launcher" (PID 13946) exited with exit code 1
+2023-01-11 12:33:21.060 GMT [13941] LOG:  shutting down
+2023-01-11 12:33:21.117 GMT [13939] LOG:  database system is shut down
+2023-01-11 12:33:23.466 GMT [14533] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:33:23.466 GMT [14533] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:33:23.468 GMT [14533] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:33:23.473 GMT [14534] LOG:  database system was shut down at 2023-01-11 12:33:23 GMT
+2023-01-11 12:33:23.479 GMT [14533] LOG:  database system is ready to accept connections
+2023-01-11 12:37:18.427 GMT [14533] LOG:  received fast shutdown request
+2023-01-11 12:37:18.431 GMT [14533] LOG:  aborting any active transactions
+2023-01-11 12:37:18.437 GMT [14533] LOG:  background worker "logical replication launcher" (PID 14540) exited with exit code 1
+2023-01-11 12:37:18.438 GMT [14535] LOG:  shutting down
+2023-01-11 12:37:18.497 GMT [14533] LOG:  database system is shut down
+2023-01-11 12:37:20.839 GMT [15415] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:37:20.839 GMT [15415] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:37:20.840 GMT [15415] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:37:20.845 GMT [15416] LOG:  database system was shut down at 2023-01-11 12:37:20 GMT
+2023-01-11 12:37:20.851 GMT [15415] LOG:  database system is ready to accept connections
+2023-01-11 12:38:21.578 GMT [15415] LOG:  received fast shutdown request
+2023-01-11 12:38:21.582 GMT [15415] LOG:  aborting any active transactions
+2023-01-11 12:38:21.587 GMT [15415] LOG:  background worker "logical replication launcher" (PID 15422) exited with exit code 1
+2023-01-11 12:38:21.589 GMT [15417] LOG:  shutting down
+2023-01-11 12:38:21.641 GMT [15415] LOG:  database system is shut down
+2023-01-11 12:38:22.872 GMT [15799] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:38:22.872 GMT [15799] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:38:22.874 GMT [15799] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:38:22.879 GMT [15800] LOG:  database system was shut down at 2023-01-11 12:38:22 GMT
+2023-01-11 12:38:22.885 GMT [15799] LOG:  database system is ready to accept connections
+2023-01-11 12:38:48.346 GMT [15799] LOG:  received fast shutdown request
+2023-01-11 12:38:48.348 GMT [15799] LOG:  aborting any active transactions
+2023-01-11 12:38:48.353 GMT [15799] LOG:  background worker "logical replication launcher" (PID 15806) exited with exit code 1
+2023-01-11 12:38:48.353 GMT [15801] LOG:  shutting down
+2023-01-11 12:38:48.408 GMT [15799] LOG:  database system is shut down
+2023-01-11 12:38:49.725 GMT [15985] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:38:49.726 GMT [15985] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:38:49.728 GMT [15985] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:38:49.733 GMT [15986] LOG:  database system was shut down at 2023-01-11 12:38:49 GMT
+2023-01-11 12:38:49.739 GMT [15985] LOG:  database system is ready to accept connections
+2023-01-11 12:39:51.943 GMT [15985] LOG:  received fast shutdown request
+2023-01-11 12:39:51.945 GMT [15985] LOG:  aborting any active transactions
+2023-01-11 12:39:51.950 GMT [15985] LOG:  background worker "logical replication launcher" (PID 15992) exited with exit code 1
+2023-01-11 12:39:51.953 GMT [15987] LOG:  shutting down
+2023-01-11 12:39:52.007 GMT [15985] LOG:  database system is shut down
+2023-01-11 12:39:53.325 GMT [16295] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:39:53.326 GMT [16295] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:39:53.327 GMT [16295] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:39:53.332 GMT [16296] LOG:  database system was shut down at 2023-01-11 12:39:53 GMT
+2023-01-11 12:39:53.342 GMT [16295] LOG:  database system is ready to accept connections
+2023-01-11 12:39:54.213 GMT [16328] ERROR:  column reference "username" is ambiguous at character 235
+2023-01-11 12:39:54.213 GMT [16328] DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+2023-01-11 12:39:54.213 GMT [16328] QUERY:  SELECT online_account_details.customer_id FROM client.client_online_account_details AS online_account_details
+	    INNER JOIN client.view_login ON online_account_details.id = client.view_login.id
+	    WHERE client.view_login.username = username AND md5(client.view_login.password) = password
+2023-01-11 12:39:54.213 GMT [16328] CONTEXT:  PL/pgSQL function client.get_customer_id(text,text) line 4 at SQL statement
+2023-01-11 12:39:54.213 GMT [16328] STATEMENT:  SELECT * FROM client.get_customer_id('johnsmith', 'b29af57c2b3bba21e9df0cece40952c6');
+2023-01-11 12:41:14.422 GMT [16295] LOG:  received fast shutdown request
+2023-01-11 12:41:14.424 GMT [16295] LOG:  aborting any active transactions
+2023-01-11 12:41:14.427 GMT [16295] LOG:  background worker "logical replication launcher" (PID 16302) exited with exit code 1
+2023-01-11 12:41:14.430 GMT [16297] LOG:  shutting down
+2023-01-11 12:41:14.483 GMT [16295] LOG:  database system is shut down
+2023-01-11 12:41:15.783 GMT [16669] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:41:15.784 GMT [16669] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:41:15.786 GMT [16669] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:41:15.790 GMT [16670] LOG:  database system was shut down at 2023-01-11 12:41:15 GMT
+2023-01-11 12:41:15.797 GMT [16669] LOG:  database system is ready to accept connections
+2023-01-11 12:41:16.745 GMT [16705] ERROR:  column "password" does not exist at character 245
+2023-01-11 12:41:16.745 GMT [16705] QUERY:  SELECT online_account_details.customer_id FROM client.client_online_account_details AS online_account_details
+	    INNER JOIN client.view_login ON online_account_details.id = client.view_login.id
+	    WHERE client.view_login.username = uname AND password = passwd
+2023-01-11 12:41:16.745 GMT [16705] CONTEXT:  PL/pgSQL function client.get_customer_id(text,text) line 4 at SQL statement
+2023-01-11 12:41:16.745 GMT [16705] STATEMENT:  SELECT * FROM client.get_customer_id('johnsmith', 'b29af57c2b3bba21e9df0cece40952c6');
+2023-01-11 12:41:36.428 GMT [16669] LOG:  received fast shutdown request
+2023-01-11 12:41:36.429 GMT [16669] LOG:  aborting any active transactions
+2023-01-11 12:41:36.432 GMT [16669] LOG:  background worker "logical replication launcher" (PID 16676) exited with exit code 1
+2023-01-11 12:41:36.436 GMT [16671] LOG:  shutting down
+2023-01-11 12:41:36.496 GMT [16669] LOG:  database system is shut down
+2023-01-11 12:41:37.718 GMT [16839] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:41:37.718 GMT [16839] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:41:37.720 GMT [16839] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:41:37.725 GMT [16840] LOG:  database system was shut down at 2023-01-11 12:41:37 GMT
+2023-01-11 12:41:37.731 GMT [16839] LOG:  database system is ready to accept connections
+2023-01-11 12:41:38.657 GMT [16869] ERROR:  column view_login.password does not exist at character 245
+2023-01-11 12:41:38.657 GMT [16869] QUERY:  SELECT online_account_details.customer_id FROM client.client_online_account_details AS online_account_details
+	    INNER JOIN client.view_login ON online_account_details.id = client.view_login.id
+	    WHERE client.view_login.username = uname AND client.view_login.password = passwd
+2023-01-11 12:41:38.657 GMT [16869] CONTEXT:  PL/pgSQL function client.get_customer_id(text,text) line 4 at SQL statement
+2023-01-11 12:41:38.657 GMT [16869] STATEMENT:  SELECT * FROM client.get_customer_id('johnsmith', 'b29af57c2b3bba21e9df0cece40952c6');
+2023-01-11 12:42:03.852 GMT [16839] LOG:  received fast shutdown request
+2023-01-11 12:42:03.855 GMT [16839] LOG:  aborting any active transactions
+2023-01-11 12:42:03.860 GMT [16839] LOG:  background worker "logical replication launcher" (PID 16846) exited with exit code 1
+2023-01-11 12:42:03.861 GMT [16841] LOG:  shutting down
+2023-01-11 12:42:03.919 GMT [16839] LOG:  database system is shut down
+2023-01-11 12:42:05.235 GMT [17024] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:42:05.235 GMT [17024] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:42:05.237 GMT [17024] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:42:05.242 GMT [17025] LOG:  database system was shut down at 2023-01-11 12:42:04 GMT
+2023-01-11 12:42:05.249 GMT [17024] LOG:  database system is ready to accept connections
+2023-01-11 12:42:06.173 GMT [17063] ERROR:  query has no destination for result data
+2023-01-11 12:42:06.173 GMT [17063] HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+2023-01-11 12:42:06.173 GMT [17063] CONTEXT:  PL/pgSQL function client.get_customer_id(text,text) line 4 at SQL statement
+2023-01-11 12:42:06.173 GMT [17063] STATEMENT:  SELECT * FROM client.get_customer_id('johnsmith', 'b29af57c2b3bba21e9df0cece40952c6');
+2023-01-11 12:43:20.110 GMT [17024] LOG:  received fast shutdown request
+2023-01-11 12:43:20.112 GMT [17024] LOG:  aborting any active transactions
+2023-01-11 12:43:20.117 GMT [17024] LOG:  background worker "logical replication launcher" (PID 17031) exited with exit code 1
+2023-01-11 12:43:20.117 GMT [17026] LOG:  shutting down
+2023-01-11 12:43:20.170 GMT [17024] LOG:  database system is shut down
+2023-01-11 12:43:25.066 GMT [17368] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:43:25.067 GMT [17368] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:43:25.068 GMT [17368] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:43:25.072 GMT [17369] LOG:  database system was shut down at 2023-01-11 12:43:24 GMT
+2023-01-11 12:43:25.078 GMT [17368] LOG:  database system is ready to accept connections
+2023-01-11 12:43:25.974 GMT [17397] ERROR:  syntax error at or near "PERFORM" at character 1
+2023-01-11 12:43:25.974 GMT [17397] STATEMENT:  PERFORM * FROM client.get_customer_id('johnsmith', 'b29af57c2b3bba21e9df0cece40952c6');
+2023-01-11 12:43:41.927 GMT [17368] LOG:  received fast shutdown request
+2023-01-11 12:43:41.929 GMT [17368] LOG:  aborting any active transactions
+2023-01-11 12:43:41.932 GMT [17368] LOG:  background worker "logical replication launcher" (PID 17375) exited with exit code 1
+2023-01-11 12:43:41.936 GMT [17370] LOG:  shutting down
+2023-01-11 12:43:41.989 GMT [17368] LOG:  database system is shut down
+2023-01-11 12:43:43.914 GMT [17566] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:43:43.914 GMT [17566] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:43:43.916 GMT [17566] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:43:43.921 GMT [17573] LOG:  database system was shut down at 2023-01-11 12:43:43 GMT
+2023-01-11 12:43:43.927 GMT [17566] LOG:  database system is ready to accept connections
+2023-01-11 12:43:44.838 GMT [17600] ERROR:  query has no destination for result data
+2023-01-11 12:43:44.838 GMT [17600] HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+2023-01-11 12:43:44.838 GMT [17600] CONTEXT:  PL/pgSQL function client.get_customer_id(text,text) line 4 at SQL statement
+2023-01-11 12:43:44.838 GMT [17600] STATEMENT:  SELECT * FROM client.get_customer_id('johnsmith', 'b29af57c2b3bba21e9df0cece40952c6');
+2023-01-11 12:44:42.456 GMT [17566] LOG:  received fast shutdown request
+2023-01-11 12:44:42.458 GMT [17566] LOG:  aborting any active transactions
+2023-01-11 12:44:42.462 GMT [17566] LOG:  background worker "logical replication launcher" (PID 17581) exited with exit code 1
+2023-01-11 12:44:42.463 GMT [17576] LOG:  shutting down
+2023-01-11 12:44:42.525 GMT [17566] LOG:  database system is shut down
+2023-01-11 12:44:43.843 GMT [17846] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-11 12:44:43.843 GMT [17846] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-11 12:44:43.846 GMT [17846] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-11 12:44:43.851 GMT [17847] LOG:  database system was shut down at 2023-01-11 12:44:43 GMT
+2023-01-11 12:44:43.857 GMT [17846] LOG:  database system is ready to accept connections
+2023-01-12 08:57:02.340 GMT [17846] LOG:  received fast shutdown request
+2023-01-12 08:57:02.351 GMT [17846] LOG:  aborting any active transactions
+2023-01-12 08:57:02.394 GMT [17846] LOG:  background worker "logical replication launcher" (PID 17853) exited with exit code 1
+2023-01-12 08:57:02.398 GMT [17848] LOG:  shutting down
+2023-01-12 08:57:02.549 GMT [17846] LOG:  database system is shut down
+2023-01-12 08:57:08.404 GMT [45638] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-12 08:57:08.404 GMT [45638] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-12 08:57:08.406 GMT [45638] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-12 08:57:08.410 GMT [45639] LOG:  database system was shut down at 2023-01-12 08:57:08 GMT
+2023-01-12 08:57:08.420 GMT [45638] LOG:  database system is ready to accept connections
+2023-01-12 08:57:09.152 GMT [45667] ERROR:  syntax error at or near "INSERT" at character 248
+2023-01-12 08:57:09.152 GMT [45667] STATEMENT:  CREATE OR REPLACE FUNCTION client.update_password(account_identifier INT, new_password TEXT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	BEGIN
+	    UPDATE user_login SET password = md5(new_password)
+	    WHERE account_id = account_identifier
+	
+	    INSERT INTO management_log (account_id, action, date) VALUES (account_identifier, 'Updated password', CURRENT_DATE);
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	    RETURN passed;
+	END;
+	$$ LANGUAGE plpgsql;
+2023-01-12 08:57:09.156 GMT [45667] ERROR:  syntax error at or near "DECLARE" at character 811
+2023-01-12 08:57:09.156 GMT [45667] STATEMENT:  CREATE OR REPLACE FUNCTION client.open_savings_account(account_id INT)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+	DECLARE savings_account_id INT;
+	BEGIN
+	    INSERT INTO savings_account (account_id, current_balance, interest_rate) VALUES (account_id, 0, 0.01) RETURNING id INTO savings_account_id;
+	    INSERT INTO savings_statement (starting_date, end_date, amount, account_id) VALUES (CURRENT_DATE, CURRENT_DATE, 0, savings_account_id);
+	    INSERT INTO management_log (account_id, action, date) VALUES (account_id, 'Opened savings account', CURRENT_DATE);
+	    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+	    RETURN passed;
+	END;
+	
+	CREATE OR REPLACE FUNCTION client.open_loan(account_id INT, loan_amount INT, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC)
+	RETURNS BOOLEAN AS $$
+	DECLARE passed BOOLEAN;
+2023-01-12 08:57:09.156 GMT [45667] ERROR:  syntax error at or near "INT" at character 17
+2023-01-12 08:57:09.156 GMT [45667] STATEMENT:  DECLARE loan_id INT;
+2023-01-12 08:57:09.156 GMT [45667] ERROR:  syntax error at or near "INSERT" at character 11
+2023-01-12 08:57:09.156 GMT [45667] STATEMENT:  BEGIN
+	    INSERT INTO loan (account_id, loan_amount, loan_end_date, loan_type, loan_interest_rate) VALUES (account_id, loan_amount, loan_end_date, loan_type, loan_interest_rate) RETURNING id INTO loan_id;
+2023-01-12 08:57:09.157 GMT [45667] ERROR:  column "end_date" of relation "loan_statement" does not exist at character 44
+2023-01-12 08:57:09.157 GMT [45667] STATEMENT:  INSERT INTO loan_statement (starting_date, end_date, amount, account_id) VALUES (CURRENT_DATE, CURRENT_DATE, 0, loan_id);
+2023-01-12 08:57:09.157 GMT [45667] ERROR:  column "loan_id" does not exist at character 68
+2023-01-12 08:57:09.157 GMT [45667] HINT:  There is a column named "loan_id" in table "loan_application", but it cannot be referenced from this part of the query.
+2023-01-12 08:57:09.157 GMT [45667] STATEMENT:  INSERT INTO loan_application (loan_id, application_status) VALUES (loan_id, 'PENDING');
+2023-01-12 08:57:09.157 GMT [45667] ERROR:  column "action" of relation "management_log" does not exist at character 41
+2023-01-12 08:57:09.157 GMT [45667] STATEMENT:  INSERT INTO management_log (account_id, action, date) VALUES (account_id, 'Opened loan', CURRENT_DATE);
+2023-01-12 08:57:09.158 GMT [45667] ERROR:  syntax error at or near "passed" at character 1
+2023-01-12 08:57:09.158 GMT [45667] STATEMENT:  passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
+2023-01-12 08:57:09.158 GMT [45667] ERROR:  syntax error at or near "RETURN" at character 1
+2023-01-12 08:57:09.158 GMT [45667] STATEMENT:  RETURN passed;
+2023-01-12 08:57:09.159 GMT [45667] WARNING:  there is no transaction in progress
+2023-01-12 08:57:09.160 GMT [45667] ERROR:  syntax error at or near ")" at character 205
+2023-01-12 08:57:09.160 GMT [45667] STATEMENT:  CREATE OR REPLACE FUNCTION client.view_debit_accounts(account_id INT)
+	RETURNS TABLE (id INT, current_balance NUMERIC, interest_rate NUMERIC, overdraft_limit NUMERIC, overdraft_usage NUMERIC, interest_rate) AS $$
+	BEGIN
+	    RETURN QUERY
+	        SELECT debit_account.id, debit_account.current_balance, debit_account.interest_rate, debit_overdraft.overdraft_limit, debit_overdraft.overdraft_usage, debit_overdraft.interest_rate
+	        FROM debit_account
+	        INNER JOIN debit_overdraft ON debit_account.id = debit_overdraft.account_id
+	        WHERE debit_account.account_id = account_id;
+	    SELECT client.
+	END;
+	$$ LANGUAGE plpgsql;
+2023-01-12 08:57:09.160 GMT [45667] ERROR:  syntax error at or near "CREATE" at character 58
+2023-01-12 08:57:09.160 GMT [45667] STATEMENT:  CREATE OR REPLACE FUNCTION client.view_credit_accounts()
+	CREATE SCHEMA IF NOT EXISTS unauthenticated;
+2023-01-12 08:57:09.161 GMT [45667] ERROR:  schema "unauthenticated" does not exist
+2023-01-12 08:57:09.161 GMT [45667] STATEMENT:  CREATE OR REPLACE VIEW unauthenticated.unauthenticated_personal_information AS
+	SELECT id, md5(first_name) AS first_name, md5(last_name) AS last_name, md5(email_address) AS email_address
+	FROM customer;
+2023-01-12 08:57:09.162 GMT [45667] ERROR:  schema "unauthenticated" does not exist
+2023-01-12 08:57:09.162 GMT [45667] STATEMENT:  CREATE OR REPLACE VIEW unauthenticated.unauthenticated_login AS
+	SELECT md5(username) AS username FROM user_login;
+2023-01-12 08:57:09.162 GMT [45667] ERROR:  schema "unauthenticated" does not exist
+2023-01-12 08:57:09.162 GMT [45667] STATEMENT:  CREATE OR REPLACE FUNCTION unauthenticated.create_personal_info(first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT)
+	RETURNS INT AS $$
+	DECLARE customer_id INT;
+	BEGIN
+	    IF NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address) THEN
+	        INSERT INTO customer
+	        VALUES (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
+	        RETURNING id INTO customer_id;
+	
+	        INSERT INTO management_log (log_description, log_date) VALUES ('New customer created', now());
+	    ELSE
+	        RAISE NOTICE 'CUSTOMER INFORMATION ALREADY PRESENT';
+	        SELECT id INTO customer_id FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address;
+	    END IF;
+	    RETURN customer_id;
+	END;
+	$$ LANGUAGE plpgsql;
+2023-01-12 08:57:09.163 GMT [45667] ERROR:  schema "unauthenticated" does not exist
+2023-01-12 08:57:09.163 GMT [45667] STATEMENT:  CREATE OR REPLACE FUNCTION unauthenticated.create_online_account_details(customer_id INT, first_name TEXT, last_name TEXT, email_address TEXT, question_choice_ids INT[], question_answers TEXT[])
+	RETURNS INT AS $$
+	DECLARE account_id INT;
+	DECLARE online_account_id INT;
+	DECLARE question_choice_id INT;
+	BEGIN
+	    IF NOT EXISTS (SELECT FROM user_login WHERE username = username) THEN
+	        INSERT INTO online_account (date_opened, sort_code, customer_id)
+	        VALUES ((SELECT now()), (SELECT num FROM GENERATE_SERIES(1, 6) AS s(num) LIMIT 1), customer_id)
+	        RETURNING id INTO account_id;
+	
+	        INSERT INTO user_login (account_id, username, password)
+	        VALUES (account_id, username, md5(password))
+	        RETURNING id INTO online_account_id;
+	
+	        FOR i IN 0..2 LOOP
+	            
+	            INSERT INTO user_login_security_question (question_choice_id, login_id)
+	            VALUES (question_choice_ids[i], online_account_id)
+	            RETURNING id INTO question_choice_id;
+	
+	            INSERT INTO security_question_answer (answer, question_id)
+	            VALUES (question_answers[i], question_choice_id);
+	
+	        END LOOP;
+	
+	
+	        INSERT INTO authentication_log (log_description, log_date, account_id) VALUES ('New online account created', now(), account_id);
+	
+	        RETURN account_id;
+	    ELSE
+	        RAISE NOTICE 'USERNAME ALREADY TAKEN';
+	        RETURN NULL;
+	
+	    END IF;
+	    RETURN success;
+	END;
+	$$ LANGUAGE plpgsql;
+2023-01-12 08:58:34.257 GMT [45638] LOG:  received fast shutdown request
+2023-01-12 08:58:34.259 GMT [45638] LOG:  aborting any active transactions
+2023-01-12 08:58:34.264 GMT [45638] LOG:  background worker "logical replication launcher" (PID 45645) exited with exit code 1
+2023-01-12 08:58:34.264 GMT [45640] LOG:  shutting down
+2023-01-12 08:58:34.306 GMT [45638] LOG:  database system is shut down
+2023-01-12 08:58:35.375 GMT [46031] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-12 08:58:35.376 GMT [46031] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-12 08:58:35.377 GMT [46031] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-12 08:58:35.382 GMT [46032] LOG:  database system was shut down at 2023-01-12 08:58:35 GMT
+2023-01-12 08:58:35.387 GMT [46031] LOG:  database system is ready to accept connections
+2023-01-12 08:58:36.110 GMT [46060] ERROR:  syntax error at or near ")" at character 205
+2023-01-12 08:58:36.110 GMT [46060] STATEMENT:  CREATE OR REPLACE FUNCTION client.view_debit_accounts(account_id INT)
+	RETURNS TABLE (id INT, current_balance NUMERIC, interest_rate NUMERIC, overdraft_limit NUMERIC, overdraft_usage NUMERIC, interest_rate) AS $$
+	BEGIN
+	    RETURN QUERY
+	        SELECT debit_account.id, debit_account.current_balance, debit_account.interest_rate, debit_overdraft.overdraft_limit, debit_overdraft.overdraft_usage, debit_overdraft.interest_rate
+	        FROM debit_account
+	        INNER JOIN debit_overdraft ON debit_account.id = debit_overdraft.account_id
+	        WHERE debit_account.account_id = account_id;
+	    SELECT client.
+	END;
+	$$ LANGUAGE plpgsql;
+2023-01-12 08:58:36.111 GMT [46060] ERROR:  syntax error at or near "CREATE" at character 58
+2023-01-12 08:58:36.111 GMT [46060] STATEMENT:  CREATE OR REPLACE FUNCTION client.view_credit_accounts()
+	CREATE SCHEMA IF NOT EXISTS unauthenticated;
+2023-01-12 08:58:36.113 GMT [46060] ERROR:  schema "unauthenticated" does not exist
+2023-01-12 08:58:36.113 GMT [46060] STATEMENT:  CREATE OR REPLACE VIEW unauthenticated.unauthenticated_personal_information AS
+	SELECT id, md5(first_name) AS first_name, md5(last_name) AS last_name, md5(email_address) AS email_address
+	FROM customer;
+2023-01-12 08:58:36.114 GMT [46060] ERROR:  schema "unauthenticated" does not exist
+2023-01-12 08:58:36.114 GMT [46060] STATEMENT:  CREATE OR REPLACE VIEW unauthenticated.unauthenticated_login AS
+	SELECT md5(username) AS username FROM user_login;
+2023-01-12 08:58:36.114 GMT [46060] ERROR:  schema "unauthenticated" does not exist
+2023-01-12 08:58:36.114 GMT [46060] STATEMENT:  CREATE OR REPLACE FUNCTION unauthenticated.create_personal_info(first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT)
+	RETURNS INT AS $$
+	DECLARE customer_id INT;
+	BEGIN
+	    IF NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address) THEN
+	        INSERT INTO customer
+	        VALUES (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
+	        RETURNING id INTO customer_id;
+	
+	        INSERT INTO management_log (log_description, log_date) VALUES ('New customer created', now());
+	    ELSE
+	        RAISE NOTICE 'CUSTOMER INFORMATION ALREADY PRESENT';
+	        SELECT id INTO customer_id FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address;
+	    END IF;
+	    RETURN customer_id;
+	END;
+	$$ LANGUAGE plpgsql;
+2023-01-12 08:58:36.115 GMT [46060] ERROR:  schema "unauthenticated" does not exist
+2023-01-12 08:58:36.115 GMT [46060] STATEMENT:  CREATE OR REPLACE FUNCTION unauthenticated.create_online_account_details(customer_id INT, first_name TEXT, last_name TEXT, email_address TEXT, question_choice_ids INT[], question_answers TEXT[])
+	RETURNS INT AS $$
+	DECLARE account_id INT;
+	DECLARE online_account_id INT;
+	DECLARE question_choice_id INT;
+	BEGIN
+	    IF NOT EXISTS (SELECT FROM user_login WHERE username = username) THEN
+	        INSERT INTO online_account (date_opened, sort_code, customer_id)
+	        VALUES ((SELECT now()), (SELECT num FROM GENERATE_SERIES(1, 6) AS s(num) LIMIT 1), customer_id)
+	        RETURNING id INTO account_id;
+	
+	        INSERT INTO user_login (account_id, username, password)
+	        VALUES (account_id, username, md5(password))
+	        RETURNING id INTO online_account_id;
+	
+	        FOR i IN 0..2 LOOP
+	            
+	            INSERT INTO user_login_security_question (question_choice_id, login_id)
+	            VALUES (question_choice_ids[i], online_account_id)
+	            RETURNING id INTO question_choice_id;
+	
+	            INSERT INTO security_question_answer (answer, question_id)
+	            VALUES (question_answers[i], question_choice_id);
+	
+	        END LOOP;
+	
+	
+	        INSERT INTO authentication_log (log_description, log_date, account_id) VALUES ('New online account created', now(), account_id);
+	
+	        RETURN account_id;
+	    ELSE
+	        RAISE NOTICE 'USERNAME ALREADY TAKEN';
+	        RETURN NULL;
+	
+	    END IF;
+	    RETURN success;
+	END;
+	$$ LANGUAGE plpgsql;
+2023-01-12 10:06:08.629 GMT [46031] LOG:  received SIGHUP, reloading configuration files
+2023-01-12 10:06:08.662 GMT [46031] LOG:  received smart shutdown request
+2023-01-12 10:06:08.759 GMT [46031] LOG:  background worker "logical replication launcher" (PID 46038) exited with exit code 1
+2023-01-12 10:06:08.760 GMT [46033] LOG:  shutting down
+2023-01-12 10:06:08.836 GMT [46031] LOG:  database system is shut down
