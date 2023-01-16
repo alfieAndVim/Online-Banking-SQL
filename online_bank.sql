@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS credit_statement (
     end_date DATE,
     amount NUMERIC,
     minimum_payment NUMERIC,
-    minimum_payment_due_date NUMERIC,
+    minimum_payment_due_date DATE,
     account_number INT REFERENCES credit_account(account_number)
 );
 
@@ -162,11 +162,20 @@ CREATE TABLE IF NOT EXISTS transaction (
     id SERIAL PRIMARY KEY,
     origin_account_id INT,
     dest_account_id INT,
+    dest_account_sort_code INT,
     amount NUMERIC(15, 2),
     date DATE,
     savings_statement_id INT REFERENCES savings_statement(id),
     credit_statement_id INT REFERENCES credit_statement(id),
-    debit_statement_id INT REFERENCES debit_statement(id)
+    debit_statement_id INT REFERENCES debit_statement(id),
+    approved BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS pending_transaction (
+    id SERIAL PRIMARY KEY REFERENCES transaction(id),
+    account_id INT,
+    is_transfer BOOLEAN,
+    is_loan_payment BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS loan_application (
@@ -177,12 +186,18 @@ CREATE TABLE IF NOT EXISTS loan_application (
 
 CREATE TABLE IF NOT EXISTS loan_statement (
     id SERIAL PRIMARY KEY,
-    starting_date INT,
-    amount INT,
+    starting_date DATE,
+    amount NUMERIC,
     loan_id INT REFERENCES loan(id)
 );
 
-
+CREATE TABLE IF NOT EXISTS loan_payment (
+    id SERIAL PRIMARY KEY,
+    amount NUMERIC,
+    date DATE,
+    approved BOOLEAN,
+    loan_id INT REFERENCES loan(id)
+);
 
 CREATE TABLE IF NOT EXISTS authentication_log (
     id SERIAL PRIMARY KEY,
@@ -203,6 +218,36 @@ CREATE TABLE IF NOT EXISTS request_log (
     log_description VARCHAR,
     log_date DATE
 );
+
+CREATE OR REPLACE FUNCTION pseudo_fk_account_id()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM account WHERE account_number = NEW.account_id) THEN
+        RAISE EXCEPTION 'account_id % does not exist', NEW.account_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER pseudo_fk_account_id
+BEFORE INSERT OR UPDATE ON pending_transaction
+FOR EACH ROW EXECUTE PROCEDURE pseudo_fk_account_id();
+
+CREATE OR REPLACE FUNCTION transaction_verification()
+RETURNS TRIGGER AS $$
+DECLARE passed BOOLEAN;
+BEGIN
+    IF NEW.id IS NOT NULL THEN
+        SELECT * FROM bank.verify_transaction(NEW.id) INTO passed;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER transaction_verification
+AFTER INSERT OR UPDATE ON pending_transaction
+FOR EACH ROW EXECUTE PROCEDURE transaction_verification();
+
 
 CREATE OR REPLACE FUNCTION get_next_account_number()
 RETURNS INT AS $$
@@ -229,6 +274,178 @@ BEGIN
     RETURN account_type;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE SCHEMA IF NOT EXISTS bank;
+SET search_path TO public, bank, client;
+
+CREATE OR REPLACE VIEW bank.accounts AS
+    SELECT account.account_number, account.account_id, online_account.sort_code
+    FROM account
+    INNER JOIN online_account ON account.account_id = online_account.id;
+
+CREATE OR REPLACE VIEW bank.pending_transactions AS
+    SELECT pending_transaction.id, pending_transaction.is_transfer, pending_transaction.is_loan_payment, transaction.origin_account_id, transaction.dest_account_id, transaction.dest_account_sort_code as sort_code, transaction.amount, transaction.date, get_account_type(transaction.origin_account_id) AS origin_account_type
+    FROM pending_transaction
+    INNER JOIN transaction ON pending_transaction.id = transaction.id;
+
+CREATE OR REPLACE FUNCTION bank.update_loan_amounts(loan_id INT, payment_amount NUMERIC)
+RETURNS BOOLEAN AS $$
+DECLARE loan_updated BOOLEAN;
+BEGIN
+    IF EXISTS (SELECT * FROM loan WHERE id = loan_id AND amount - payment_amount < 0) THEN
+        RAISE EXCEPTION 'LOAN OVERPAID';
+        loan_updated = FALSE;
+    ELSE
+        UPDATE loan SET amount = amount - payment_amount WHERE id = loan_id;
+        loan_updated = TRUE;
+    END IF;
+    RETURN loan_updated;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION bank.update_balance_amounts(account_number_identifier INT, amount NUMERIC)
+RETURNS BOOLEAN AS $$
+DECLARE balances_updated BOOLEAN;
+DECLARE account_type TEXT;
+BEGIN
+    SELECT get_account_type(account_number_identifier) INTO account_type;
+    IF account_type = 'DEBIT' THEN 
+        IF EXISTS (SELECT * FROM debit_account WHERE account_number = account_number_identifier AND current_balance - amount < 0) THEN
+            RAISE EXCEPTION 'INSUFFICIENT FUNDS';
+            balances_updated = FALSE;
+        ELSE
+            RAISE NOTICE 'SUFFICIENT FUNDS';
+            UPDATE debit_account SET current_balance = current_balance - amount WHERE account_number = account_number_identifier;
+            balances_updated = TRUE;
+        END IF;
+    ELSIF account_type = 'CREDIT' THEN
+        IF EXISTS (SELECT * FROM credit_account WHERE account_number AND credit_usage + amount < credit_limit) THEN
+            RAISE NOTICE 'SUFFICIENT CREDIT';
+            UPDATE credit_account SET credit_usage = credit_usage + amount WHERE account_number = account_number_identifier;
+            balances_updated = TRUE;
+        ELSE
+            RAISE EXCEPTION 'CREDIT LIMIT EXCEEDED';
+            balances_updated = FALSE;
+        END IF;
+    ELSIF account_type = 'SAVINGS' THEN
+        IF EXISTS (SELECT * FROM savings_account WHERE account_number = account_number_identifier AND current_balance - amount < 0) THEN
+            RAISE EXCEPTION 'INSUFFICIENT FUNDS';
+            balances_updated = FALSE;
+        ELSE
+            RAISE NOTICE 'SUFFICIENT FUNDS';
+            UPDATE savings_account SET current_balance = current_balance - amount WHERE account_number = account_number_identifier;
+            balances_updated = TRUE;
+        END IF;
+    END IF;
+    RETURN balances_updated;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION bank.verify_and_update_transaction_amounts(pending_transaction_id INT, is_transfer BOOLEAN, is_loan_payment BOOLEAN)
+RETURNS BOOLEAN AS $$
+DECLARE transaction_approved BOOLEAN;
+DECLARE account_type TEXT;
+BEGIN
+
+    
+    IF EXISTS (SELECT * FROM bank.accounts WHERE account_number = (SELECT dest_account_id FROM bank.pending_transactions WHERE id = pending_transaction_id) AND sort_code = (SELECT sort_code FROM bank.pending_transactions WHERE id = pending_transaction_id)) OR is_loan_payment THEN
+        RAISE NOTICE 'INTERNAL TRANSFER OCCURING';
+
+        IF is_loan_payment = TRUE THEN
+            IF bank.update_balance_amounts((SELECT origin_account_id FROM transaction WHERE id = pending_transaction_id), (SELECT amount FROM bank.pending_transactions WHERE id = pending_transaction_id)) = TRUE THEN
+                IF bank.update_loan_amounts((SELECT dest_account_id FROM transaction WHERE id = pending_transaction_id), (SELECT amount FROM bank.pending_transactions WHERE id = pending_transaction_id)) THEN
+                    transaction_approved = TRUE;
+                END IF;
+            ELSE
+                transaction_approved = FALSE;
+            END IF;
+
+            DELETE FROM pending_transaction WHERE id = pending_transaction_id;
+
+        ELSIF is_transfer = TRUE THEN
+            IF bank.update_balance_amounts((SELECT origin_account_id FROM transaction WHERE id = pending_transaction_id), (SELECT amount FROM bank.pending_transactions WHERE id = pending_transaction_id)) = TRUE THEN
+                IF bank.update_balance_amounts((SELECT dest_account_id FROM transaction WHERE id = pending_transaction_id), (SELECT SUM(amount*-1) FROM bank.pending_transactions WHERE id = pending_transaction_id)) THEN
+                    transaction_approved = TRUE;
+                END IF;
+            ELSE
+                transaction_approved = FALSE;
+            END IF;
+
+            DELETE FROM pending_transaction WHERE id = pending_transaction_id;
+
+        ELSE
+            IF bank.update_balance_amounts((SELECT origin_account_id FROM transaction WHERE id = pending_transaction_id), (SELECT amount FROM bank.pending_transactions WHERE id = pending_transaction_id)) = TRUE THEN
+                transaction_approved = TRUE;
+            ELSE
+                transaction_approved = FALSE;
+            END IF;
+
+            DELETE FROM pending_transaction WHERE id = pending_transaction_id;
+        END IF;
+    ELSE
+        RAISE NOTICE 'EXTERNAL TRANSFER OCCURING';
+        IF bank.update_balance_amounts((SELECT origin_account_id FROM transaction WHERE id = pending_transaction_id), (SELECT amount FROM bank.pending_transactions WHERE id = pending_transaction_id)) THEN
+            transaction_approved = TRUE;
+        ELSE
+            transaction_approved = FALSE;
+        DELETE FROM pending_transaction WHERE id = pending_transaction_id;
+        END IF;
+    END IF;
+
+
+    RETURN transaction_approved;
+END;
+$$ LANGUAGE plpgsql;
+
+    
+CREATE OR REPLACE FUNCTION bank.verify_transaction_type(pending_transaction_id INT)
+RETURNS BOOLEAN AS $$
+DECLARE transaction_approved BOOLEAN;
+BEGIN
+    -- check pending transaction exists
+    IF EXISTS (SELECT * FROM bank.pending_transactions) THEN
+        --check is it is a transfer
+
+        IF EXISTS (SELECT * FROM bank.pending_transactions WHERE id = pending_transaction_id AND is_transfer = TRUE AND is_loan_payment = FALSE) THEN
+            RAISE NOTICE 'Transfer transaction';
+            SELECT * FROM bank.verify_and_update_transaction_amounts(pending_transaction_id, TRUE, FALSE) INTO transaction_approved;
+        ELSIF EXISTS (SELECT * FROM bank.pending_transactions WHERE id = pending_transaction_id AND is_loan_payment = TRUE) THEN
+            RAISE NOTICE 'Loan payment transaction';
+            SELECT * FROM bank.verify_and_update_transaction_amounts(pending_transaction_id, FALSE, TRUE) INTO transaction_approved;
+        ELSIF EXISTS (SELECT * FROM bank.pending_transactions WHERE id = pending_transaction_id AND is_transfer = FALSE) THEN
+            RAISE NOTICE 'Payment transaction';
+            SELECT * FROM bank.verify_and_update_transaction_amounts(pending_transaction_id, FALSE, FALSE) INTO transaction_approved;
+        ELSE
+            RAISE NOTICE 'Unknown transaction type';
+            transaction_approved = FALSE;
+        END IF;
+    ELSE
+        RAISE NOTICE 'Transaction does not exist';
+        transaction_approved = FALSE;
+    END IF;
+    RETURN transaction_approved;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION bank.verify_transaction(pending_transaction_id INT)
+RETURNS BOOLEAN AS $$
+DECLARE transaction_approved BOOLEAN;
+DECLARE account_type TEXT;
+BEGIN
+    -- check pending transaction exists
+    IF bank.verify_transaction_type(pending_transaction_id) = TRUE THEN
+        RAISE NOTICE 'Transaction approved';
+        transaction_approved = TRUE;
+    ELSE
+        RAISE NOTICE 'Transaction not approved';
+        transaction_approved = FALSE;
+    END IF;
+    RETURN transaction_approved;
+END;
+$$ LANGUAGE plpgsql;
+
+--CREATE OR REPLACE FUNCTION bank.approve_loan_payment(loan_payment_id INT)
 
 CREATE SCHEMA IF NOT EXISTS staff;
 SET search_path TO public, staff, client;
@@ -274,6 +491,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- CREATE OR REPLACE FUNCTION staff.view_personal_information(first_name, last_name);
+-- RETURNS TABLE(first_name TEXT, last_name TEXT, )
+
 
 CREATE SCHEMA IF NOT EXISTS client;
 SET search_path TO public, client;
@@ -284,10 +504,10 @@ CREATE OR REPLACE VIEW client.accounts AS
     INNER JOIN online_account ON account.account_id = online_account.id;
 
 CREATE OR REPLACE VIEW client.debit_accounts AS
-    SELECT account.account_id, account.account_number, debit_account.current_balance, debit_account.interest_rate, debit_overdraft.overdraft_limit, debit_overdraft.overdraft_usage, debit_overdraft.interest_rate AS overdraft_interest_rate
-    FROM account
-    INNER JOIN debit_account ON account.account_number = debit_account.account_number
-    INNER JOIN debit_overdraft ON account.account_number = debit_overdraft.account_number;
+    SELECT accounts.account_id, accounts.account_number, debit_account.current_balance, debit_account.interest_rate, debit_overdraft.overdraft_limit, debit_overdraft.overdraft_usage, debit_overdraft.interest_rate AS overdraft_interest_rate
+    FROM client.accounts
+    INNER JOIN debit_account ON accounts.account_number = debit_account.account_number
+    INNER JOIN debit_overdraft ON accounts.account_number = debit_overdraft.account_number;
 
 CREATE OR REPLACE VIEW client.debit_accounts_statements AS
     SELECT debit_accounts.account_id, debit_accounts.account_number, debit_statement.id, debit_statement.starting_date, debit_statement.end_date, debit_statement.amount
@@ -300,10 +520,10 @@ CREATE OR REPLACE VIEW client.debit_accounts_statement AS
     INNER JOIN transaction ON debit_accounts_statements.id = transaction.debit_statement_id;
 
 CREATE OR REPLACE VIEW client.credit_accounts AS
-    SELECT account.account_id, account.account_number, credit_account.outstanding_balance, credit_account.credit_limit, credit_account.interest_rate, credit_account_application.application_status
-    FROM account
-    INNER JOIN credit_account ON account.account_number = credit_account.account_number
-    INNER JOIN credit_account_application ON account.account_number = credit_account_application.account_number;
+    SELECT accounts.account_id, accounts.account_number, credit_account.outstanding_balance, credit_account.credit_limit, credit_account.interest_rate, credit_account_application.application_status
+    FROM client.accounts
+    INNER JOIN credit_account ON accounts.account_number = credit_account.account_number
+    INNER JOIN credit_account_application ON accounts.account_number = credit_account_application.account_number;
 
 CREATE OR REPLACE VIEW client.credit_accounts_statements AS
     SELECT credit_accounts.account_id, credit_accounts.account_number, credit_statement.id, credit_statement.starting_date, credit_statement.end_date, credit_statement.amount, credit_statement.minimum_payment, credit_statement.minimum_payment_due_date
@@ -316,9 +536,9 @@ CREATE OR REPLACE VIEW client.credit_accounts_statement AS
     INNER JOIN transaction ON credit_accounts_statements.id = transaction.credit_statement_id;
 
 CREATE OR REPLACE VIEW client.savings_accounts AS
-    SELECT account.account_id, account.account_number, savings_account.current_balance, savings_account.interest_rate
-    FROM account
-    INNER JOIN savings_account ON account.account_number = savings_account.account_number;
+    SELECT accounts.account_id, accounts.account_number, savings_account.current_balance, savings_account.interest_rate
+    FROM client.accounts
+    INNER JOIN savings_account ON accounts.account_number = savings_account.account_number;
 
 CREATE OR REPLACE VIEW client.savings_accounts_statements AS
     SELECT savings_accounts.account_id, savings_accounts.account_number, savings_statement.id, savings_statement.starting_date, savings_statement.end_date, savings_statement.amount
@@ -434,7 +654,7 @@ BEGIN
 
     SELECT get_next_account_number() INTO next_account_number;
 
-    INSERT INTO savings_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number ,account_id, 0, 0.01) RETURNING account_number INTO savings_account_id;
+    INSERT INTO savings_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number ,account_id, 10000, 0.01) RETURNING account_number INTO savings_account_id;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO savings_statement (starting_date, end_date, amount, account_number) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, savings_account_id);
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened savings account', CURRENT_DATE);
@@ -443,15 +663,15 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.open_loan(account_id INT, loan_amount INT, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC)
+CREATE OR REPLACE FUNCTION client.open_loan(account_id INT, loan_amount NUMERIC, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE loan_id INT;
 DECLARE ROW_COUNT INT;
 BEGIN
-    INSERT INTO loan (account_id, loan_amount, loan_end_date, loan_type, loan_interest_rate) VALUES (account_id, loan_amount, loan_end_date, loan_type, loan_interest_rate) RETURNING id INTO loan_id;
+    INSERT INTO loan (account_id, amount, end_date, loan_type, interest_rate) VALUES (account_id, loan_amount, loan_end_date, loan_type, loan_interest_rate) RETURNING id INTO loan_id;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
-    INSERT INTO loan_statement (starting_date, end_date, amount, account_id) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, loan_id);
+    INSERT INTO loan_statement (starting_date, amount, loan_id) VALUES (date_trunc('month', now()::date), 0, loan_id);
     INSERT INTO loan_application (loan_id, application_status) VALUES (loan_id, 'PENDING');
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened loan', CURRENT_DATE);
     passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
@@ -654,31 +874,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE OR REPLACE FUNCTION client.place_transaction_into_account(account_identifier INT, orig_account_number INT, transaction_account_number INT, transaction_amount NUMERIC)
+CREATE OR REPLACE FUNCTION client.place_transaction_into_account(account_identifier INT, orig_account_number INT, transaction_account_number INT, transaction_amount NUMERIC, transfer_account_sort_code INT, loan_payment BOOLEAN)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE statement_id INT;
+DECLARE transaction_id INT;
 BEGIN
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Placed transaction into account', CURRENT_DATE);
 
     CASE WHEN EXISTS (SELECT * FROM client.debit_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
-        UPDATE debit_account SET current_balance = current_balance + transaction_amount WHERE debit_account.account_number = orig_account_number;
+        --UPDATE debit_account SET current_balance = current_balance - transaction_amount WHERE debit_account.account_number = orig_account_number;
         SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
-        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, debit_statement_id)
-        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id);
+        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, debit_statement_id, dest_account_sort_code, approved)
+        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id, transfer_account_sort_code, FALSE) RETURNING id INTO transaction_id;
+        INSERT INTO pending_transaction (id, account_id, is_transfer, is_loan_payment) VALUES (transaction_id, orig_account_number, true, loan_payment);
 
     WHEN EXISTS (SELECT * FROM client.credit_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
-        UPDATE credit_account SET outstanding_balance = outstanding_balance + transaction_amount WHERE credit_account.account_number = orig_account_number;
+        --UPDATE credit_account SET outstanding_balance = outstanding_balance - transaction_amount WHERE credit_account.account_number = orig_account_number;
         SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
-        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, credit_statement_id)
-        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id);
+        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, credit_statement_id, dest_account_sort_code, approved)
+        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id, transfer_account_sort_code, FALSE) RETURNING id INTO transaction_id;
+        INSERT INTO pending_transaction (id, account_id, is_transfer, is_loan_payment) VALUES (transaction_id, orig_account_number, true, loan_payment);
 
     WHEN EXISTS (SELECT * FROM client.savings_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
-        UPDATE savings_account SET current_balance = current_balance + transaction_amount WHERE savings_account.account_number = orig_account_number;
+        --UPDATE savings_account SET current_balance = current_balance - transaction_amount WHERE savings_account.account_number = orig_account_number;
         SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
-        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, savings_statement_id)
-        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id);
+        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, savings_statement_id, dest_account_sort_code, approved)
+        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id, transfer_account_sort_code, FALSE) RETURNING id INTO transaction_id;
+        INSERT INTO pending_transaction (id, account_id, is_transfer, is_loan_payment) VALUES (transaction_id, orig_account_number, true, loan_payment);
     ELSE
         RAISE NOTICE 'Account does not exist';
         RETURN FALSE;
@@ -687,38 +910,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.place_transaction_out_of_account(account_identifier INT, orig_account_number INT, transaction_account_number INT, transaction_amount NUMERIC)
-RETURNS BOOLEAN AS $$
-DECLARE passed BOOLEAN;
-DECLARE statement_id INT;
-BEGIN
-    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Placed transaction out of account', CURRENT_DATE);
-
-    CASE WHEN EXISTS (SELECT * FROM client.debit_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
-        UPDATE debit_account SET current_balance = current_balance - transaction_amount WHERE debit_account.account_number = orig_account_number;
-        SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
-        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, debit_statement_id)
-        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id);
-
-    WHEN EXISTS (SELECT * FROM client.credit_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
-        UPDATE credit_account SET outstanding_balance = outstanding_balance - transaction_amount WHERE credit_account.account_number = orig_account_number;
-        SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
-        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, credit_statement_id)
-        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id);
-
-    WHEN EXISTS (SELECT * FROM client.savings_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
-        UPDATE savings_account SET current_balance = current_balance - transaction_amount WHERE savings_account.account_number = orig_account_number;
-        SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
-        INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, savings_statement_id)
-        VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id);
-    ELSE
-        RAISE NOTICE 'Account does not exist';
-        RETURN FALSE;
-    END CASE;
-    
-    RETURN TRUE;
-END;
-$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION client.initiate_transfer(account_identifier INT, orig_account_number INT, transfer_amount NUMERIC, transfer_account_number INT, transfer_account_sort_code INT)
 RETURNS BOOLEAN AS $$
@@ -728,24 +919,26 @@ DECLARE ROW_COUNT INT;
 BEGIN
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Initiated transfer', CURRENT_DATE);
 
-    SELECT account_id INTO internal_account_id FROM client.accounts
-    WHERE account_number = transfer_account_number AND sort_code = transfer_account_sort_code;
-
-    IF internal_account_id IS NULL THEN
-       RAISE NOTICE 'EXTERNAL TRANSFER TO ACCOUNT %', transfer_account_number;
-       
-    ELSE
-        RAISE NOTICE 'INTERNAL TRANSFER TO ACCOUNT %', transfer_account_number;
-        SELECT * FROM client.place_transaction_into_account(account_identifier, orig_account_number, transfer_account_number, transfer_amount) INTO passed;
-        SELECT * FROM client.place_transaction_out_of_account(account_identifier, transfer_account_number, orig_account_number, transfer_amount) INTO passed;
-        GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
-        passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
-    END IF;
+    SELECT * FROM client.place_transaction_into_account(account_identifier, orig_account_number, transfer_account_number, transfer_amount, transfer_account_sort_code, FALSE) INTO passed;
 
     RETURN passed;
 
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION client.initiate_loan_payment(account_identifier INT, orig_account_number INT, payment_amount NUMERIC, loan_id INT)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+BEGIN
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Initiated loan payment', CURRENT_DATE);
+
+    SELECT * FROM client.place_transaction_into_account(account_identifier, orig_account_number, loan_id, payment_amount, 0, TRUE) INTO passed;
+
+    RETURN passed;
+
+END;
+$$ LANGUAGE plpgsql;
+ 
 
 CREATE SCHEMA IF NOT EXISTS unauthenticated;
 SET search_path TO unauthenticated, public;
@@ -916,17 +1109,32 @@ SELECT * FROM client.open_credit_account(2);
 SELECT * FROM client.open_credit_account(3);
 SELECT * FROM client.open_credit_account(4);
 
+SELECT * FROM client.open_loan(1, 10000.00, '22-12-2025'::DATE, 'vehicle'::TEXT, 5.00);
+
+SELECT * FROM loan;
+
+SELECT * FROM client.initiate_loan_payment(1, 10000001, 50.00, 1);
+
 SELECT * FROM client.view_accounts(1);
 
-SELECT * FROM client.initiate_transfer(1, 10000000, 100.00, 10000001, 123456);
+SELECT * FROM transaction;
+
+SELECT * FROM client.initiate_transfer(1, 10000001, 100.00, 20000000, 123456);
+
+SELECT * FROM pending_transaction;
+
+
+
+
+--SELECT * FROM bank.verify_transaction(1);
+
 
 SELECT * FROM client.view_accounts(1);
 
-
-
-SELECT * FROM client.view_savings_statements(1, 10000000);
 
 SELECT * FROM savings_statement;
+
+SELECT * FROM loan;
 
 -- -- sample data for savings account
 -- INSERT INTO savings_account (current_balance, interest_rate, account_id)
