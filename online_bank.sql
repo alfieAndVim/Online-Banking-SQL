@@ -50,7 +50,8 @@ CREATE TABLE IF NOT EXISTS customer (
     address_street VARCHAR(255),
     address_city VARCHAR(255),
     address_county VARCHAR(255),
-    address_postcode VARCHAR(255)
+    address_postcode VARCHAR(255),
+    is_verified BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS online_account (
@@ -155,6 +156,7 @@ CREATE TABLE IF NOT EXISTS debit_overdraft (
     overdraft_usage NUMERIC(15, 2),
     overdraft_limit NUMERIC(15, 2),
     interest_rate NUMERIC(5,2),
+    approved BOOLEAN,
     account_number INT REFERENCES debit_account(account_number)
 );
 
@@ -181,7 +183,8 @@ CREATE TABLE IF NOT EXISTS pending_transaction (
 CREATE TABLE IF NOT EXISTS loan_application (
     id SERIAL PRIMARY KEY,
     application_status VARCHAR,
-    loan_id INT REFERENCES loan(id)
+    loan_id INT REFERENCES loan(id),
+    amount NUMERIC
 );
 
 CREATE TABLE IF NOT EXISTS loan_statement (
@@ -213,10 +216,11 @@ CREATE TABLE IF NOT EXISTS management_log (
     account_id INT REFERENCES online_account(id)
 );
 
-CREATE TABLE IF NOT EXISTS request_log (
+CREATE TABLE IF NOT EXISTS staff_log (
     id SERIAL PRIMARY KEY,
     log_description VARCHAR,
-    log_date DATE
+    log_date DATE,
+    staff_name VARCHAR
 );
 
 CREATE OR REPLACE FUNCTION pseudo_fk_account_id()
@@ -242,7 +246,7 @@ BEGIN
     END IF;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE TRIGGER transaction_verification
 AFTER INSERT OR UPDATE ON pending_transaction
@@ -261,7 +265,7 @@ BEGIN
     END IF;
     RETURN next_account_number;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE OR REPLACE FUNCTION get_account_type(account_number_identifier INT)
 RETURNS TEXT AS $$
@@ -273,7 +277,7 @@ BEGIN
                 ELSE 'UNKNOWN' END INTO account_type;
     RETURN account_type;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE SCHEMA IF NOT EXISTS bank;
 SET search_path TO public, bank, client;
@@ -309,19 +313,23 @@ DECLARE balances_updated BOOLEAN;
 DECLARE account_type TEXT;
 BEGIN
     SELECT get_account_type(account_number_identifier) INTO account_type;
-    IF account_type = 'DEBIT' THEN 
-        IF EXISTS (SELECT * FROM debit_account WHERE account_number = account_number_identifier AND current_balance - amount < 0) THEN
-            RAISE EXCEPTION 'INSUFFICIENT FUNDS';
-            balances_updated = FALSE;
-        ELSE
+    IF account_type = 'DEBIT' THEN
+
+        IF EXISTS (SELECT * FROM debit_account WHERE account_number = account_number_identifier AND (current_balance + (SELECT overdraft_limit - overdraft_usage FROM debit_overdraft WHERE account_number = account_number_identifier AND approved = TRUE)) - amount >= 0) THEN
             RAISE NOTICE 'SUFFICIENT FUNDS';
             UPDATE debit_account SET current_balance = current_balance - amount WHERE account_number = account_number_identifier;
+            UPDATE debit_overdraft SET overdraft_usage = overdraft_usage + (SELECT SUM(current_balance*-1) FROM debit_account WHERE account_number = account_number_identifier) WHERE account_number = account_number_identifier AND approved = TRUE;
+            UPDATE debit_account SET current_balance = 0 WHERE account_number = account_number_identifier AND current_balance < 0;
             balances_updated = TRUE;
+        ELSE
+            RAISE EXCEPTION 'INSUFFICIENT FUNDS';
+            balances_updated = FALSE;
         END IF;
+
     ELSIF account_type = 'CREDIT' THEN
-        IF EXISTS (SELECT * FROM credit_account WHERE account_number AND credit_usage + amount < credit_limit) THEN
+        IF EXISTS (SELECT credit_account.* FROM credit_account INNER JOIN credit_account_application ON credit_account.account_number = credit_account_application.account_number WHERE credit_account.account_number = account_number_identifier AND credit_account.outstanding_balance + amount < credit_account.credit_limit AND credit_account_application.application_status = 'APPROVED') THEN
             RAISE NOTICE 'SUFFICIENT CREDIT';
-            UPDATE credit_account SET credit_usage = credit_usage + amount WHERE account_number = account_number_identifier;
+            UPDATE credit_account SET outstanding_balance = outstanding_balance - amount WHERE account_number = account_number_identifier;
             balances_updated = TRUE;
         ELSE
             RAISE EXCEPTION 'CREDIT LIMIT EXCEEDED';
@@ -346,6 +354,7 @@ CREATE OR REPLACE FUNCTION bank.verify_and_update_transaction_amounts(pending_tr
 RETURNS BOOLEAN AS $$
 DECLARE transaction_approved BOOLEAN;
 DECLARE account_type TEXT;
+DECLARE statement_id INT;
 BEGIN
 
     
@@ -366,6 +375,7 @@ BEGIN
         ELSIF is_transfer = TRUE THEN
             IF bank.update_balance_amounts((SELECT origin_account_id FROM transaction WHERE id = pending_transaction_id), (SELECT amount FROM bank.pending_transactions WHERE id = pending_transaction_id)) = TRUE THEN
                 IF bank.update_balance_amounts((SELECT dest_account_id FROM transaction WHERE id = pending_transaction_id), (SELECT SUM(amount*-1) FROM bank.pending_transactions WHERE id = pending_transaction_id)) THEN
+                    SELECT * FROM client.get_or_create_statement((SELECT account_id FROM account WHERE account_number = (SELECT dest_account_id FROM transaction WHERE id = pending_transaction_id)), (SELECT dest_account_id FROM transaction WHERE id = pending_transaction_id)) INTO statement_id;
                     transaction_approved = TRUE;
                 END IF;
             ELSE
@@ -470,6 +480,40 @@ CREATE OR REPLACE VIEW staff.customers AS
     FROM online_account
     INNER JOIN customer ON customer.id = online_account.customer_id;
 
+CREATE OR REPLACE VIEW staff.customer_personal_information AS
+    SELECT * FROM customer;
+
+CREATE OR REPLACE VIEW staff.overdrafts AS
+    SELECT customers.first_name, customers.last_name, debit_overdraft.id, debit_overdraft.account_number, debit_overdraft.overdraft_usage, debit_overdraft.overdraft_limit, debit_overdraft.interest_rate
+    FROM debit_overdraft
+    INNER JOIN staff.accounts ON staff.accounts.account_number = debit_overdraft.account_number
+    INNER JOIN staff.customers ON staff.customers.account_id = staff.accounts.account_id;
+
+CREATE OR REPLACE FUNCTION staff.review_unverified_customer_personal_information()
+RETURNS TABLE(first_name TEXT, last_name TEXT, date_of_birth DATE, address TEXT, email TEXT, phone_number TEXT) AS $$
+BEGIN
+    RETURN QUERY SELECT first_name, last_name, date_of_birth, address, email, phone_number
+    FROM staff.customer_personal_information
+    WHERE is_verified = FALSE;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION staff.verify_customer_personal_information(customer_id INT)
+RETURNS BOOLEAN AS $$
+DECLARE customer_verified BOOLEAN;
+BEGIN
+    IF EXISTS (SELECT * FROM staff.customer_personal_information WHERE id = customer_id) THEN
+        UPDATE customer
+        SET is_verified = TRUE
+        WHERE id = customer_id;
+        customer_verified = TRUE;
+    ELSE
+        customer_verified = FALSE;
+    END IF;
+    RETURN customer_verified;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION staff.view_outstanding_credit_applications()
 RETURNS TABLE(first_name TEXT, last_name TEXT, account_number INT) AS $$
 BEGIN
@@ -478,6 +522,29 @@ BEGIN
     INNER JOIN staff.accounts ON customers.account_id = accounts.account_id
     INNER JOIN staff.credit_card_applications ON accounts.account_number = credit_card_applications.account_number
     WHERE credit_card_applications.application_status = 'PENDING';
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION staff.approve_or_deny_credit_application(account_number INT, application_approved BOOLEAN)
+RETURNS BOOLEAN AS $$
+DECLARE application_approved BOOLEAN;
+BEGIN
+    IF EXISTS (SELECT * FROM staff.credit_card_applications WHERE account_number = account_number) THEN
+        IF application_approved = TRUE THEN
+            UPDATE credit_account_application
+            SET application_status = 'APPROVED'
+            WHERE account_number = account_number;
+            application_approved = TRUE;
+        ELSE
+            UPDATE credit_account_application
+            SET application_status = 'DENIED'
+            WHERE account_number = account_number;
+            application_approved = FALSE;
+        END IF;
+    ELSE
+        application_approved = FALSE;
+    END IF;
+    RETURN application_approved;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -491,9 +558,60 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- CREATE OR REPLACE FUNCTION staff.view_personal_information(first_name, last_name);
--- RETURNS TABLE(first_name TEXT, last_name TEXT, )
+CREATE OR REPLACE FUNCTION staff.approve_or_deny_loan_application(loan_id INT, application_approved BOOLEAN)
+RETURNS BOOLEAN AS $$
+DECLARE application_approved BOOLEAN;
+BEGIN
+    IF EXISTS (SELECT * FROM staff.loan_applications WHERE id = loan_id) THEN
+        IF application_approved = TRUE THEN
+            UPDATE loan_application
+            SET application_status = 'APPROVED'
+            WHERE id = loan_id;
+            application_approved = TRUE;
+        ELSE
+            UPDATE loan_application
+            SET application_status = 'DENIED'
+            WHERE id = loan_id;
+            application_approved = FALSE;
+        END IF;
+    ELSE
+        application_approved = FALSE;
+    END IF;
+    RETURN application_approved;
+END;
+$$ LANGUAGE plpgsql;
 
+
+CREATE OR REPLACE FUNCTION staff.view_outstanding_overdraft_applications()
+RETURNS TABLE(first_name TEXT, last_name TEXT, overdraft_id INT, account_number INT, overdraft_usage NUMERIC, overdraft_limit NUMERIC, interest_rate NUMERIC) AS $$
+BEGIN
+    SELECT * FROM staff.overdrafts
+    WHERE overdraft_approved = FALSE;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION staff.approve_or_deny_overdraft_application(overdraft_id INT, application_approved BOOLEAN)
+RETURNS BOOLEAN AS $$
+DECLARE application_approved BOOLEAN;
+BEGIN
+    IF EXISTS (SELECT * FROM staff.overdrafts WHERE id = overdraft_id) THEN
+        IF application_approved = TRUE THEN
+            UPDATE overdraft
+            SET overdraft_approved = TRUE
+            WHERE id = overdraft_id;
+            application_approved = TRUE;
+        ELSE
+            UPDATE overdraft
+            SET overdraft_approved = FALSE
+            WHERE id = overdraft_id;
+            application_approved = FALSE;
+        END IF;
+    ELSE
+        application_approved = FALSE;
+    END IF;
+    RETURN application_approved;
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE SCHEMA IF NOT EXISTS client;
 SET search_path TO public, client;
@@ -503,8 +621,11 @@ CREATE OR REPLACE VIEW client.accounts AS
     SELECT account.account_number, account.account_id, online_account.sort_code FROM account
     INNER JOIN online_account ON account.account_id = online_account.id;
 
+CREATE OR REPLACE VIEW client.personal_information AS
+    SELECT * FROM customer;
+
 CREATE OR REPLACE VIEW client.debit_accounts AS
-    SELECT accounts.account_id, accounts.account_number, debit_account.current_balance, debit_account.interest_rate, debit_overdraft.overdraft_limit, debit_overdraft.overdraft_usage, debit_overdraft.interest_rate AS overdraft_interest_rate
+    SELECT accounts.account_id, accounts.account_number, (debit_account.current_balance + debit_overdraft.overdraft_usage*-1) as current_balance, debit_account.interest_rate, debit_overdraft.overdraft_limit, debit_overdraft.overdraft_usage, debit_overdraft.interest_rate AS overdraft_interest_rate, debit_overdraft.approved as overdraft_approved
     FROM client.accounts
     INNER JOIN debit_account ON accounts.account_number = debit_account.account_number
     INNER JOIN debit_overdraft ON accounts.account_number = debit_overdraft.account_number;
@@ -544,6 +665,11 @@ CREATE OR REPLACE VIEW client.savings_accounts_statements AS
     SELECT savings_accounts.account_id, savings_accounts.account_number, savings_statement.id, savings_statement.starting_date, savings_statement.end_date, savings_statement.amount
     FROM savings_accounts
     INNER JOIN savings_statement ON savings_accounts.account_number = savings_statement.account_number;
+
+CREATE OR REPLACE VIEW client.savings_accounts_statement AS
+    SELECT savings_accounts_statements.account_id, savings_accounts_statements.account_number, savings_accounts_statements.id, savings_accounts_statements.starting_date, savings_accounts_statements.end_date, savings_accounts_statements.amount AS total_amount, transaction.origin_account_id, transaction.dest_account_id, transaction.amount, transaction.date
+    FROM savings_accounts_statements
+    INNER JOIN transaction ON savings_accounts_statements.id = transaction.savings_statement_id;
 
 CREATE OR REPLACE VIEW client.loans AS
     SELECT loan.account_id, loan.id, loan.amount, loan.interest_rate, loan.loan_type, loan.end_date, loan_application.application_status
@@ -617,12 +743,12 @@ BEGIN
     INSERT INTO debit_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number ,account_id, 0, 0.01) RETURNING account_number INTO debit_account_number;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO debit_statement (starting_date, end_date, amount, account_number) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, debit_account_number);
-    INSERT INTO debit_overdraft (overdraft_usage, overdraft_limit, interest_rate, account_number) VALUES (0, 0, 0.01, debit_account_number);
+    INSERT INTO debit_overdraft (overdraft_usage, overdraft_limit, interest_rate, account_number, approved) VALUES (0, 0, 0.01, debit_account_number, FALSE);
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened debit account', CURRENT_DATE);
     passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
     RETURN passed;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE OR REPLACE FUNCTION client.open_credit_account(account_id INT)
 RETURNS BOOLEAN AS $$
@@ -634,7 +760,7 @@ BEGIN
 
     SELECT get_next_account_number() INTO next_account_number;
 
-    INSERT INTO credit_account (account_number, outstanding_balance, credit_limit, interest_rate, account_id) VALUES (next_account_number ,0, 0, 24.9, account_id) RETURNING account_number INTO credit_account_number;
+    INSERT INTO credit_account (account_number, outstanding_balance, credit_limit, interest_rate, account_id) VALUES (next_account_number ,0, 1000, 24.9, account_id) RETURNING account_number INTO credit_account_number;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO credit_statement (starting_date, end_date, amount, minimum_payment, minimum_payment_due_date, account_number) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, 0, CURRENT_DATE, credit_account_number);
     INSERT INTO credit_account_application (account_number, application_status) VALUES (credit_account_number, 'PENDING');
@@ -642,7 +768,7 @@ BEGIN
     passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
     return PASSED;
 END
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE OR REPLACE FUNCTION client.open_savings_account(account_id INT)
 RETURNS BOOLEAN AS $$
@@ -661,7 +787,7 @@ BEGIN
     passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
     RETURN passed;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE OR REPLACE FUNCTION client.open_loan(account_id INT, loan_amount NUMERIC, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC)
 RETURNS BOOLEAN AS $$
@@ -669,47 +795,60 @@ DECLARE passed BOOLEAN;
 DECLARE loan_id INT;
 DECLARE ROW_COUNT INT;
 BEGIN
-    INSERT INTO loan (account_id, amount, end_date, loan_type, interest_rate) VALUES (account_id, loan_amount, loan_end_date, loan_type, loan_interest_rate) RETURNING id INTO loan_id;
+    INSERT INTO loan (account_id, amount, end_date, loan_type, interest_rate) VALUES (account_id, 0, loan_end_date, loan_type, loan_interest_rate) RETURNING id INTO loan_id;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO loan_statement (starting_date, amount, loan_id) VALUES (date_trunc('month', now()::date), 0, loan_id);
-    INSERT INTO loan_application (loan_id, application_status) VALUES (loan_id, 'PENDING');
+    INSERT INTO loan_application (loan_id, application_status, amount) VALUES (loan_id, 'PENDING', loan_amount);
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened loan', CURRENT_DATE);
     passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
     RETURN passed;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION client.open_overdraft_application(account_id INT, overdraft_limit NUMERIC)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE ROW_COUNT INT;
+BEGIN
+    INSERT INTO overdraft_application (account_id, application_status, overdraft_limit) VALUES (account_id, 'PENDING', overdraft_limit);
+    GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened overdraft application', CURRENT_DATE);
+    passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE OR REPLACE FUNCTION client.view_personal_information(account_id INT)
 RETURNS TABLE (first_name TEXT, last_name TEXT, email TEXT, phone_number TEXT, address TEXT, city TEXT, country TEXT, postal_code TEXT) AS $$
 BEGIN
     RETURN QUERY
         SELECT first_name, last_name, email, phone_number, address, city, country, postal_code
-            FROM customer
-        INNER JOIN account ON account.customer_id = customer.id
-        WHERE account.id = account_id;
+            FROM client.personal_information
+        INNER JOIN client.accounts ON accounts.customer_id = personal_information.id
+        WHERE accounts.id = account_id;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION client.view_accounts(account_identifier INT)
-RETURNS TABLE (account_number INT, account_id INT, balance NUMERIC, interest_rate NUMERIC, account_type TEXT) AS $$
+RETURNS TABLE (account_number INT, account_id INT, sort_code INT, balance NUMERIC, interest_rate NUMERIC, account_type TEXT) AS $$
 
 BEGIN
 
     RETURN QUERY
-        SELECT account.*, COALESCE(debit_accounts.current_balance, credit_accounts.outstanding_balance, savings_accounts.current_balance) AS balance,
+        SELECT client.accounts.*, COALESCE(debit_accounts.current_balance, credit_accounts.outstanding_balance, savings_accounts.current_balance) AS balance,
             COALESCE(debit_accounts.interest_rate, credit_accounts.interest_rate, savings_accounts.interest_rate) AS interest_rate,
-            get_account_type(account.account_number) AS account_type
-            FROM account
-            LEFT JOIN client.credit_accounts ON account.account_number = credit_accounts.account_number
-            LEFT JOIN client.debit_accounts ON account.account_number = debit_accounts.account_number
-            LEFT JOIN client.savings_accounts ON account.account_number = savings_accounts.account_number
-            WHERE account.account_id = account_identifier;
+            get_account_type(accounts.account_number) AS account_type
+            FROM client.accounts
+            LEFT JOIN client.credit_accounts ON accounts.account_number = credit_accounts.account_number
+            LEFT JOIN client.debit_accounts ON accounts.account_number = debit_accounts.account_number
+            LEFT JOIN client.savings_accounts ON accounts.account_number = savings_accounts.account_number
+            WHERE accounts.account_id = account_identifier;
 
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION client.view_debit_accounts(account_id INT)
-RETURNS TABLE (id INT, current_balance NUMERIC, interest_rate NUMERIC, overdraft_limit NUMERIC, overdraft_usage NUMERIC, overdraft_interest_rate NUMERIC, external_account_number INT) AS $$
+RETURNS TABLE (id INT, current_balance NUMERIC, interest_rate NUMERIC, overdraft_limit NUMERIC, overdraft_usage NUMERIC, overdraft_interest_rate NUMERIC, external_account_number INT, overdraft_approved BOOLEAN) AS $$
 BEGIN
 
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed debit accounts', CURRENT_DATE);
@@ -824,7 +963,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_savings_statement(account_identifier INT, account_number INT, statement_id INT)
+CREATE OR REPLACE FUNCTION client.view_savings_statement(account_identifier INT, account_number_identifier INT, statement_id INT)
 RETURNS TABLE (starting_date DATE, end_date DATE, amount NUMERIC, account_id INT) AS $$
 BEGIN
 
@@ -834,7 +973,7 @@ BEGIN
         SELECT savings_accounts_statement.account_id, savings_accounts_statement.account_number, savings_accounts_statement.starting_date, savings_accounts_statement.end_date, savings_accounts_statement.amount
         FROM client.savings_accounts_statement
         WHERE savings_accounts_statement.account_id = account_identifier
-        AND savings_accounts_statement.account_number = account_number
+        AND savings_accounts_statement.account_number = account_number_identifier
         AND savings_accounts_statement.statement_id = statement_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -879,6 +1018,7 @@ RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE statement_id INT;
 DECLARE transaction_id INT;
+
 BEGIN
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Placed transaction into account', CURRENT_DATE);
 
@@ -908,7 +1048,7 @@ BEGIN
     END CASE;
     RETURN TRUE;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 
 CREATE OR REPLACE FUNCTION client.initiate_transfer(account_identifier INT, orig_account_number INT, transfer_amount NUMERIC, transfer_account_number INT, transfer_account_sort_code INT)
@@ -931,6 +1071,12 @@ RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 BEGIN
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Initiated loan payment', CURRENT_DATE);
+
+
+    IF EXISTS (SELECT * FROM client.loans WHERE id = loan_id AND application_status = 'PENDING') THEN
+        RAISE NOTICE 'Loan is not yet approved';
+        RETURN FALSE;
+    END IF;
 
     SELECT * FROM client.place_transaction_into_account(account_identifier, orig_account_number, loan_id, payment_amount, 0, TRUE) INTO passed;
 
@@ -978,6 +1124,13 @@ DECLARE account_id INT;
 DECLARE online_account_id INT;
 DECLARE question_choice_id INT;
 BEGIN
+
+    --check customer is verified
+    IF NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE id = customer_id AND md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address) AND is_verified = FALSE THEN
+        RAISE NOTICE 'CUSTOMER INFORMATION NOT VERIFIED';
+        RETURN -1;
+    END IF;
+
     IF NOT EXISTS (SELECT FROM user_login WHERE username = username) THEN
         INSERT INTO online_account (date_opened, sort_code, customer_id)
         VALUES ((SELECT now()), (SELECT num FROM GENERATE_SERIES(1, 6) AS s(num) LIMIT 1), customer_id)
@@ -1007,13 +1160,75 @@ BEGIN
         RETURN NULL;
 
     END IF;
-    RETURN success;
+    RETURN 1;
 END;
 $$ LANGUAGE plpgsql;
 
+-- Setting role based access control for l2 level clients
+REVOKE USAGE ON SCHEMA public FROM l2;
+REVOKE USAGE ON SCHEMA bank FROM l2;
+REVOKE USAGE ON SCHEMA staff FROM l2;
+REVOKE USAGE ON SCHEMA client FROM l2;
+REVOKE USAGE ON SCHEMA unauthenticated FROM l2;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM l2;
+REVOKE ALL ON ALL TABLES IN SCHEMA bank FROM l2;
+REVOKE ALL ON ALL TABLES IN SCHEMA staff FROM l2;
+REVOKE ALL ON ALL TABLES IN SCHEMA client FROM l2;
+REVOKE ALL ON ALL TABLES IN SCHEMA unauthenticated FROM l2;
 
+GRANT USAGE ON SCHEMA staff TO l2;
+GRANT USAGE ON SCHEMA client TO l2;
+GRANT USAGE ON SCHEMA bank TO l2;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA staff TO l2;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA client TO l2;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA bank TO l2;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA staff TO l2;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA client TO l2;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA bank TO l2;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO l2;
+GRANT INSERT ON TABLE management_log TO l2;
+GRANT INSERT ON TABLE authentication_log TO l2;
 
+-- Setting role based access control for l3 level clients
+REVOKE USAGE ON SCHEMA public FROM l3;
+REVOKE USAGE ON SCHEMA bank FROM l3;
+REVOKE USAGE ON SCHEMA staff FROM l3;
+REVOKE USAGE ON SCHEMA client FROM l3;
+REVOKE USAGE ON SCHEMA unauthenticated FROM l3;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM l3;
+REVOKE ALL ON ALL TABLES IN SCHEMA bank FROM l3;
+REVOKE ALL ON ALL TABLES IN SCHEMA staff FROM l3;
+REVOKE ALL ON ALL TABLES IN SCHEMA client FROM l3;
+REVOKE ALL ON ALL TABLES IN SCHEMA unauthenticated FROM l3;
 
+GRANT USAGE ON SCHEMA staff TO l3;
+GRANT USAGE ON SCHEMA client TO l3;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA staff TO l3;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA client TO l3;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA staff TO l3;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA client TO l3;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO l3;
+GRANT INSERT ON TABLE management_log TO l3;
+GRANT INSERT ON TABLE authentication_log TO l3;
+
+-- Setting role based access control for l4 level clients
+REVOKE USAGE ON SCHEMA public FROM l4;
+REVOKE USAGE ON SCHEMA bank FROM l4;
+REVOKE USAGE ON SCHEMA staff FROM l4;
+REVOKE USAGE ON SCHEMA client FROM l4;
+REVOKE USAGE ON SCHEMA unauthenticated FROM l4;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM l4;
+REVOKE ALL ON ALL TABLES IN SCHEMA bank FROM l4;
+REVOKE ALL ON ALL TABLES IN SCHEMA staff FROM l4;
+REVOKE ALL ON ALL TABLES IN SCHEMA client FROM l4;
+REVOKE ALL ON ALL TABLES IN SCHEMA unauthenticated FROM l4;
+
+GRANT USAGE ON SCHEMA client TO l4;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA client TO l4;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA client TO l4;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO l4;
+GRANT INSERT ON TABLE management_log TO l4;
+GRANT INSERT ON TABLE authentication_log TO l4;
 
 -- sample data for customers
 INSERT INTO customer (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
@@ -1041,15 +1256,18 @@ VALUES ('2020-01-01', '123456', 1),
 
 -- sample data for user login
 INSERT INTO user_login (account_id, username, password)
-VALUES (1, 'johnsmith', 'b29af57c2b3bba21e9df0cece40952c6'),
-(2, 'janedoe', 'ee02f771bbeb15b28ccd7bbd68faf193'),
-(3, 'joebloggs', 'b29af57c2b3bba21e9df0cece40952c6'),
-(4, 'johnbloggs', 'ee02f771bbeb15b28ccd7bbd68faf193'),
-(5, 'janebloggs', 'b29af57c2b3bba21e9df0cece40952c6'),
-(6, 'joedoe', 'ee02f771bbeb15b28ccd7bbd68faf193'),
-(7, 'johndoe', 'b29af57c2b3bba21e9df0cece40952c6'),
-(8, 'joesmith', 'ee02f771bbeb15b28ccd7bbd68faf193'),
-(9, 'janesmith', 'b29af57c2b3bba21e9df0cece40952c6');
+VALUES (1, 'johnsmith', '8b1a9953c4611296a827abf8c47804d7'),
+(2, 'janedoe', '161e7ce7bfdc89ab4b9f52c1d4c94212'),
+(3, 'joebloggs', 'fa3ebd6742c360b2d9652b7f78d9bd7d'),
+(4, 'johnbloggs', 'dc647eb65e6711e155375218212b3964'),
+(5, 'janebloggs', '42f749ade7f9e195bf475f37a44cafcb'),
+(6, 'joedoe', '227d56be289d0f869da94b3976f7d82a'),
+(7, 'johndoe', 'a94d7853871a856c71a172a599cee227'),
+(8, 'joesmith', 'e433bdbeae0efbfba64964bd1c381b90'),
+(9, 'janesmith', '155f25da0ecfab1f56f21310490daaa7');
+
+
+
 
 -- sample data for security question option
 INSERT INTO security_question_option (question_description)
@@ -1088,8 +1306,20 @@ VALUES ('Red', 1),
 ('Black', 8),
 ('White', 9);
 
-SELECT * FROM savings_statement;
 
+CREATE ROLE johnsmith WITH LOGIN PASSWORD '8b1a9953c4611296a827abf8c47804d7';
+CREATE ROLE janedoe WITH LOGIN PASSWORD '161e7ce7bfdc89ab4b9f52c1d4c94212';
+CREATE ROLE joebloggs WITH LOGIN PASSWORD 'fa3ebd6742c360b2d9652b7f78d9bd7d';
+CREATE ROLE johnbloggs WITH LOGIN PASSWORD 'dc647eb65e6711e155375218212b3964';
+CREATE ROLE janebloggs WITH LOGIN PASSWORD '42f749ade7f9e195bf475f37a44cafcb';
+CREATE ROLE joedoe WITH LOGIN PASSWORD '227d56be289d0f869da94b3976f7d82a';
+CREATE ROLE johndoe WITH LOGIN PASSWORD 'a94d7853871a856c71a172a599cee227';
+CREATE ROLE joesmith WITH LOGIN PASSWORD 'e433bdbeae0efbfba64964bd1c381b90';
+CREATE ROLE janesmith WITH LOGIN PASSWORD '155f25da0ecfab1f56f21310490daaa7';
+
+GRANT user_banking TO johnsmith, janedoe, joebloggs, johnbloggs, janebloggs, joedoe, johndoe, joesmith, janesmith;
+
+SET ROLE johnsmith;
 
 SELECT * FROM client.open_savings_account(1);
 
@@ -1111,18 +1341,10 @@ SELECT * FROM client.open_credit_account(4);
 
 SELECT * FROM client.open_loan(1, 10000.00, '22-12-2025'::DATE, 'vehicle'::TEXT, 5.00);
 
-SELECT * FROM loan;
 
-SELECT * FROM client.initiate_loan_payment(1, 10000001, 50.00, 1);
+SELECT * FROM client.initiate_transfer(1, 10000001, 100.00, 10000000, 123456);
 
-SELECT * FROM client.view_accounts(1);
-
-SELECT * FROM transaction;
-
-SELECT * FROM client.initiate_transfer(1, 10000001, 100.00, 20000000, 123456);
-
-SELECT * FROM pending_transaction;
-
+SELECT * FROM client.savings_accounts_statement;
 
 
 
@@ -1131,10 +1353,9 @@ SELECT * FROM pending_transaction;
 
 SELECT * FROM client.view_accounts(1);
 
+SELECT * FROM client.debit_accounts;
 
-SELECT * FROM savings_statement;
-
-SELECT * FROM loan;
+SELECT * FROM client.credit_accounts;
 
 -- -- sample data for savings account
 -- INSERT INTO savings_account (current_balance, interest_rate, account_id)
