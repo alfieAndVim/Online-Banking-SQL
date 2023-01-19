@@ -40632,3 +40632,999 @@
 2023-01-18 11:30:27.133 GMT [148101] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
 2023-01-18 11:30:27.139 GMT [148102] LOG:  database system was shut down at 2023-01-18 11:30:26 GMT
 2023-01-18 11:30:27.145 GMT [148101] LOG:  database system is ready to accept connections
+2023-01-19 09:10:59.439 GMT [148101] LOG:  received smart shutdown request
+2023-01-19 09:10:59.456 GMT [148101] LOG:  background worker "logical replication launcher" (PID 148108) exited with exit code 1
+2023-01-19 09:10:59.462 GMT [148101] LOG:  received SIGHUP, reloading configuration files
+2023-01-19 09:10:59.486 GMT [148103] LOG:  shutting down
+2023-01-19 09:10:59.548 GMT [148101] LOG:  database system is shut down
+2023-01-19 09:51:06.949 GMT [7022] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 09:51:06.953 GMT [7022] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 09:51:06.954 GMT [7022] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 09:51:06.958 GMT [7025] LOG:  database system was shut down at 2023-01-19 09:51:06 GMT
+2023-01-19 09:51:06.964 GMT [7022] LOG:  database system is ready to accept connections
+2023-01-19 09:52:14.294 GMT [7022] LOG:  received fast shutdown request
+2023-01-19 09:52:14.296 GMT [7022] LOG:  aborting any active transactions
+2023-01-19 09:52:14.299 GMT [7022] LOG:  background worker "logical replication launcher" (PID 7032) exited with exit code 1
+2023-01-19 09:52:14.304 GMT [7027] LOG:  shutting down
+2023-01-19 09:52:14.377 GMT [7022] LOG:  database system is shut down
+2023-01-19 09:52:15.894 GMT [7375] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 09:52:15.895 GMT [7375] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 09:52:15.896 GMT [7375] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 09:52:15.901 GMT [7376] LOG:  database system was shut down at 2023-01-19 09:52:15 GMT
+2023-01-19 09:52:15.907 GMT [7375] LOG:  database system is ready to accept connections
+2023-01-19 09:52:57.698 GMT [7375] LOG:  received fast shutdown request
+2023-01-19 09:52:57.700 GMT [7375] LOG:  aborting any active transactions
+2023-01-19 09:52:57.705 GMT [7375] LOG:  background worker "logical replication launcher" (PID 7382) exited with exit code 1
+2023-01-19 09:52:57.705 GMT [7377] LOG:  shutting down
+2023-01-19 09:52:57.773 GMT [7375] LOG:  database system is shut down
+2023-01-19 09:52:59.123 GMT [7603] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 09:52:59.123 GMT [7603] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 09:52:59.128 GMT [7603] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 09:52:59.132 GMT [7604] LOG:  database system was shut down at 2023-01-19 09:52:58 GMT
+2023-01-19 09:52:59.138 GMT [7603] LOG:  database system is ready to accept connections
+2023-01-19 09:53:27.354 GMT [7603] LOG:  received fast shutdown request
+2023-01-19 09:53:27.358 GMT [7603] LOG:  aborting any active transactions
+2023-01-19 09:53:27.360 GMT [7603] LOG:  background worker "logical replication launcher" (PID 7610) exited with exit code 1
+2023-01-19 09:53:27.365 GMT [7605] LOG:  shutting down
+2023-01-19 09:53:27.435 GMT [7603] LOG:  database system is shut down
+2023-01-19 09:53:28.851 GMT [7812] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 09:53:28.852 GMT [7812] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 09:53:28.857 GMT [7812] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 09:53:28.864 GMT [7813] LOG:  database system was shut down at 2023-01-19 09:53:28 GMT
+2023-01-19 09:53:28.871 GMT [7812] LOG:  database system is ready to accept connections
+2023-01-19 09:54:18.810 GMT [7812] LOG:  received fast shutdown request
+2023-01-19 09:54:18.813 GMT [7812] LOG:  aborting any active transactions
+2023-01-19 09:54:18.820 GMT [7812] LOG:  background worker "logical replication launcher" (PID 7819) exited with exit code 1
+2023-01-19 09:54:18.820 GMT [7814] LOG:  shutting down
+2023-01-19 09:54:18.882 GMT [7812] LOG:  database system is shut down
+2023-01-19 09:54:20.305 GMT [8068] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 09:54:20.305 GMT [8068] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 09:54:20.307 GMT [8068] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 09:54:20.312 GMT [8069] LOG:  database system was shut down at 2023-01-19 09:54:19 GMT
+2023-01-19 09:54:20.320 GMT [8068] LOG:  database system is ready to accept connections
+2023-01-19 09:54:29.574 GMT [8068] LOG:  received fast shutdown request
+2023-01-19 09:54:29.576 GMT [8068] LOG:  aborting any active transactions
+2023-01-19 09:54:29.578 GMT [8068] LOG:  background worker "logical replication launcher" (PID 8075) exited with exit code 1
+2023-01-19 09:54:29.586 GMT [8070] LOG:  shutting down
+2023-01-19 09:54:29.655 GMT [8068] LOG:  database system is shut down
+2023-01-19 09:54:31.106 GMT [8213] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 09:54:31.106 GMT [8213] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 09:54:31.108 GMT [8213] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 09:54:31.114 GMT [8214] LOG:  database system was shut down at 2023-01-19 09:54:30 GMT
+2023-01-19 09:54:31.127 GMT [8213] LOG:  database system is ready to accept connections
+2023-01-19 10:03:54.226 GMT [8213] LOG:  received fast shutdown request
+2023-01-19 10:03:54.229 GMT [8213] LOG:  aborting any active transactions
+2023-01-19 10:03:54.236 GMT [8213] LOG:  background worker "logical replication launcher" (PID 8223) exited with exit code 1
+2023-01-19 10:03:54.236 GMT [8218] LOG:  shutting down
+2023-01-19 10:03:54.253 GMT [8213] LOG:  database system is shut down
+2023-01-19 10:03:55.914 GMT [9940] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 10:03:55.915 GMT [9940] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 10:03:55.917 GMT [9940] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 10:03:55.922 GMT [9941] LOG:  database system was shut down at 2023-01-19 10:03:55 GMT
+2023-01-19 10:03:55.930 GMT [9940] LOG:  database system is ready to accept connections
+2023-01-19 10:04:08.080 GMT [9940] LOG:  received fast shutdown request
+2023-01-19 10:04:08.082 GMT [9940] LOG:  aborting any active transactions
+2023-01-19 10:04:08.089 GMT [9940] LOG:  background worker "logical replication launcher" (PID 9947) exited with exit code 1
+2023-01-19 10:04:08.091 GMT [9942] LOG:  shutting down
+2023-01-19 10:04:08.174 GMT [9940] LOG:  database system is shut down
+2023-01-19 10:04:09.879 GMT [10096] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 10:04:09.880 GMT [10096] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 10:04:09.881 GMT [10096] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 10:04:09.886 GMT [10097] LOG:  database system was shut down at 2023-01-19 10:04:09 GMT
+2023-01-19 10:04:09.893 GMT [10096] LOG:  database system is ready to accept connections
+2023-01-19 10:04:26.248 GMT [10096] LOG:  received fast shutdown request
+2023-01-19 10:04:26.250 GMT [10096] LOG:  aborting any active transactions
+2023-01-19 10:04:26.254 GMT [10096] LOG:  background worker "logical replication launcher" (PID 10103) exited with exit code 1
+2023-01-19 10:04:26.257 GMT [10098] LOG:  shutting down
+2023-01-19 10:04:26.340 GMT [10096] LOG:  database system is shut down
+2023-01-19 10:04:27.722 GMT [10253] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 10:04:27.723 GMT [10253] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 10:04:27.725 GMT [10253] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 10:04:27.731 GMT [10254] LOG:  database system was shut down at 2023-01-19 10:04:27 GMT
+2023-01-19 10:04:27.739 GMT [10253] LOG:  database system is ready to accept connections
+2023-01-19 10:55:20.171 GMT [10253] LOG:  received smart shutdown request
+2023-01-19 10:55:20.434 GMT [10253] LOG:  background worker "logical replication launcher" (PID 10260) exited with exit code 1
+2023-01-19 10:55:20.497 GMT [10255] LOG:  shutting down
+2023-01-19 10:55:20.967 GMT [10253] LOG:  database system is shut down
+2023-01-19 17:24:10.652 GMT [43026] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 17:24:10.652 GMT [43026] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 17:24:10.654 GMT [43026] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 17:24:10.659 GMT [43027] LOG:  database system was shut down at 2023-01-19 17:24:10 GMT
+2023-01-19 17:24:10.664 GMT [43026] LOG:  database system is ready to accept connections
+2023-01-19 17:24:11.371 GMT [43052] ERROR:  type "numeri" does not exist at character 107
+2023-01-19 17:24:11.371 GMT [43052] STATEMENT:  CREATE TABLE IF NOT EXISTS loan_statement (
+	    id SERIAL PRIMARY KEY,
+	    starting_date DATE,
+	    amount NUMERI(15,2),
+	    loan_id INT REFERENCES loan(id)
+	);
+2023-01-19 17:24:11.503 GMT [43052] ERROR:  relation "loan_statement" does not exist at character 213
+2023-01-19 17:24:11.503 GMT [43052] STATEMENT:  CREATE OR REPLACE VIEW client.loan_statements AS
+	    SELECT loans.account_id, loans.id, loan_statement.id as statement_id, loan_statement.starting_date, loan_statement.amount
+	    FROM client.loans
+	    INNER JOIN loan_statement ON loans.id = loan_statement.loan_id;
+2023-01-19 17:24:11.766 GMT [43052] ERROR:  relation "loan_statement" does not exist at character 13
+2023-01-19 17:24:11.766 GMT [43052] QUERY:  INSERT INTO loan_statement (starting_date, amount, loan_id) VALUES (date_trunc('month', now()::date), 0, loan_id)
+2023-01-19 17:24:11.766 GMT [43052] CONTEXT:  PL/pgSQL function client.open_loan(integer,numeric,date,text,numeric) line 8 at SQL statement
+2023-01-19 17:24:11.766 GMT [43052] STATEMENT:  SELECT * FROM client.open_loan(1, 10000.00, '22-12-2025'::DATE, 'vehicle'::TEXT, 5.00);
+2023-01-19 17:27:33.592 GMT [43796] ERROR:  permission denied for schema unauthenticated at character 15
+2023-01-19 17:27:33.592 GMT [43796] STATEMENT:  SELECT * FROM unauthenticated.unauthenticated_personal_information;
+2023-01-19 17:29:04.775 GMT [44293] ERROR:  permission denied for schema unauthenticated at character 15
+2023-01-19 17:29:04.775 GMT [44293] STATEMENT:  SELECT * FROM unauthenticated.unauthenticated_personal_information;
+2023-01-19 17:32:48.030 GMT [43026] LOG:  received fast shutdown request
+2023-01-19 17:32:48.032 GMT [43026] LOG:  aborting any active transactions
+2023-01-19 17:32:48.034 GMT [43026] LOG:  background worker "logical replication launcher" (PID 43033) exited with exit code 1
+2023-01-19 17:32:48.037 GMT [43028] LOG:  shutting down
+2023-01-19 17:32:48.050 GMT [43026] LOG:  database system is shut down
+2023-01-19 17:32:49.287 GMT [45507] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 17:32:49.287 GMT [45507] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 17:32:49.289 GMT [45507] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 17:32:49.296 GMT [45508] LOG:  database system was shut down at 2023-01-19 17:32:48 GMT
+2023-01-19 17:32:49.301 GMT [45507] LOG:  database system is ready to accept connections
+2023-01-19 17:32:50.021 GMT [45536] ERROR:  type "numeri" does not exist at character 107
+2023-01-19 17:32:50.021 GMT [45536] STATEMENT:  CREATE TABLE IF NOT EXISTS loan_statement (
+	    id SERIAL PRIMARY KEY,
+	    starting_date DATE,
+	    amount NUMERI(15,2),
+	    loan_id INT REFERENCES loan(id)
+	);
+2023-01-19 17:32:50.146 GMT [45536] ERROR:  relation "loan_statement" does not exist at character 213
+2023-01-19 17:32:50.146 GMT [45536] STATEMENT:  CREATE OR REPLACE VIEW client.loan_statements AS
+	    SELECT loans.account_id, loans.id, loan_statement.id as statement_id, loan_statement.starting_date, loan_statement.amount
+	    FROM client.loans
+	    INNER JOIN loan_statement ON loans.id = loan_statement.loan_id;
+2023-01-19 17:32:50.422 GMT [45536] ERROR:  relation "loan_statement" does not exist at character 13
+2023-01-19 17:32:50.422 GMT [45536] QUERY:  INSERT INTO loan_statement (starting_date, amount, loan_id) VALUES (date_trunc('month', now()::date), 0, loan_id)
+2023-01-19 17:32:50.422 GMT [45536] CONTEXT:  PL/pgSQL function client.open_loan(integer,numeric,date,text,numeric) line 8 at SQL statement
+2023-01-19 17:32:50.422 GMT [45536] STATEMENT:  SELECT * FROM client.open_loan(1, 10000.00, '22-12-2025'::DATE, 'vehicle'::TEXT, 5.00);
+2023-01-19 17:36:49.979 GMT [45911] ERROR:  function unauthenticated.create_personal_info(unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist at character 15
+2023-01-19 17:36:49.979 GMT [45911] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 17:36:49.979 GMT [45911] STATEMENT:  SELECT * FROM unauthenticated.create_personal_info('alfie', 'dew', '22-12-2002', '0777777777777', 'alfie@example.com', 'street', 'city', 'postcode');
+2023-01-19 17:38:08.629 GMT [45911] ERROR:  syntax error at or near ":" at character 59
+2023-01-19 17:38:08.629 GMT [45911] STATEMENT:  SELECT * FROM unauthenticated.create_personal_info('alfie':TEXT, 'dew':TEXT, '22-12-2002':DATE, '0777777777777':TEXT, 'alfie@example.com':TEXT, 'street':TEXT, 'city':TEXT, 'postcode':TEXT);
+2023-01-19 17:38:39.447 GMT [45911] ERROR:  function unauthenticated.create_personal_info(text, text, date, text, text, text, text, text) does not exist at character 15
+2023-01-19 17:38:39.447 GMT [45911] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 17:38:39.447 GMT [45911] STATEMENT:  SELECT * FROM unauthenticated.create_personal_info('alfie'::TEXT, 'dew'::TEXT, '22-12-2002'::DATE, '0777777777777'::TEXT, 'alfie@example.com'::TEXT, 'street'::TEXT, 'city'::TEXT, 'postcode'::TEXT);
+2023-01-19 17:39:39.779 GMT [45911] ERROR:  column reference "first_name" is ambiguous at character 88
+2023-01-19 17:39:39.779 GMT [45911] DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+2023-01-19 17:39:39.779 GMT [45911] QUERY:  NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address)
+2023-01-19 17:39:39.779 GMT [45911] CONTEXT:  PL/pgSQL function create_personal_info(text,text,date,text,text,text,text,text,text) line 4 at IF
+2023-01-19 17:39:39.779 GMT [45911] STATEMENT:  SELECT * FROM unauthenticated.create_personal_info('alfie'::TEXT, 'dew'::TEXT, '22-12-2002'::DATE, '0777777777777'::TEXT, 'alfie@example.com'::TEXT, 'street'::TEXT, 'city'::TEXT, 'postcode'::TEXT, 'postcode'::TEXT);
+2023-01-19 17:41:12.011 GMT [45911] ERROR:  column reference "first_name" is ambiguous at character 88
+2023-01-19 17:41:12.011 GMT [45911] DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+2023-01-19 17:41:12.011 GMT [45911] QUERY:  NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address)
+2023-01-19 17:41:12.011 GMT [45911] CONTEXT:  PL/pgSQL function create_personal_info(text,text,date,text,text,text,text,text,text) line 4 at IF
+2023-01-19 17:41:12.011 GMT [45911] STATEMENT:  SELECT * FROM unauthenticated.create_personal_info('alfie'::TEXT, 'dew'::TEXT, '22-12-2002'::DATE, '0777777777777'::TEXT, 'alfie@example.com'::TEXT, 'street'::TEXT, 'city'::TEXT, 'postcode'::TEXT, 'postcode'::TEXT);
+2023-01-19 17:53:17.009 GMT [49941] FATAL:  database "johnsmith" does not exist
+2023-01-19 19:52:06.367 GMT [45507] LOG:  received SIGHUP, reloading configuration files
+2023-01-19 19:52:06.368 GMT [45507] LOG:  received smart shutdown request
+2023-01-19 19:52:06.404 GMT [45507] LOG:  background worker "logical replication launcher" (PID 45514) exited with exit code 1
+2023-01-19 19:52:06.406 GMT [45509] LOG:  shutting down
+2023-01-19 19:52:06.470 GMT [45507] LOG:  database system is shut down
+2023-01-19 19:56:06.014 GMT [8289] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 19:56:06.016 GMT [8289] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2023-01-19 19:56:06.016 GMT [8289] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2023-01-19 19:56:06.016 GMT [8289] WARNING:  could not create listen socket for "localhost"
+2023-01-19 19:56:06.017 GMT [8289] FATAL:  could not create any TCP/IP sockets
+2023-01-19 19:56:06.019 GMT [8289] LOG:  database system is shut down
+2023-01-19 19:57:09.117 GMT [10502] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 19:57:09.117 GMT [10502] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 19:57:09.119 GMT [10502] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 19:57:09.125 GMT [10503] LOG:  database system was shut down at 2023-01-19 19:52:06 GMT
+2023-01-19 19:57:09.132 GMT [10502] LOG:  database system is ready to accept connections
+2023-01-19 19:57:20.527 GMT [10919] FATAL:  password authentication failed for user "parallels"
+2023-01-19 19:57:20.527 GMT [10919] DETAIL:  User "parallels" has no password assigned.
+	Connection matched pg_hba.conf line 89: "local   all             all                                     md5"
+2023-01-19 19:57:20.527 GMT [10919] LOG:  could not send data to client: Broken pipe
+2023-01-19 19:57:35.182 GMT [11394] FATAL:  password authentication failed for user "parallels"
+2023-01-19 19:57:35.182 GMT [11394] DETAIL:  User "parallels" has no password assigned.
+	Connection matched pg_hba.conf line 89: "local   all             all                                     md5"
+2023-01-19 19:57:35.182 GMT [11394] LOG:  could not send data to client: Broken pipe
+2023-01-19 19:57:35.866 GMT [11474] FATAL:  password authentication failed for user "postgres"
+2023-01-19 19:57:35.866 GMT [11474] DETAIL:  User "postgres" has no password assigned.
+	Connection matched pg_hba.conf line 89: "local   all             all                                     md5"
+2023-01-19 19:57:35.866 GMT [11474] LOG:  could not send data to client: Broken pipe
+2023-01-19 19:57:40.362 GMT [11637] FATAL:  password authentication failed for user "postgres"
+2023-01-19 19:57:40.362 GMT [11637] DETAIL:  User "postgres" has no password assigned.
+	Connection matched pg_hba.conf line 89: "local   all             all                                     md5"
+2023-01-19 19:58:04.356 GMT [12405] FATAL:  password authentication failed for user "parallels"
+2023-01-19 19:58:04.356 GMT [12405] DETAIL:  User "parallels" has no password assigned.
+	Connection matched pg_hba.conf line 89: "local   all             all                                     md5"
+2023-01-19 19:58:04.356 GMT [12405] LOG:  could not send data to client: Broken pipe
+2023-01-19 20:17:36.646 GMT [10502] LOG:  received fast shutdown request
+2023-01-19 20:17:36.647 GMT [10502] LOG:  aborting any active transactions
+2023-01-19 20:17:36.650 GMT [10502] LOG:  background worker "logical replication launcher" (PID 10509) exited with exit code 1
+2023-01-19 20:17:36.653 GMT [10504] LOG:  shutting down
+2023-01-19 20:17:36.669 GMT [10502] LOG:  database system is shut down
+2023-01-19 20:17:40.556 GMT [50720] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:17:40.557 GMT [50720] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:17:40.559 GMT [50720] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:17:40.572 GMT [50721] LOG:  database system was shut down at 2023-01-19 20:17:40 GMT
+2023-01-19 20:17:40.578 GMT [50720] LOG:  database system is ready to accept connections
+2023-01-19 20:17:41.376 GMT [50749] ERROR:  type "numeri" does not exist at character 107
+2023-01-19 20:17:41.376 GMT [50749] STATEMENT:  CREATE TABLE IF NOT EXISTS loan_statement (
+	    id SERIAL PRIMARY KEY,
+	    starting_date DATE,
+	    amount NUMERI(15,2),
+	    loan_id INT REFERENCES loan(id)
+	);
+2023-01-19 20:17:41.414 GMT [50749] ERROR:  syntax error at or near "username" at character 65
+2023-01-19 20:17:41.414 GMT [50749] STATEMENT:  CREATE OR REPLACE FUNCTION policy_customer_client_check(VARCHAR username)
+	RETURNS INT AS $$
+	DECLARE
+	    allowed_customer_id INT;
+	BEGIN
+	    SELECT customer_id INTO allowed_customer_id FROM customer
+	    INNER JOIN online_account ON customer.id = online_account.customer_id
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = username;
+	    RETURN allowed_customer_id;
+	END;
+	$$ LANGUAGE plpgsql SECURITY DEFINER;
+2023-01-19 20:17:41.416 GMT [50749] ERROR:  function policy_customer_client_check(name) does not exist
+2023-01-19 20:17:41.416 GMT [50749] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 20:17:41.416 GMT [50749] STATEMENT:  CREATE POLICY policy_customer_client ON customer
+	    FOR SELECT TO l4 USING (id = policy_customer_client_check(current_user));
+2023-01-19 20:17:41.510 GMT [50749] ERROR:  relation "loan_statement" does not exist at character 213
+2023-01-19 20:17:41.510 GMT [50749] STATEMENT:  CREATE OR REPLACE VIEW client.loan_statements AS
+	    SELECT loans.account_id, loans.id, loan_statement.id as statement_id, loan_statement.starting_date, loan_statement.amount
+	    FROM client.loans
+	    INNER JOIN loan_statement ON loans.id = loan_statement.loan_id;
+2023-01-19 20:17:41.592 GMT [50749] ERROR:  role "johnsmith" does not exist
+2023-01-19 20:17:41.592 GMT [50749] STATEMENT:  SET ROLE johnsmith;
+2023-01-19 20:17:43.430 GMT [50749] ERROR:  relation "loan_statement" does not exist at character 13
+2023-01-19 20:17:43.430 GMT [50749] QUERY:  INSERT INTO loan_statement (starting_date, amount, loan_id) VALUES (date_trunc('month', now()::date), 0, loan_id)
+2023-01-19 20:17:43.430 GMT [50749] CONTEXT:  PL/pgSQL function client.open_loan(integer,numeric,date,text,numeric) line 8 at SQL statement
+2023-01-19 20:17:43.430 GMT [50749] STATEMENT:  SELECT * FROM client.open_loan(1, 10000.00, '22-12-2025'::DATE, 'vehicle'::TEXT, 5.00);
+2023-01-19 20:17:43.455 GMT [50749] ERROR:  syntax error at or near "ROLE" at character 58
+2023-01-19 20:17:43.455 GMT [50749] STATEMENT:  SELECT * FROM unauthenticated.create_personal_info()
+	SET ROLE johnsmith;
+2023-01-19 20:22:18.840 GMT [50720] LOG:  received fast shutdown request
+2023-01-19 20:22:18.842 GMT [50720] LOG:  aborting any active transactions
+2023-01-19 20:22:18.845 GMT [50720] LOG:  background worker "logical replication launcher" (PID 50727) exited with exit code 1
+2023-01-19 20:22:18.847 GMT [50722] LOG:  shutting down
+2023-01-19 20:22:18.903 GMT [50720] LOG:  database system is shut down
+2023-01-19 20:22:20.125 GMT [59913] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:22:20.126 GMT [59913] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:22:20.127 GMT [59913] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:22:20.133 GMT [59914] LOG:  database system was shut down at 2023-01-19 20:22:19 GMT
+2023-01-19 20:22:20.139 GMT [59913] LOG:  database system is ready to accept connections
+2023-01-19 20:22:20.994 GMT [59939] ERROR:  syntax error at or near "username" at character 65
+2023-01-19 20:22:20.994 GMT [59939] STATEMENT:  CREATE OR REPLACE FUNCTION policy_customer_client_check(VARCHAR username)
+	RETURNS INT AS $$
+	DECLARE
+	    allowed_customer_id INT;
+	BEGIN
+	    SELECT customer_id INTO allowed_customer_id FROM customer
+	    INNER JOIN online_account ON customer.id = online_account.customer_id
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = username;
+	    RETURN allowed_customer_id;
+	END;
+	$$ LANGUAGE plpgsql SECURITY DEFINER;
+2023-01-19 20:22:20.994 GMT [59939] ERROR:  function policy_customer_client_check(name) does not exist
+2023-01-19 20:22:20.994 GMT [59939] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 20:22:20.994 GMT [59939] STATEMENT:  CREATE POLICY policy_customer_client ON customer
+	    FOR SELECT TO l4 USING (id = policy_customer_client_check(current_user));
+2023-01-19 20:22:21.044 GMT [59939] ERROR:  role "johnsmith" does not exist
+2023-01-19 20:22:21.044 GMT [59939] STATEMENT:  SET ROLE johnsmith;
+2023-01-19 20:22:21.374 GMT [59939] ERROR:  syntax error at or near "ROLE" at character 58
+2023-01-19 20:22:21.374 GMT [59939] STATEMENT:  SELECT * FROM unauthenticated.create_personal_info()
+	SET ROLE johnsmith;
+2023-01-19 20:25:33.181 GMT [59913] LOG:  received fast shutdown request
+2023-01-19 20:25:33.182 GMT [59913] LOG:  aborting any active transactions
+2023-01-19 20:25:33.187 GMT [59913] LOG:  background worker "logical replication launcher" (PID 59920) exited with exit code 1
+2023-01-19 20:25:33.187 GMT [59915] LOG:  shutting down
+2023-01-19 20:25:33.256 GMT [59913] LOG:  database system is shut down
+2023-01-19 20:25:34.500 GMT [66361] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:25:34.501 GMT [66361] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:25:34.504 GMT [66361] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:25:34.513 GMT [66362] LOG:  database system was shut down at 2023-01-19 20:25:34 GMT
+2023-01-19 20:25:34.520 GMT [66361] LOG:  database system is ready to accept connections
+2023-01-19 20:25:35.409 GMT [66387] ERROR:  "personal_information" is not a table
+2023-01-19 20:25:35.409 GMT [66387] STATEMENT:  CREATE POLICY policy_customer_client ON client.personal_information
+	    FOR SELECT TO l4 USING (id = policy_customer_client_check(current_user));
+2023-01-19 20:40:01.100 GMT [66361] LOG:  received fast shutdown request
+2023-01-19 20:40:01.102 GMT [66361] LOG:  aborting any active transactions
+2023-01-19 20:40:01.107 GMT [66361] LOG:  background worker "logical replication launcher" (PID 66368) exited with exit code 1
+2023-01-19 20:40:01.107 GMT [66363] LOG:  shutting down
+2023-01-19 20:40:01.122 GMT [66361] LOG:  database system is shut down
+2023-01-19 20:40:02.245 GMT [94585] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:40:02.245 GMT [94585] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:40:02.246 GMT [94585] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:40:02.251 GMT [94586] LOG:  database system was shut down at 2023-01-19 20:40:01 GMT
+2023-01-19 20:40:02.264 GMT [94585] LOG:  database system is ready to accept connections
+2023-01-19 20:40:02.811 GMT [94683] ERROR:  syntax error at or near "CREATE" at character 37
+2023-01-19 20:40:02.811 GMT [94683] STATEMENT:  CREATE ROLE user_banking_protection
+	CREATE ROLE employee WITH LOGIN PASSWORD 'employee';
+2023-01-19 20:40:02.822 GMT [94683] ERROR:  role "user_banking_protection" does not exist
+2023-01-19 20:40:02.822 GMT [94683] STATEMENT:  GRANT l1 to user_banking_protection;
+2023-01-19 20:40:02.823 GMT [94683] ERROR:  role "employee" does not exist
+2023-01-19 20:40:02.823 GMT [94683] STATEMENT:  GRANT l3 TO employee;
+2023-01-19 20:40:02.959 GMT [94683] ERROR:  role "user_banking_protection" does not exist
+2023-01-19 20:40:02.959 GMT [94683] STATEMENT:  CREATE POLICY policy_customer_client ON customer
+	    FOR SELECT TO user_banking_protection USING (id = policy_customer_client_check(current_user));
+2023-01-19 20:40:03.080 GMT [94683] ERROR:  role "user_banking_protection" does not exist
+2023-01-19 20:40:03.080 GMT [94683] STATEMENT:  ALTER VIEW IF EXISTS client.personal_information OWNER TO user_banking_protection;
+2023-01-19 20:40:34.542 GMT [94585] LOG:  received fast shutdown request
+2023-01-19 20:40:34.544 GMT [94585] LOG:  aborting any active transactions
+2023-01-19 20:40:34.551 GMT [94585] LOG:  background worker "logical replication launcher" (PID 94592) exited with exit code 1
+2023-01-19 20:40:34.552 GMT [94587] LOG:  shutting down
+2023-01-19 20:40:34.607 GMT [94585] LOG:  database system is shut down
+2023-01-19 20:40:35.869 GMT [95789] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:40:35.869 GMT [95789] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:40:35.870 GMT [95789] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:40:35.876 GMT [95790] LOG:  database system was shut down at 2023-01-19 20:40:35 GMT
+2023-01-19 20:40:35.883 GMT [95789] LOG:  database system is ready to accept connections
+2023-01-19 20:40:37.013 GMT [95815] ERROR:  permission denied for table customer
+2023-01-19 20:40:37.013 GMT [95815] STATEMENT:  SELECT * FROM client.personal_information;
+2023-01-19 20:41:43.287 GMT [95789] LOG:  received fast shutdown request
+2023-01-19 20:41:43.289 GMT [95789] LOG:  aborting any active transactions
+2023-01-19 20:41:43.294 GMT [95789] LOG:  background worker "logical replication launcher" (PID 95796) exited with exit code 1
+2023-01-19 20:41:43.295 GMT [95791] LOG:  shutting down
+2023-01-19 20:41:43.348 GMT [95789] LOG:  database system is shut down
+2023-01-19 20:41:44.542 GMT [98078] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:41:44.543 GMT [98078] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:41:44.544 GMT [98078] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:41:44.548 GMT [98079] LOG:  database system was shut down at 2023-01-19 20:41:44 GMT
+2023-01-19 20:41:44.553 GMT [98078] LOG:  database system is ready to accept connections
+2023-01-19 20:42:47.797 GMT [98078] LOG:  received fast shutdown request
+2023-01-19 20:42:47.798 GMT [98078] LOG:  aborting any active transactions
+2023-01-19 20:42:47.801 GMT [98078] LOG:  background worker "logical replication launcher" (PID 98085) exited with exit code 1
+2023-01-19 20:42:47.803 GMT [98080] LOG:  shutting down
+2023-01-19 20:42:47.852 GMT [98078] LOG:  database system is shut down
+2023-01-19 20:42:48.938 GMT [100368] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:42:48.938 GMT [100368] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:42:48.941 GMT [100368] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:42:48.948 GMT [100369] LOG:  database system was shut down at 2023-01-19 20:42:48 GMT
+2023-01-19 20:42:48.953 GMT [100368] LOG:  database system is ready to accept connections
+2023-01-19 20:43:48.457 GMT [100368] LOG:  received fast shutdown request
+2023-01-19 20:43:48.459 GMT [100368] LOG:  aborting any active transactions
+2023-01-19 20:43:48.461 GMT [100368] LOG:  background worker "logical replication launcher" (PID 100375) exited with exit code 1
+2023-01-19 20:43:48.465 GMT [100370] LOG:  shutting down
+2023-01-19 20:43:48.511 GMT [100368] LOG:  database system is shut down
+2023-01-19 20:43:49.667 GMT [102431] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:43:49.668 GMT [102431] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:43:49.669 GMT [102431] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:43:49.674 GMT [102434] LOG:  database system was shut down at 2023-01-19 20:43:49 GMT
+2023-01-19 20:43:49.689 GMT [102431] LOG:  database system is ready to accept connections
+2023-01-19 20:45:05.459 GMT [102431] LOG:  received fast shutdown request
+2023-01-19 20:45:05.461 GMT [102431] LOG:  aborting any active transactions
+2023-01-19 20:45:05.465 GMT [102431] LOG:  background worker "logical replication launcher" (PID 102441) exited with exit code 1
+2023-01-19 20:45:05.469 GMT [102436] LOG:  shutting down
+2023-01-19 20:45:05.517 GMT [102431] LOG:  database system is shut down
+2023-01-19 20:45:06.592 GMT [105058] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:45:06.592 GMT [105058] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:45:06.594 GMT [105058] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:45:06.600 GMT [105059] LOG:  database system was shut down at 2023-01-19 20:45:06 GMT
+2023-01-19 20:45:06.606 GMT [105058] LOG:  database system is ready to accept connections
+2023-01-19 20:47:15.429 GMT [105058] LOG:  received fast shutdown request
+2023-01-19 20:47:15.430 GMT [105058] LOG:  aborting any active transactions
+2023-01-19 20:47:15.436 GMT [105058] LOG:  background worker "logical replication launcher" (PID 105065) exited with exit code 1
+2023-01-19 20:47:15.438 GMT [105060] LOG:  shutting down
+2023-01-19 20:47:15.486 GMT [105058] LOG:  database system is shut down
+2023-01-19 20:47:16.705 GMT [109418] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:47:16.706 GMT [109418] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:47:16.707 GMT [109418] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:47:16.712 GMT [109420] LOG:  database system was shut down at 2023-01-19 20:47:16 GMT
+2023-01-19 20:47:16.719 GMT [109418] LOG:  database system is ready to accept connections
+2023-01-19 20:47:17.307 GMT [109445] ERROR:  syntax error at or near "NO" at character 41
+2023-01-19 20:47:17.307 GMT [109445] STATEMENT:  ALTER USER user_banking_protection WITH NO SUPERUSER;
+2023-01-19 20:47:48.094 GMT [109418] LOG:  received fast shutdown request
+2023-01-19 20:47:48.097 GMT [109418] LOG:  aborting any active transactions
+2023-01-19 20:47:48.099 GMT [109418] LOG:  background worker "logical replication launcher" (PID 109426) exited with exit code 1
+2023-01-19 20:47:48.104 GMT [109421] LOG:  shutting down
+2023-01-19 20:47:48.167 GMT [109418] LOG:  database system is shut down
+2023-01-19 20:47:49.241 GMT [110554] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:47:49.241 GMT [110554] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:47:49.243 GMT [110554] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:47:49.257 GMT [110558] LOG:  database system was shut down at 2023-01-19 20:47:48 GMT
+2023-01-19 20:47:49.271 GMT [110554] LOG:  database system is ready to accept connections
+2023-01-19 20:47:50.558 GMT [110583] ERROR:  permission denied for table customer
+2023-01-19 20:47:50.558 GMT [110583] STATEMENT:  SELECT * FROM client.personal_information;
+2023-01-19 20:48:42.751 GMT [110554] LOG:  received fast shutdown request
+2023-01-19 20:48:42.752 GMT [110554] LOG:  aborting any active transactions
+2023-01-19 20:48:42.755 GMT [110554] LOG:  background worker "logical replication launcher" (PID 110564) exited with exit code 1
+2023-01-19 20:48:42.760 GMT [110559] LOG:  shutting down
+2023-01-19 20:48:42.825 GMT [110554] LOG:  database system is shut down
+2023-01-19 20:48:44.006 GMT [112443] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:48:44.006 GMT [112443] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:48:44.007 GMT [112443] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:48:44.014 GMT [112444] LOG:  database system was shut down at 2023-01-19 20:48:43 GMT
+2023-01-19 20:48:44.020 GMT [112443] LOG:  database system is ready to accept connections
+2023-01-19 20:48:45.359 GMT [112469] ERROR:  permission denied for table customer
+2023-01-19 20:48:45.359 GMT [112469] STATEMENT:  SELECT * FROM client.personal_information;
+2023-01-19 20:50:27.112 GMT [112443] LOG:  received fast shutdown request
+2023-01-19 20:50:27.114 GMT [112443] LOG:  aborting any active transactions
+2023-01-19 20:50:27.119 GMT [112443] LOG:  background worker "logical replication launcher" (PID 112450) exited with exit code 1
+2023-01-19 20:50:27.119 GMT [112445] LOG:  shutting down
+2023-01-19 20:50:27.166 GMT [112443] LOG:  database system is shut down
+2023-01-19 20:50:28.282 GMT [115948] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:50:28.282 GMT [115948] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:50:28.288 GMT [115948] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:50:28.296 GMT [115949] LOG:  database system was shut down at 2023-01-19 20:50:28 GMT
+2023-01-19 20:50:28.301 GMT [115948] LOG:  database system is ready to accept connections
+2023-01-19 20:50:29.543 GMT [116043] ERROR:  column reference "username" is ambiguous at character 236
+2023-01-19 20:50:29.543 GMT [116043] DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+2023-01-19 20:50:29.543 GMT [116043] QUERY:  SELECT customer_id                          FROM customer
+	    INNER JOIN online_account ON customer.id = online_account.customer_id
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = username
+2023-01-19 20:50:29.543 GMT [116043] CONTEXT:  PL/pgSQL function policy_customer_client_check(text) line 6 at SQL statement
+2023-01-19 20:50:29.543 GMT [116043] STATEMENT:  SELECT * FROM client.personal_information;
+2023-01-19 20:51:19.518 GMT [115948] LOG:  received fast shutdown request
+2023-01-19 20:51:19.519 GMT [115948] LOG:  aborting any active transactions
+2023-01-19 20:51:19.524 GMT [115948] LOG:  background worker "logical replication launcher" (PID 115955) exited with exit code 1
+2023-01-19 20:51:19.524 GMT [115950] LOG:  shutting down
+2023-01-19 20:51:19.571 GMT [115948] LOG:  database system is shut down
+2023-01-19 20:51:20.852 GMT [117827] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:51:20.853 GMT [117827] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:51:20.854 GMT [117827] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:51:20.858 GMT [117828] LOG:  database system was shut down at 2023-01-19 20:51:20 GMT
+2023-01-19 20:51:20.864 GMT [117827] LOG:  database system is ready to accept connections
+2023-01-19 20:51:41.881 GMT [117827] LOG:  received fast shutdown request
+2023-01-19 20:51:41.883 GMT [117827] LOG:  aborting any active transactions
+2023-01-19 20:51:41.887 GMT [117827] LOG:  background worker "logical replication launcher" (PID 117834) exited with exit code 1
+2023-01-19 20:51:41.887 GMT [117829] LOG:  shutting down
+2023-01-19 20:51:41.942 GMT [117827] LOG:  database system is shut down
+2023-01-19 20:51:42.992 GMT [118595] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 20:51:42.992 GMT [118595] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 20:51:42.994 GMT [118595] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 20:51:43.001 GMT [118596] LOG:  database system was shut down at 2023-01-19 20:51:42 GMT
+2023-01-19 20:51:43.007 GMT [118595] LOG:  database system is ready to accept connections
+2023-01-19 21:01:46.228 GMT [118595] LOG:  received fast shutdown request
+2023-01-19 21:01:46.230 GMT [118595] LOG:  aborting any active transactions
+2023-01-19 21:01:46.234 GMT [118595] LOG:  background worker "logical replication launcher" (PID 118602) exited with exit code 1
+2023-01-19 21:01:46.234 GMT [118597] LOG:  shutting down
+2023-01-19 21:01:46.253 GMT [118595] LOG:  database system is shut down
+2023-01-19 21:01:47.367 GMT [138494] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:01:47.367 GMT [138494] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:01:47.369 GMT [138494] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:01:47.373 GMT [138495] LOG:  database system was shut down at 2023-01-19 21:01:47 GMT
+2023-01-19 21:01:47.379 GMT [138494] LOG:  database system is ready to accept connections
+2023-01-19 21:01:48.127 GMT [138524] ERROR:  relation "user_account" does not exist
+2023-01-19 21:01:48.127 GMT [138524] STATEMENT:  CREATE POLICY policy_user_account_client ON user_account
+	    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+2023-01-19 21:01:48.128 GMT [138524] ERROR:  relation "user_account" does not exist
+2023-01-19 21:01:48.128 GMT [138524] STATEMENT:  ALTER TABLE user_account ENABLE ROW LEVEL SECURITY;
+2023-01-19 21:02:32.456 GMT [138494] LOG:  received fast shutdown request
+2023-01-19 21:02:32.459 GMT [138494] LOG:  aborting any active transactions
+2023-01-19 21:02:32.461 GMT [138494] LOG:  background worker "logical replication launcher" (PID 138501) exited with exit code 1
+2023-01-19 21:02:32.463 GMT [138496] LOG:  shutting down
+2023-01-19 21:02:32.509 GMT [138494] LOG:  database system is shut down
+2023-01-19 21:02:33.650 GMT [140052] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:02:33.651 GMT [140052] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:02:33.655 GMT [140052] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:02:33.660 GMT [140053] LOG:  database system was shut down at 2023-01-19 21:02:33 GMT
+2023-01-19 21:02:33.667 GMT [140052] LOG:  database system is ready to accept connections
+2023-01-19 21:02:34.446 GMT [140081] ERROR:  relation "user_account" does not exist
+2023-01-19 21:02:34.446 GMT [140081] STATEMENT:  CREATE POLICY policy_user_account_client ON user_account
+	    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+2023-01-19 21:02:34.446 GMT [140081] ERROR:  relation "user_account" does not exist
+2023-01-19 21:02:34.446 GMT [140081] STATEMENT:  ALTER TABLE user_account ENABLE ROW LEVEL SECURITY;
+2023-01-19 21:06:46.934 GMT [140052] LOG:  received fast shutdown request
+2023-01-19 21:06:46.935 GMT [140052] LOG:  aborting any active transactions
+2023-01-19 21:06:46.940 GMT [140052] LOG:  background worker "logical replication launcher" (PID 140059) exited with exit code 1
+2023-01-19 21:06:46.940 GMT [140054] LOG:  shutting down
+2023-01-19 21:06:46.992 GMT [140052] LOG:  database system is shut down
+2023-01-19 21:06:48.138 GMT [148426] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:06:48.138 GMT [148426] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:06:48.141 GMT [148426] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:06:48.147 GMT [148427] LOG:  database system was shut down at 2023-01-19 21:06:47 GMT
+2023-01-19 21:06:48.153 GMT [148426] LOG:  database system is ready to accept connections
+2023-01-19 21:06:48.921 GMT [148455] ERROR:  syntax error at or near "END" at character 441
+2023-01-19 21:06:48.921 GMT [148455] STATEMENT:  CREATE OR REPLACE FUNCTION policy_account_client_check(user_fullname TEXT)
+	RETURNS INT AS $$
+	DECLARE
+	    allowed_account_id INT;
+	BEGIN
+	    SELECT account_number INTO allowed_account_id FROM account
+	    INNER JOIN online_account ON account.account_number = online_account.account_number
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname;
+	    RETURN allowed_account_id;
+	END;
+	END;
+	$$ LANGUAGE plpgsql SECURITY DEFINER;
+2023-01-19 21:06:48.922 GMT [148455] ERROR:  relation "user_account" does not exist
+2023-01-19 21:06:48.922 GMT [148455] STATEMENT:  CREATE POLICY policy_user_account_client ON user_account
+	    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+2023-01-19 21:06:48.922 GMT [148455] ERROR:  relation "user_account" does not exist
+2023-01-19 21:06:48.922 GMT [148455] STATEMENT:  ALTER TABLE user_account ENABLE ROW LEVEL SECURITY;
+2023-01-19 21:06:48.922 GMT [148455] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:06:48.922 GMT [148455] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:06:48.922 GMT [148455] STATEMENT:  CREATE POLICY policy_savings_account_client ON savings_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:06:48.925 GMT [148455] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:06:48.925 GMT [148455] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:06:48.925 GMT [148455] STATEMENT:  CREATE POLICY policy_credit_account_client ON credit_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:06:48.927 GMT [148455] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:06:48.927 GMT [148455] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:06:48.927 GMT [148455] STATEMENT:  CREATE POLICY policy_debit_account_client ON debit_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:07:09.499 GMT [148426] LOG:  received fast shutdown request
+2023-01-19 21:07:09.501 GMT [148426] LOG:  aborting any active transactions
+2023-01-19 21:07:09.505 GMT [148426] LOG:  background worker "logical replication launcher" (PID 148433) exited with exit code 1
+2023-01-19 21:07:09.505 GMT [148428] LOG:  shutting down
+2023-01-19 21:07:09.555 GMT [148426] LOG:  database system is shut down
+2023-01-19 21:07:10.713 GMT [149279] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:07:10.713 GMT [149279] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:07:10.715 GMT [149279] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:07:10.720 GMT [149280] LOG:  database system was shut down at 2023-01-19 21:07:10 GMT
+2023-01-19 21:07:10.725 GMT [149279] LOG:  database system is ready to accept connections
+2023-01-19 21:07:11.486 GMT [149305] ERROR:  syntax error at or near "END" at character 441
+2023-01-19 21:07:11.486 GMT [149305] STATEMENT:  CREATE OR REPLACE FUNCTION policy_account_client_check(user_fullname TEXT)
+	RETURNS INT AS $$
+	DECLARE
+	    allowed_account_id INT;
+	BEGIN
+	    SELECT account_number INTO allowed_account_id FROM account
+	    INNER JOIN online_account ON account.account_number = online_account.account_number
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname;
+	    RETURN allowed_account_id;
+	END;
+	END;
+	$$ LANGUAGE plpgsql SECURITY DEFINER;
+2023-01-19 21:07:11.487 GMT [149305] ERROR:  relation "user_account" does not exist
+2023-01-19 21:07:11.487 GMT [149305] STATEMENT:  CREATE POLICY policy_user_account_client ON user_account
+	    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+2023-01-19 21:07:11.488 GMT [149305] ERROR:  relation "user_account" does not exist
+2023-01-19 21:07:11.488 GMT [149305] STATEMENT:  ALTER TABLE user_account ENABLE ROW LEVEL SECURITY;
+2023-01-19 21:07:11.488 GMT [149305] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:07:11.488 GMT [149305] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:07:11.488 GMT [149305] STATEMENT:  CREATE POLICY policy_savings_account_client ON savings_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:07:11.489 GMT [149305] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:07:11.489 GMT [149305] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:07:11.489 GMT [149305] STATEMENT:  CREATE POLICY policy_credit_account_client ON credit_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:07:11.490 GMT [149305] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:07:11.490 GMT [149305] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:07:11.490 GMT [149305] STATEMENT:  CREATE POLICY policy_debit_account_client ON debit_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:08:24.420 GMT [149279] LOG:  received fast shutdown request
+2023-01-19 21:08:24.422 GMT [149279] LOG:  aborting any active transactions
+2023-01-19 21:08:24.426 GMT [149279] LOG:  background worker "logical replication launcher" (PID 149286) exited with exit code 1
+2023-01-19 21:08:24.426 GMT [149281] LOG:  shutting down
+2023-01-19 21:08:24.479 GMT [149279] LOG:  database system is shut down
+2023-01-19 21:08:25.642 GMT [151811] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:08:25.643 GMT [151811] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:08:25.644 GMT [151811] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:08:25.650 GMT [151812] LOG:  database system was shut down at 2023-01-19 21:08:25 GMT
+2023-01-19 21:08:25.657 GMT [151811] LOG:  database system is ready to accept connections
+2023-01-19 21:08:26.509 GMT [151840] ERROR:  relation "user_account" does not exist
+2023-01-19 21:08:26.509 GMT [151840] STATEMENT:  ALTER TABLE user_account ENABLE ROW LEVEL SECURITY;
+2023-01-19 21:08:41.750 GMT [151811] LOG:  received fast shutdown request
+2023-01-19 21:08:41.751 GMT [151811] LOG:  aborting any active transactions
+2023-01-19 21:08:41.757 GMT [151811] LOG:  background worker "logical replication launcher" (PID 151818) exited with exit code 1
+2023-01-19 21:08:41.757 GMT [151813] LOG:  shutting down
+2023-01-19 21:08:41.811 GMT [151811] LOG:  database system is shut down
+2023-01-19 21:08:42.873 GMT [152505] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:08:42.873 GMT [152505] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:08:42.875 GMT [152505] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:08:42.880 GMT [152506] LOG:  database system was shut down at 2023-01-19 21:08:42 GMT
+2023-01-19 21:08:42.886 GMT [152505] LOG:  database system is ready to accept connections
+2023-01-19 21:09:05.989 GMT [152505] LOG:  received fast shutdown request
+2023-01-19 21:09:05.991 GMT [152505] LOG:  aborting any active transactions
+2023-01-19 21:09:05.996 GMT [152505] LOG:  background worker "logical replication launcher" (PID 152512) exited with exit code 1
+2023-01-19 21:09:05.998 GMT [152507] LOG:  shutting down
+2023-01-19 21:09:06.052 GMT [152505] LOG:  database system is shut down
+2023-01-19 21:09:07.181 GMT [153354] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:09:07.181 GMT [153354] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:09:07.182 GMT [153354] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:09:07.214 GMT [153373] LOG:  database system was shut down at 2023-01-19 21:09:06 GMT
+2023-01-19 21:09:07.225 GMT [153354] LOG:  database system is ready to accept connections
+2023-01-19 21:09:23.940 GMT [153354] LOG:  received fast shutdown request
+2023-01-19 21:09:23.942 GMT [153354] LOG:  aborting any active transactions
+2023-01-19 21:09:23.946 GMT [153354] LOG:  background worker "logical replication launcher" (PID 153385) exited with exit code 1
+2023-01-19 21:09:23.948 GMT [153379] LOG:  shutting down
+2023-01-19 21:09:24.005 GMT [153354] LOG:  database system is shut down
+2023-01-19 21:09:25.091 GMT [154064] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:09:25.091 GMT [154064] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:09:25.093 GMT [154064] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:09:25.098 GMT [154065] LOG:  database system was shut down at 2023-01-19 21:09:24 GMT
+2023-01-19 21:09:25.106 GMT [154064] LOG:  database system is ready to accept connections
+2023-01-19 21:10:22.430 GMT [154064] LOG:  received fast shutdown request
+2023-01-19 21:10:22.432 GMT [154064] LOG:  aborting any active transactions
+2023-01-19 21:10:22.439 GMT [154064] LOG:  background worker "logical replication launcher" (PID 154071) exited with exit code 1
+2023-01-19 21:10:22.439 GMT [154066] LOG:  shutting down
+2023-01-19 21:10:22.493 GMT [154064] LOG:  database system is shut down
+2023-01-19 21:10:23.525 GMT [156074] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:10:23.526 GMT [156074] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:10:23.527 GMT [156074] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:10:23.532 GMT [156075] LOG:  database system was shut down at 2023-01-19 21:10:23 GMT
+2023-01-19 21:10:23.539 GMT [156074] LOG:  database system is ready to accept connections
+2023-01-19 21:10:24.644 GMT [156103] ERROR:  column reference "id" is ambiguous at character 8
+2023-01-19 21:10:24.644 GMT [156103] QUERY:  SELECT id                                FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname
+2023-01-19 21:10:24.644 GMT [156103] CONTEXT:  PL/pgSQL function policy_online_account_client_check(text) line 5 at SQL statement
+	SQL expression "EXISTS (SELECT * FROM client.savings_accounts WHERE account_id = account_identifier AND account_number = orig_account_number)"
+	PL/pgSQL function place_transaction_into_account(integer,integer,integer,numeric,integer,boolean) line 9 at CASE
+	SQL statement "SELECT * FROM client.place_transaction_into_account(account_identifier, orig_account_number, transfer_account_number, transfer_amount, transfer_account_sort_code, FALSE)"
+	PL/pgSQL function initiate_transfer(integer,integer,numeric,integer,integer) line 8 at SQL statement
+2023-01-19 21:10:24.644 GMT [156103] STATEMENT:  SELECT * FROM client.initiate_transfer(1, 10000001, 100.00, 10000000, 123456);
+2023-01-19 21:10:24.651 GMT [156103] ERROR:  column reference "id" is ambiguous at character 8
+2023-01-19 21:10:24.651 GMT [156103] QUERY:  SELECT id                                FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname
+2023-01-19 21:10:24.651 GMT [156103] CONTEXT:  PL/pgSQL function policy_online_account_client_check(text) line 5 at SQL statement
+	SQL statement "SELECT client.accounts.*, COALESCE(debit_accounts.current_balance, credit_accounts.outstanding_balance, savings_accounts.current_balance) AS balance,
+	            COALESCE(debit_accounts.interest_rate, credit_accounts.interest_rate, savings_accounts.interest_rate) AS interest_rate,
+	            get_account_type(accounts.account_number) AS account_type
+	            FROM client.accounts
+	            LEFT JOIN client.credit_accounts ON accounts.account_number = credit_accounts.account_number
+	            LEFT JOIN client.debit_accounts ON accounts.account_number = debit_accounts.account_number
+	            LEFT JOIN client.savings_accounts ON accounts.account_number = savings_accounts.account_number
+	            WHERE accounts.account_id = account_identifier"
+	PL/pgSQL function view_accounts(integer) line 5 at RETURN QUERY
+2023-01-19 21:10:24.651 GMT [156103] STATEMENT:  SELECT * FROM client.view_accounts(1);
+2023-01-19 21:11:29.846 GMT [156074] LOG:  received fast shutdown request
+2023-01-19 21:11:29.848 GMT [156074] LOG:  aborting any active transactions
+2023-01-19 21:11:29.854 GMT [156074] LOG:  background worker "logical replication launcher" (PID 156081) exited with exit code 1
+2023-01-19 21:11:29.855 GMT [156076] LOG:  shutting down
+2023-01-19 21:11:29.902 GMT [156074] LOG:  database system is shut down
+2023-01-19 21:11:31.034 GMT [158364] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:11:31.034 GMT [158364] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:11:31.036 GMT [158364] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:11:31.042 GMT [158365] LOG:  database system was shut down at 2023-01-19 21:11:30 GMT
+2023-01-19 21:11:31.049 GMT [158364] LOG:  database system is ready to accept connections
+2023-01-19 21:11:32.286 GMT [158393] ERROR:  column reference "id" is ambiguous at character 8
+2023-01-19 21:11:32.286 GMT [158393] QUERY:  SELECT id                                FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname
+2023-01-19 21:11:32.286 GMT [158393] CONTEXT:  PL/pgSQL function policy_online_account_client_check(text) line 5 at SQL statement
+	SQL expression "EXISTS (SELECT * FROM client.savings_accounts WHERE account_id = account_identifier AND account_number = orig_account_number)"
+	PL/pgSQL function place_transaction_into_account(integer,integer,integer,numeric,integer,boolean) line 9 at CASE
+	SQL statement "SELECT * FROM client.place_transaction_into_account(account_identifier, orig_account_number, transfer_account_number, transfer_amount, transfer_account_sort_code, FALSE)"
+	PL/pgSQL function initiate_transfer(integer,integer,numeric,integer,integer) line 8 at SQL statement
+2023-01-19 21:11:32.286 GMT [158393] STATEMENT:  SELECT * FROM client.initiate_transfer(1, 10000001, 100.00, 10000000, 123456);
+2023-01-19 21:11:32.299 GMT [158393] ERROR:  column reference "id" is ambiguous at character 8
+2023-01-19 21:11:32.299 GMT [158393] QUERY:  SELECT id                                FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname
+2023-01-19 21:11:32.299 GMT [158393] CONTEXT:  PL/pgSQL function policy_online_account_client_check(text) line 5 at SQL statement
+	SQL statement "SELECT client.accounts.*, COALESCE(debit_accounts.current_balance, credit_accounts.outstanding_balance, savings_accounts.current_balance) AS balance,
+	            COALESCE(debit_accounts.interest_rate, credit_accounts.interest_rate, savings_accounts.interest_rate) AS interest_rate,
+	            get_account_type(accounts.account_number) AS account_type
+	            FROM client.accounts
+	            LEFT JOIN client.credit_accounts ON accounts.account_number = credit_accounts.account_number
+	            LEFT JOIN client.debit_accounts ON accounts.account_number = debit_accounts.account_number
+	            LEFT JOIN client.savings_accounts ON accounts.account_number = savings_accounts.account_number
+	            WHERE accounts.account_id = account_identifier"
+	PL/pgSQL function view_accounts(integer) line 5 at RETURN QUERY
+2023-01-19 21:11:32.299 GMT [158393] STATEMENT:  SELECT * FROM client.view_accounts(1);
+2023-01-19 21:11:32.309 GMT [158393] ERROR:  column reference "id" is ambiguous at character 8
+2023-01-19 21:11:32.309 GMT [158393] QUERY:  SELECT id                                FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname
+2023-01-19 21:11:32.309 GMT [158393] CONTEXT:  PL/pgSQL function policy_online_account_client_check(text) line 5 at SQL statement
+2023-01-19 21:11:32.309 GMT [158393] STATEMENT:  SELECT * FROM client.accounts;
+2023-01-19 21:13:44.486 GMT [158364] LOG:  received fast shutdown request
+2023-01-19 21:13:44.488 GMT [158364] LOG:  aborting any active transactions
+2023-01-19 21:13:44.494 GMT [158364] LOG:  background worker "logical replication launcher" (PID 158371) exited with exit code 1
+2023-01-19 21:13:44.494 GMT [158366] LOG:  shutting down
+2023-01-19 21:13:44.544 GMT [158364] LOG:  database system is shut down
+2023-01-19 21:13:45.684 GMT [162872] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:13:45.684 GMT [162872] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:13:45.685 GMT [162872] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:13:45.689 GMT [162873] LOG:  database system was shut down at 2023-01-19 21:13:45 GMT
+2023-01-19 21:13:45.695 GMT [162872] LOG:  database system is ready to accept connections
+2023-01-19 21:13:46.884 GMT [162898] ERROR:  column reference "id" is ambiguous at character 8
+2023-01-19 21:13:46.884 GMT [162898] QUERY:  SELECT id                                FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname
+2023-01-19 21:13:46.884 GMT [162898] CONTEXT:  PL/pgSQL function policy_online_account_client_check(text) line 5 at SQL statement
+	SQL expression "EXISTS (SELECT * FROM client.savings_accounts WHERE account_id = account_identifier AND account_number = orig_account_number)"
+	PL/pgSQL function place_transaction_into_account(integer,integer,integer,numeric,integer,boolean) line 9 at CASE
+	SQL statement "SELECT * FROM client.place_transaction_into_account(account_identifier, orig_account_number, transfer_account_number, transfer_amount, transfer_account_sort_code, FALSE)"
+	PL/pgSQL function initiate_transfer(integer,integer,numeric,integer,integer) line 8 at SQL statement
+2023-01-19 21:13:46.884 GMT [162898] STATEMENT:  SELECT * FROM client.initiate_transfer(1, 10000001, 100.00, 10000000, 123456);
+2023-01-19 21:13:46.891 GMT [162898] ERROR:  column reference "id" is ambiguous at character 8
+2023-01-19 21:13:46.891 GMT [162898] QUERY:  SELECT id                                FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname
+2023-01-19 21:13:46.891 GMT [162898] CONTEXT:  PL/pgSQL function policy_online_account_client_check(text) line 5 at SQL statement
+	SQL statement "SELECT client.accounts.*, COALESCE(debit_accounts.current_balance, credit_accounts.outstanding_balance, savings_accounts.current_balance) AS balance,
+	            COALESCE(debit_accounts.interest_rate, credit_accounts.interest_rate, savings_accounts.interest_rate) AS interest_rate,
+	            get_account_type(accounts.account_number) AS account_type
+	            FROM client.accounts
+	            LEFT JOIN client.credit_accounts ON accounts.account_number = credit_accounts.account_number
+	            LEFT JOIN client.debit_accounts ON accounts.account_number = debit_accounts.account_number
+	            LEFT JOIN client.savings_accounts ON accounts.account_number = savings_accounts.account_number
+	            WHERE accounts.account_id = account_identifier"
+	PL/pgSQL function view_accounts(integer) line 5 at RETURN QUERY
+2023-01-19 21:13:46.891 GMT [162898] STATEMENT:  SELECT * FROM client.view_accounts(1);
+2023-01-19 21:13:46.906 GMT [162898] ERROR:  column reference "id" is ambiguous at character 8
+2023-01-19 21:13:46.906 GMT [162898] QUERY:  SELECT id                                FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname
+2023-01-19 21:13:46.906 GMT [162898] CONTEXT:  PL/pgSQL function policy_online_account_client_check(text) line 5 at SQL statement
+2023-01-19 21:13:46.906 GMT [162898] STATEMENT:  SELECT * FROM client.accounts;
+2023-01-19 21:15:28.144 GMT [162872] LOG:  received fast shutdown request
+2023-01-19 21:15:28.146 GMT [162872] LOG:  aborting any active transactions
+2023-01-19 21:15:28.148 GMT [162872] LOG:  background worker "logical replication launcher" (PID 162879) exited with exit code 1
+2023-01-19 21:15:28.153 GMT [162874] LOG:  shutting down
+2023-01-19 21:15:28.197 GMT [162872] LOG:  database system is shut down
+2023-01-19 21:15:29.338 GMT [166366] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:15:29.338 GMT [166366] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:15:29.340 GMT [166366] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:15:29.347 GMT [166367] LOG:  database system was shut down at 2023-01-19 21:15:29 GMT
+2023-01-19 21:15:29.355 GMT [166366] LOG:  database system is ready to accept connections
+2023-01-19 21:17:35.897 GMT [166366] LOG:  received fast shutdown request
+2023-01-19 21:17:35.899 GMT [166366] LOG:  aborting any active transactions
+2023-01-19 21:17:35.905 GMT [166366] LOG:  background worker "logical replication launcher" (PID 166373) exited with exit code 1
+2023-01-19 21:17:35.905 GMT [166368] LOG:  shutting down
+2023-01-19 21:17:35.956 GMT [166366] LOG:  database system is shut down
+2023-01-19 21:17:37.260 GMT [170643] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:17:37.261 GMT [170643] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:17:37.262 GMT [170643] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:17:37.266 GMT [170644] LOG:  database system was shut down at 2023-01-19 21:17:36 GMT
+2023-01-19 21:17:37.271 GMT [170643] LOG:  database system is ready to accept connections
+2023-01-19 21:19:37.756 GMT [170643] LOG:  received fast shutdown request
+2023-01-19 21:19:37.757 GMT [170643] LOG:  aborting any active transactions
+2023-01-19 21:19:37.762 GMT [170643] LOG:  background worker "logical replication launcher" (PID 170650) exited with exit code 1
+2023-01-19 21:19:37.762 GMT [170645] LOG:  shutting down
+2023-01-19 21:19:37.811 GMT [170643] LOG:  database system is shut down
+2023-01-19 21:19:39.037 GMT [174711] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:19:39.037 GMT [174711] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:19:39.039 GMT [174711] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:19:39.043 GMT [174712] LOG:  database system was shut down at 2023-01-19 21:19:38 GMT
+2023-01-19 21:19:39.047 GMT [174711] LOG:  database system is ready to accept connections
+2023-01-19 21:20:55.669 GMT [174711] LOG:  received fast shutdown request
+2023-01-19 21:20:55.671 GMT [174711] LOG:  aborting any active transactions
+2023-01-19 21:20:55.677 GMT [174711] LOG:  background worker "logical replication launcher" (PID 174718) exited with exit code 1
+2023-01-19 21:20:55.677 GMT [174713] LOG:  shutting down
+2023-01-19 21:20:55.726 GMT [174711] LOG:  database system is shut down
+2023-01-19 21:20:56.925 GMT [177295] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:20:56.926 GMT [177295] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:20:56.927 GMT [177295] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:20:56.933 GMT [177296] LOG:  database system was shut down at 2023-01-19 21:20:56 GMT
+2023-01-19 21:20:56.938 GMT [177295] LOG:  database system is ready to accept connections
+2023-01-19 21:21:17.989 GMT [177295] LOG:  received fast shutdown request
+2023-01-19 21:21:17.991 GMT [177295] LOG:  aborting any active transactions
+2023-01-19 21:21:17.997 GMT [177295] LOG:  background worker "logical replication launcher" (PID 177302) exited with exit code 1
+2023-01-19 21:21:17.997 GMT [177297] LOG:  shutting down
+2023-01-19 21:21:18.051 GMT [177295] LOG:  database system is shut down
+2023-01-19 21:21:19.496 GMT [178162] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:21:19.496 GMT [178162] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:21:19.498 GMT [178162] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:21:19.502 GMT [178163] LOG:  database system was shut down at 2023-01-19 21:21:19 GMT
+2023-01-19 21:21:19.510 GMT [178162] LOG:  database system is ready to accept connections
+2023-01-19 21:22:12.336 GMT [178162] LOG:  received fast shutdown request
+2023-01-19 21:22:12.338 GMT [178162] LOG:  aborting any active transactions
+2023-01-19 21:22:12.343 GMT [178162] LOG:  background worker "logical replication launcher" (PID 178169) exited with exit code 1
+2023-01-19 21:22:12.343 GMT [178164] LOG:  shutting down
+2023-01-19 21:22:12.399 GMT [178162] LOG:  database system is shut down
+2023-01-19 21:22:13.572 GMT [180025] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:22:13.573 GMT [180025] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:22:13.575 GMT [180025] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:22:13.581 GMT [180026] LOG:  database system was shut down at 2023-01-19 21:22:13 GMT
+2023-01-19 21:22:13.590 GMT [180025] LOG:  database system is ready to accept connections
+2023-01-19 21:24:37.788 GMT [180025] LOG:  received fast shutdown request
+2023-01-19 21:24:37.792 GMT [180025] LOG:  aborting any active transactions
+2023-01-19 21:24:37.795 GMT [180025] LOG:  background worker "logical replication launcher" (PID 180032) exited with exit code 1
+2023-01-19 21:24:37.796 GMT [180027] LOG:  shutting down
+2023-01-19 21:24:37.844 GMT [180025] LOG:  database system is shut down
+2023-01-19 21:24:39.093 GMT [184889] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:24:39.093 GMT [184889] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:24:39.095 GMT [184889] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:24:39.100 GMT [184890] LOG:  database system was shut down at 2023-01-19 21:24:38 GMT
+2023-01-19 21:24:39.105 GMT [184889] LOG:  database system is ready to accept connections
+2023-01-19 21:25:49.351 GMT [184889] LOG:  received fast shutdown request
+2023-01-19 21:25:49.353 GMT [184889] LOG:  aborting any active transactions
+2023-01-19 21:25:49.357 GMT [184889] LOG:  background worker "logical replication launcher" (PID 184896) exited with exit code 1
+2023-01-19 21:25:49.357 GMT [184891] LOG:  shutting down
+2023-01-19 21:25:49.406 GMT [184889] LOG:  database system is shut down
+2023-01-19 21:25:50.550 GMT [187346] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:25:50.552 GMT [187346] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:25:50.557 GMT [187346] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:25:50.561 GMT [187347] LOG:  database system was shut down at 2023-01-19 21:25:50 GMT
+2023-01-19 21:25:50.569 GMT [187346] LOG:  database system is ready to accept connections
+2023-01-19 21:25:51.152 GMT [187372] ERROR:  role "l0" does not exist
+2023-01-19 21:25:51.152 GMT [187372] STATEMENT:  GRANT l0 TO postgres;
+2023-01-19 21:31:49.807 GMT [187346] LOG:  received fast shutdown request
+2023-01-19 21:31:49.809 GMT [187346] LOG:  aborting any active transactions
+2023-01-19 21:31:49.815 GMT [187346] LOG:  background worker "logical replication launcher" (PID 187353) exited with exit code 1
+2023-01-19 21:31:49.816 GMT [187348] LOG:  shutting down
+2023-01-19 21:31:49.831 GMT [187346] LOG:  database system is shut down
+2023-01-19 21:31:51.144 GMT [199208] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:31:51.145 GMT [199208] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:31:51.146 GMT [199208] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:31:51.152 GMT [199209] LOG:  database system was shut down at 2023-01-19 21:31:50 GMT
+2023-01-19 21:31:51.159 GMT [199208] LOG:  database system is ready to accept connections
+2023-01-19 21:32:53.304 GMT [199208] LOG:  received fast shutdown request
+2023-01-19 21:32:53.306 GMT [199208] LOG:  aborting any active transactions
+2023-01-19 21:32:53.311 GMT [199208] LOG:  background worker "logical replication launcher" (PID 199215) exited with exit code 1
+2023-01-19 21:32:53.311 GMT [199210] LOG:  shutting down
+2023-01-19 21:32:53.363 GMT [199208] LOG:  database system is shut down
+2023-01-19 21:32:54.425 GMT [201369] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:32:54.425 GMT [201369] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:32:54.426 GMT [201369] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:32:54.431 GMT [201370] LOG:  database system was shut down at 2023-01-19 21:32:54 GMT
+2023-01-19 21:32:54.436 GMT [201369] LOG:  database system is ready to accept connections
+2023-01-19 21:32:55.619 GMT [201395] ERROR:  permission denied for schema staff at character 15
+2023-01-19 21:32:55.619 GMT [201395] STATEMENT:  SELECT * FROM staff.accounts;
+2023-01-19 21:37:47.873 GMT [201369] LOG:  received fast shutdown request
+2023-01-19 21:37:47.875 GMT [201369] LOG:  aborting any active transactions
+2023-01-19 21:37:47.877 GMT [201369] LOG:  background worker "logical replication launcher" (PID 201376) exited with exit code 1
+2023-01-19 21:37:47.882 GMT [201371] LOG:  shutting down
+2023-01-19 21:37:47.932 GMT [201369] LOG:  database system is shut down
+2023-01-19 21:37:49.135 GMT [211052] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:37:49.136 GMT [211052] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:37:49.137 GMT [211052] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:37:49.141 GMT [211053] LOG:  database system was shut down at 2023-01-19 21:37:48 GMT
+2023-01-19 21:37:49.146 GMT [211052] LOG:  database system is ready to accept connections
+2023-01-19 21:37:49.907 GMT [211078] ERROR:  syntax error at or near "FROM" at character 163
+2023-01-19 21:37:49.907 GMT [211078] STATEMENT:  CREATE OR REPLACE FUNCTION policy_account_client_check(user_fullname TEXT)
+	RETURNS INT AS $$
+	DECLARE
+	    allowed_account_id INT;
+	BEGIN
+	    SELECT account_id INTO FROM online_account
+	    INNER JOIN user_login ON online_account.id = user_login.account_id
+	    WHERE user_login.username = user_fullname;
+	END;
+	$$ LANGUAGE plpgsql SECURITY DEFINER;
+2023-01-19 21:37:49.910 GMT [211078] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:37:49.910 GMT [211078] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:37:49.910 GMT [211078] STATEMENT:  CREATE POLICY policy_account_client ON account
+	    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+2023-01-19 21:37:49.913 GMT [211078] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:37:49.913 GMT [211078] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:37:49.913 GMT [211078] STATEMENT:  CREATE POLICY policy_savings_account_client ON savings_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:37:49.913 GMT [211078] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:37:49.913 GMT [211078] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:37:49.913 GMT [211078] STATEMENT:  CREATE POLICY policy_credit_account_client ON credit_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:37:49.914 GMT [211078] ERROR:  function policy_account_client_check(name) does not exist
+2023-01-19 21:37:49.914 GMT [211078] HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2023-01-19 21:37:49.914 GMT [211078] STATEMENT:  CREATE POLICY policy_debit_account_client ON debit_account
+	    FOR SELECT TO user_banking_protection USING (account_number = policy_account_client_check(current_user));
+2023-01-19 21:38:18.257 GMT [211052] LOG:  received fast shutdown request
+2023-01-19 21:38:18.259 GMT [211052] LOG:  aborting any active transactions
+2023-01-19 21:38:18.267 GMT [211052] LOG:  background worker "logical replication launcher" (PID 211059) exited with exit code 1
+2023-01-19 21:38:18.267 GMT [211054] LOG:  shutting down
+2023-01-19 21:38:18.338 GMT [211052] LOG:  database system is shut down
+2023-01-19 21:38:19.575 GMT [212110] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:38:19.576 GMT [212110] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:38:19.577 GMT [212110] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:38:19.584 GMT [212111] LOG:  database system was shut down at 2023-01-19 21:38:19 GMT
+2023-01-19 21:38:19.590 GMT [212110] LOG:  database system is ready to accept connections
+2023-01-19 21:38:20.905 GMT [212136] ERROR:  control reached end of function without RETURN
+2023-01-19 21:38:20.905 GMT [212136] CONTEXT:  PL/pgSQL function policy_account_client_check(text)
+2023-01-19 21:38:20.905 GMT [212136] STATEMENT:  SELECT * FROM client.accounts;
+2023-01-19 21:38:20.907 GMT [212136] ERROR:  control reached end of function without RETURN
+2023-01-19 21:38:20.907 GMT [212136] CONTEXT:  PL/pgSQL function policy_account_client_check(text)
+2023-01-19 21:38:20.907 GMT [212136] STATEMENT:  SELECT * FROM client.savings_accounts_statement;
+2023-01-19 21:38:20.912 GMT [212136] ERROR:  control reached end of function without RETURN
+2023-01-19 21:38:20.912 GMT [212136] CONTEXT:  PL/pgSQL function policy_account_client_check(text)
+	SQL statement "SELECT client.accounts.*, COALESCE(debit_accounts.current_balance, credit_accounts.outstanding_balance, savings_accounts.current_balance) AS balance,
+	            COALESCE(debit_accounts.interest_rate, credit_accounts.interest_rate, savings_accounts.interest_rate) AS interest_rate,
+	            get_account_type(accounts.account_number) AS account_type
+	            FROM client.accounts
+	            LEFT JOIN client.credit_accounts ON accounts.account_number = credit_accounts.account_number
+	            LEFT JOIN client.debit_accounts ON accounts.account_number = debit_accounts.account_number
+	            LEFT JOIN client.savings_accounts ON accounts.account_number = savings_accounts.account_number
+	            WHERE accounts.account_id = account_identifier"
+	PL/pgSQL function view_accounts(integer) line 5 at RETURN QUERY
+2023-01-19 21:38:20.912 GMT [212136] STATEMENT:  SELECT * FROM client.view_accounts(1);
+2023-01-19 21:38:20.913 GMT [212136] ERROR:  control reached end of function without RETURN
+2023-01-19 21:38:20.913 GMT [212136] CONTEXT:  PL/pgSQL function policy_account_client_check(text)
+2023-01-19 21:38:20.913 GMT [212136] STATEMENT:  SELECT * FROM client.debit_accounts;
+2023-01-19 21:38:20.915 GMT [212136] ERROR:  control reached end of function without RETURN
+2023-01-19 21:38:20.915 GMT [212136] CONTEXT:  PL/pgSQL function policy_account_client_check(text)
+2023-01-19 21:38:20.915 GMT [212136] STATEMENT:  SELECT * FROM client.credit_accounts;
+2023-01-19 21:38:35.481 GMT [212110] LOG:  received fast shutdown request
+2023-01-19 21:38:35.483 GMT [212110] LOG:  aborting any active transactions
+2023-01-19 21:38:35.487 GMT [212110] LOG:  background worker "logical replication launcher" (PID 212117) exited with exit code 1
+2023-01-19 21:38:35.487 GMT [212112] LOG:  shutting down
+2023-01-19 21:38:35.541 GMT [212110] LOG:  database system is shut down
+2023-01-19 21:38:36.742 GMT [212770] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:38:36.742 GMT [212770] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:38:36.745 GMT [212770] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:38:36.750 GMT [212785] LOG:  database system was shut down at 2023-01-19 21:38:36 GMT
+2023-01-19 21:38:36.757 GMT [212770] LOG:  database system is ready to accept connections
+2023-01-19 21:39:26.671 GMT [212770] LOG:  received fast shutdown request
+2023-01-19 21:39:26.673 GMT [212770] LOG:  aborting any active transactions
+2023-01-19 21:39:26.676 GMT [212770] LOG:  background worker "logical replication launcher" (PID 212793) exited with exit code 1
+2023-01-19 21:39:26.677 GMT [212788] LOG:  shutting down
+2023-01-19 21:39:26.729 GMT [212770] LOG:  database system is shut down
+2023-01-19 21:39:27.909 GMT [214534] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:39:27.909 GMT [214534] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:39:27.910 GMT [214534] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:39:27.915 GMT [214535] LOG:  database system was shut down at 2023-01-19 21:39:27 GMT
+2023-01-19 21:39:27.921 GMT [214534] LOG:  database system is ready to accept connections
+2023-01-19 21:39:59.801 GMT [214534] LOG:  received fast shutdown request
+2023-01-19 21:39:59.803 GMT [214534] LOG:  aborting any active transactions
+2023-01-19 21:39:59.807 GMT [214534] LOG:  background worker "logical replication launcher" (PID 214541) exited with exit code 1
+2023-01-19 21:39:59.808 GMT [214536] LOG:  shutting down
+2023-01-19 21:39:59.858 GMT [214534] LOG:  database system is shut down
+2023-01-19 21:40:00.996 GMT [215730] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:40:00.997 GMT [215730] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:40:00.998 GMT [215730] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:40:01.003 GMT [215734] LOG:  database system was shut down at 2023-01-19 21:40:00 GMT
+2023-01-19 21:40:01.015 GMT [215730] LOG:  database system is ready to accept connections
+2023-01-19 21:40:47.715 GMT [215730] LOG:  received fast shutdown request
+2023-01-19 21:40:47.717 GMT [215730] LOG:  aborting any active transactions
+2023-01-19 21:40:47.720 GMT [215730] LOG:  background worker "logical replication launcher" (PID 215740) exited with exit code 1
+2023-01-19 21:40:47.722 GMT [215735] LOG:  shutting down
+2023-01-19 21:40:47.772 GMT [215730] LOG:  database system is shut down
+2023-01-19 21:40:49.000 GMT [217384] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:40:49.001 GMT [217384] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:40:49.007 GMT [217384] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:40:49.013 GMT [217385] LOG:  database system was shut down at 2023-01-19 21:40:48 GMT
+2023-01-19 21:40:49.021 GMT [217384] LOG:  database system is ready to accept connections
+2023-01-19 21:41:05.770 GMT [217384] LOG:  received fast shutdown request
+2023-01-19 21:41:05.771 GMT [217384] LOG:  aborting any active transactions
+2023-01-19 21:41:05.776 GMT [217384] LOG:  background worker "logical replication launcher" (PID 217391) exited with exit code 1
+2023-01-19 21:41:05.776 GMT [217386] LOG:  shutting down
+2023-01-19 21:41:05.833 GMT [217384] LOG:  database system is shut down
+2023-01-19 21:41:07.034 GMT [218081] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:41:07.034 GMT [218081] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:41:07.035 GMT [218081] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:41:07.041 GMT [218082] LOG:  database system was shut down at 2023-01-19 21:41:06 GMT
+2023-01-19 21:41:07.047 GMT [218081] LOG:  database system is ready to accept connections
+2023-01-19 21:42:10.724 GMT [218081] LOG:  received fast shutdown request
+2023-01-19 21:42:10.726 GMT [218081] LOG:  aborting any active transactions
+2023-01-19 21:42:10.729 GMT [218081] LOG:  background worker "logical replication launcher" (PID 218088) exited with exit code 1
+2023-01-19 21:42:10.731 GMT [218083] LOG:  shutting down
+2023-01-19 21:42:10.795 GMT [218081] LOG:  database system is shut down
+2023-01-19 21:42:11.887 GMT [220349] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:42:11.888 GMT [220349] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:42:11.889 GMT [220349] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:42:11.895 GMT [220350] LOG:  database system was shut down at 2023-01-19 21:42:11 GMT
+2023-01-19 21:42:11.901 GMT [220349] LOG:  database system is ready to accept connections
+2023-01-19 21:42:50.497 GMT [220349] LOG:  received fast shutdown request
+2023-01-19 21:42:50.499 GMT [220349] LOG:  aborting any active transactions
+2023-01-19 21:42:50.503 GMT [220349] LOG:  background worker "logical replication launcher" (PID 220356) exited with exit code 1
+2023-01-19 21:42:50.503 GMT [220351] LOG:  shutting down
+2023-01-19 21:42:50.555 GMT [220349] LOG:  database system is shut down
+2023-01-19 21:42:51.617 GMT [221713] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:42:51.618 GMT [221713] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:42:51.619 GMT [221713] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:42:51.625 GMT [221714] LOG:  database system was shut down at 2023-01-19 21:42:51 GMT
+2023-01-19 21:42:51.631 GMT [221713] LOG:  database system is ready to accept connections
+2023-01-19 21:43:45.320 GMT [221713] LOG:  received fast shutdown request
+2023-01-19 21:43:45.322 GMT [221713] LOG:  aborting any active transactions
+2023-01-19 21:43:45.327 GMT [221713] LOG:  background worker "logical replication launcher" (PID 221720) exited with exit code 1
+2023-01-19 21:43:45.327 GMT [221715] LOG:  shutting down
+2023-01-19 21:43:45.379 GMT [221713] LOG:  database system is shut down
+2023-01-19 21:43:46.438 GMT [223629] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:43:46.438 GMT [223629] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:43:46.440 GMT [223629] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:43:46.445 GMT [223630] LOG:  database system was shut down at 2023-01-19 21:43:46 GMT
+2023-01-19 21:43:46.451 GMT [223629] LOG:  database system is ready to accept connections
+2023-01-19 21:44:37.996 GMT [223629] LOG:  received fast shutdown request
+2023-01-19 21:44:37.997 GMT [223629] LOG:  aborting any active transactions
+2023-01-19 21:44:38.002 GMT [223629] LOG:  background worker "logical replication launcher" (PID 223636) exited with exit code 1
+2023-01-19 21:44:38.002 GMT [223631] LOG:  shutting down
+2023-01-19 21:44:38.053 GMT [223629] LOG:  database system is shut down
+2023-01-19 21:44:39.125 GMT [225412] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:44:39.125 GMT [225412] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:44:39.126 GMT [225412] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:44:39.137 GMT [225413] LOG:  database system was shut down at 2023-01-19 21:44:38 GMT
+2023-01-19 21:44:39.149 GMT [225412] LOG:  database system is ready to accept connections
+2023-01-19 21:44:52.515 GMT [225412] LOG:  received fast shutdown request
+2023-01-19 21:44:52.516 GMT [225412] LOG:  aborting any active transactions
+2023-01-19 21:44:52.520 GMT [225412] LOG:  background worker "logical replication launcher" (PID 225419) exited with exit code 1
+2023-01-19 21:44:52.522 GMT [225414] LOG:  shutting down
+2023-01-19 21:44:52.577 GMT [225412] LOG:  database system is shut down
+2023-01-19 21:44:53.733 GMT [225990] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:44:53.744 GMT [225990] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:44:53.747 GMT [225990] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:44:53.754 GMT [226002] LOG:  database system was shut down at 2023-01-19 21:44:53 GMT
+2023-01-19 21:44:53.771 GMT [225990] LOG:  database system is ready to accept connections
+2023-01-19 21:45:16.682 GMT [225990] LOG:  received fast shutdown request
+2023-01-19 21:45:16.683 GMT [225990] LOG:  aborting any active transactions
+2023-01-19 21:45:16.690 GMT [225990] LOG:  background worker "logical replication launcher" (PID 226013) exited with exit code 1
+2023-01-19 21:45:16.690 GMT [226007] LOG:  shutting down
+2023-01-19 21:45:16.746 GMT [225990] LOG:  database system is shut down
+2023-01-19 21:45:18.015 GMT [226880] LOG:  starting PostgreSQL 14.5 (Ubuntu 14.5-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+2023-01-19 21:45:18.015 GMT [226880] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-19 21:45:18.022 GMT [226880] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-01-19 21:45:18.027 GMT [226881] LOG:  database system was shut down at 2023-01-19 21:45:17 GMT
+2023-01-19 21:45:18.032 GMT [226880] LOG:  database system is ready to accept connections

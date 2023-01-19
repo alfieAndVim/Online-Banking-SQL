@@ -8,11 +8,13 @@ CREATE ROLE l5;
 -- Creating users for application access
 CREATE ROLE unauthenticated WITH LOGIN PASSWORD 'unauthenticated';
 CREATE ROLE user_banking WITH LOGIN PASSWORD 'mobile_banking';
+CREATE ROLE user_banking_protection;
 CREATE ROLE employee WITH LOGIN PASSWORD 'employee';
 CREATE ROLE manager WITH LOGIN PASSWORD 'manager';
 
 -- Granting role based access to users
 GRANT l1 TO postgres;
+GRANT l1 TO user_banking_protection;
 GRANT l2 TO manager;
 GRANT l3 TO employee;
 GRANT l4 TO user_banking;
@@ -123,7 +125,7 @@ CREATE TABLE IF NOT EXISTS savings_statement (
     id SERIAL PRIMARY KEY,
     starting_date DATE,
     end_date DATE,
-    amount NUMERIC,
+    amount NUMERIC(15,2),
     account_number INT REFERENCES savings_account(account_number)
 );
 
@@ -137,8 +139,8 @@ CREATE TABLE IF NOT EXISTS credit_statement (
     id SERIAL PRIMARY KEY,
     starting_date DATE,
     end_date DATE,
-    amount NUMERIC,
-    minimum_payment NUMERIC,
+    amount NUMERIC(15,2),
+    minimum_payment NUMERIC(15,2),
     minimum_payment_due_date DATE,
     account_number INT REFERENCES credit_account(account_number)
 );
@@ -147,7 +149,7 @@ CREATE TABLE IF NOT EXISTS debit_statement (
     id SERIAL PRIMARY KEY,
     starting_date DATE,
     end_date DATE,
-    amount NUMERIC,
+    amount NUMERIC(15,2),
     account_number INT REFERENCES debit_account(account_number)
 );
 
@@ -184,19 +186,19 @@ CREATE TABLE IF NOT EXISTS loan_application (
     id SERIAL PRIMARY KEY,
     application_status VARCHAR,
     loan_id INT REFERENCES loan(id),
-    amount NUMERIC
+    amount NUMERIC(15,2)
 );
 
 CREATE TABLE IF NOT EXISTS loan_statement (
     id SERIAL PRIMARY KEY,
     starting_date DATE,
-    amount NUMERIC,
+    amount NUMERIC(15,2),
     loan_id INT REFERENCES loan(id)
 );
 
 CREATE TABLE IF NOT EXISTS loan_payment (
     id SERIAL PRIMARY KEY,
-    amount NUMERIC,
+    amount NUMERIC(15,2),
     date DATE,
     approved BOOLEAN,
     loan_id INT REFERENCES loan(id)
@@ -278,6 +280,100 @@ BEGIN
     RETURN account_type;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+
+
+
+
+CREATE OR REPLACE FUNCTION policy_customer_client_check(user_fullname TEXT)
+RETURNS INT AS $$
+DECLARE
+    allowed_customer_id INT;
+BEGIN
+    SELECT customer_id INTO allowed_customer_id FROM customer
+    INNER JOIN online_account ON customer.id = online_account.customer_id
+    INNER JOIN user_login ON online_account.id = user_login.account_id
+    WHERE user_login.username = user_fullname;
+    RETURN allowed_customer_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE POLICY policy_customer_client ON customer
+    FOR SELECT TO user_banking_protection USING (id = policy_customer_client_check(current_user));
+
+ALTER TABLE customer ENABLE ROW LEVEL SECURITY;
+
+
+CREATE OR REPLACE FUNCTION policy_online_account_client_check(user_fullname TEXT)
+RETURNS INT AS $$
+DECLARE
+    allowed_online_account_id INT;
+BEGIN
+    SELECT online_account.id INTO allowed_online_account_id FROM online_account
+    INNER JOIN user_login ON online_account.id = user_login.account_id
+    WHERE user_login.username = user_fullname;
+    RETURN allowed_online_account_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE POLICY policy_online_account_client ON online_account
+    FOR SELECT TO user_banking_protection USING (id = policy_online_account_client_check(current_user));
+
+ALTER TABLE online_account ENABLE ROW LEVEL SECURITY;
+
+CREATE OR REPLACE FUNCTION policy_user_login_client_check(user_fullname TEXT)
+RETURNS INT AS $$
+DECLARE
+    allowed_user_login_id INT;
+BEGIN
+    SELECT id INTO allowed_user_login_id FROM user_login
+    WHERE user_login.username = user_fullname;
+    RETURN allowed_user_login_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE POLICY policy_user_login_client ON user_login
+    FOR SELECT TO user_banking_protection USING (id = policy_user_login_client_check(current_user));
+
+ALTER TABLE user_login ENABLE ROW LEVEL SECURITY;
+
+
+CREATE OR REPLACE FUNCTION policy_account_client_check(user_fullname TEXT)
+RETURNS INT AS $$
+DECLARE
+    allowed_account_id INT;
+BEGIN
+    SELECT account_id INTO allowed_account_id FROM online_account
+    INNER JOIN user_login ON online_account.id = user_login.account_id
+    WHERE user_login.username = user_fullname;
+    RETURN allowed_account_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE POLICY policy_account_client ON account
+    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+
+ALTER TABLE account ENABLE ROW LEVEL SECURITY;
+
+
+
+CREATE POLICY policy_savings_account_client ON savings_account
+    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+
+ALTER TABLE savings_account ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY policy_credit_account_client ON credit_account
+    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+
+ALTER TABLE credit_account ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY policy_debit_account_client ON debit_account
+    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+
+ALTER TABLE debit_account ENABLE ROW LEVEL SECURITY;
+
+
+
 
 CREATE SCHEMA IF NOT EXISTS bank;
 SET search_path TO public, bank, client;
@@ -460,10 +556,23 @@ $$ LANGUAGE plpgsql;
 CREATE SCHEMA IF NOT EXISTS staff;
 SET search_path TO public, staff, client;
 
+
 CREATE OR REPLACE VIEW staff.accounts AS
-    SELECT account.account_number, account.account_id, online_account.sort_code
-    FROM account
-    INNER JOIN online_account ON account.account_id = online_account.id;
+    SELECT customer.first_name, customer.last_name, account.account_number, account.account_id, online_account.sort_code,
+    COALESCE(debit_account.current_balance, credit_account.outstanding_balance, savings_account.current_balance) AS balance,
+    COALESCE(debit_account.interest_rate, credit_account.interest_rate, savings_account.interest_rate) AS interest_rate,
+    get_account_type(account.account_number) AS account_type
+    FROM customer
+    LEFT JOIN online_account ON online_account.customer_id = customer.id
+    LEFT JOIN account ON account.account_id = online_account.id
+    LEFT JOIN credit_account ON account.account_number = credit_account.account_number
+    LEFT JOIN debit_account ON account.account_number = debit_account.account_number
+    LEFT JOIN savings_account ON account.account_number = savings_account.account_number;
+
+-- CREATE OR REPLACE VIEW staff.accounts AS
+--     SELECT account.account_number, account.account_id, online_account.sort_code
+--     FROM account
+--     INNER JOIN online_account ON account.account_id = online_account.id;
 
 CREATE OR REPLACE VIEW staff.credit_account_applications AS
     SELECT credit_account_application.id, credit_account_application.application_status, credit_account.account_number, credit_account.outstanding_balance, credit_account.credit_limit, credit_account.interest_rate
@@ -685,6 +794,11 @@ CREATE OR REPLACE VIEW client.loan_applications AS
     SELECT loan.account_id, loan_application.id, loan_application.application_status, loan_application.loan_id
     FROM loan_application
     INNER JOIN loan ON loan_application.loan_id = loan.id;
+
+
+
+
+
 
 CREATE OR REPLACE FUNCTION client.update_personal_information(account_identifier INT, first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT, account_id INT)
 RETURNS BOOLEAN AS $$
@@ -982,7 +1096,7 @@ CREATE OR REPLACE FUNCTION client.get_or_create_statement(account_identifier INT
 RETURNS INT AS $$
 DECLARE statement_id INT;
 BEGIN
-    CASE WHEN EXISTS (SELECT * FROM client.debit_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
+    CASE WHEN EXISTS (SELECT * FROM debit_account WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
         IF EXISTS (SELECT * FROM debit_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date) THEN
             SELECT id INTO statement_id FROM debit_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date;
             RETURN statement_id;
@@ -991,7 +1105,7 @@ BEGIN
             SELECT id INTO statement_id FROM debit_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date;
             RETURN statement_id;
         END IF;
-    WHEN EXISTS (SELECT * FROM client.credit_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
+    WHEN EXISTS (SELECT * FROM credit_account WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
         IF EXISTS (SELECT * FROM credit_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date) THEN
             SELECT id INTO statement_id FROM credit_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date;
             return statement_id;
@@ -1000,7 +1114,7 @@ BEGIN
             SELECT id INTO statement_id FROM credit_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date;
             return statement_id;
         END IF;
-    WHEN EXISTS (SELECT * FROM client.savings_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
+    WHEN EXISTS (SELECT * FROM savings_account WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
         IF EXISTS (SELECT * FROM savings_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date) THEN
             SELECT id INTO statement_id FROM savings_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date;
             return statement_id;
@@ -1022,21 +1136,21 @@ DECLARE transaction_id INT;
 BEGIN
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Placed transaction into account', CURRENT_DATE);
 
-    CASE WHEN EXISTS (SELECT * FROM client.debit_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
+    CASE WHEN EXISTS (SELECT * FROM debit_account WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
         --UPDATE debit_account SET current_balance = current_balance - transaction_amount WHERE debit_account.account_number = orig_account_number;
         SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
         INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, debit_statement_id, dest_account_sort_code, approved)
         VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id, transfer_account_sort_code, FALSE) RETURNING id INTO transaction_id;
         INSERT INTO pending_transaction (id, account_id, is_transfer, is_loan_payment) VALUES (transaction_id, orig_account_number, true, loan_payment);
 
-    WHEN EXISTS (SELECT * FROM client.credit_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
+    WHEN EXISTS (SELECT * FROM credit_account WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
         --UPDATE credit_account SET outstanding_balance = outstanding_balance - transaction_amount WHERE credit_account.account_number = orig_account_number;
         SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
         INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, credit_statement_id, dest_account_sort_code, approved)
         VALUES (orig_account_number, transaction_account_number, transaction_amount, now(), statement_id, transfer_account_sort_code, FALSE) RETURNING id INTO transaction_id;
         INSERT INTO pending_transaction (id, account_id, is_transfer, is_loan_payment) VALUES (transaction_id, orig_account_number, true, loan_payment);
 
-    WHEN EXISTS (SELECT * FROM client.savings_accounts WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
+    WHEN EXISTS (SELECT * FROM savings_account WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
         --UPDATE savings_account SET current_balance = current_balance - transaction_amount WHERE savings_account.account_number = orig_account_number;
         SELECT * FROM client.get_or_create_statement(account_identifier, orig_account_number) INTO statement_id;
         INSERT INTO transaction (origin_account_id, dest_account_id, amount, date, savings_statement_id, dest_account_sort_code, approved)
@@ -1103,7 +1217,7 @@ CREATE OR REPLACE FUNCTION unauthenticated.create_personal_info(first_name TEXT,
 RETURNS INT AS $$
 DECLARE customer_id INT;
 BEGIN
-    IF NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address) THEN
+    IF NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_naming AND md5(last_name) = last_naming AND md5(email_address) = email_addressing) THEN
         INSERT INTO customer
         VALUES (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
         RETURNING id INTO customer_id;
@@ -1163,6 +1277,35 @@ BEGIN
     RETURN 1;
 END;
 $$ LANGUAGE plpgsql;
+
+
+ALTER VIEW IF EXISTS client.personal_information OWNER TO user_banking_protection;
+ALTER VIEW IF EXISTS client.accounts OWNER TO user_banking_protection;
+
+
+REVOKE USAGE ON SCHEMA public FROM l1;
+REVOKE USAGE ON SCHEMA bank FROM l1;
+REVOKE USAGE ON SCHEMA staff FROM l1;
+REVOKE USAGE ON SCHEMA client FROM l1;
+REVOKE USAGE ON SCHEMA unauthenticated FROM l1;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM l1;
+REVOKE ALL ON ALL TABLES IN SCHEMA bank FROM l1;
+REVOKE ALL ON ALL TABLES IN SCHEMA staff FROM l1;
+REVOKE ALL ON ALL TABLES IN SCHEMA client FROM l1;
+REVOKE ALL ON ALL TABLES IN SCHEMA unauthenticated FROM l1;
+
+GRANT USAGE ON SCHEMA staff TO l1;
+GRANT USAGE ON SCHEMA client TO l1;
+GRANT USAGE ON SCHEMA bank TO l1;
+GRANT USAGE ON SCHEMA public TO l1;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA staff TO l1;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA client TO l1;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA bank TO l1;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO l1;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA staff TO l1;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA client TO l1;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA bank TO l1;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO l1;
 
 -- Setting role based access control for l2 level clients
 REVOKE USAGE ON SCHEMA public FROM l2;
@@ -1229,6 +1372,23 @@ GRANT USAGE ON ALL SEQUENCES IN SCHEMA client TO l4;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO l4;
 GRANT INSERT ON TABLE management_log TO l4;
 GRANT INSERT ON TABLE authentication_log TO l4;
+
+REVOKE USAGE ON SCHEMA public FROM l5;
+REVOKE USAGE ON SCHEMA bank FROM l5;
+REVOKE USAGE ON SCHEMA staff FROM l5;
+REVOKE USAGE ON SCHEMA client FROM l5;
+REVOKE USAGE ON SCHEMA unauthenticated FROM l5;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM l5;
+REVOKE ALL ON ALL TABLES IN SCHEMA bank FROM l5;
+REVOKE ALL ON ALL TABLES IN SCHEMA staff FROM l5;
+REVOKE ALL ON ALL TABLES IN SCHEMA client FROM l5;
+REVOKE ALL ON ALL TABLES IN SCHEMA unauthenticated FROM l5;
+
+GRANT USAGE ON SCHEMA unauthenticated TO l5;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA unauthenticated TO l5;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA unauthenticated TO l5;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO l5;
+
 
 -- sample data for customers
 INSERT INTO customer (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
@@ -1306,6 +1466,7 @@ VALUES ('Red', 1),
 ('Black', 8),
 ('White', 9);
 
+SELECT * FROM staff.accounts;
 
 CREATE ROLE johnsmith WITH LOGIN PASSWORD '8b1a9953c4611296a827abf8c47804d7';
 CREATE ROLE janedoe WITH LOGIN PASSWORD '161e7ce7bfdc89ab4b9f52c1d4c94212';
@@ -1319,7 +1480,7 @@ CREATE ROLE janesmith WITH LOGIN PASSWORD '155f25da0ecfab1f56f21310490daaa7';
 
 GRANT user_banking TO johnsmith, janedoe, joebloggs, johnbloggs, janebloggs, joedoe, johndoe, joesmith, janesmith;
 
-SET ROLE johnsmith;
+--SET ROLE johnsmith;
 
 SELECT * FROM client.open_savings_account(1);
 
@@ -1344,18 +1505,22 @@ SELECT * FROM client.open_loan(1, 10000.00, '22-12-2025'::DATE, 'vehicle'::TEXT,
 
 SELECT * FROM client.initiate_transfer(1, 10000001, 100.00, 10000000, 123456);
 
-SELECT * FROM client.savings_accounts_statement;
+SET ROLE janedoe;
+SELECT * FROM client.personal_information;
+SELECT * FROM client.accounts;
 
+SELECT * FROM client.savings_accounts_statement;
 
 
 --SELECT * FROM bank.verify_transaction(1);
 
 
-SELECT * FROM client.view_accounts(1);
+SELECT * FROM client.view_accounts(2);
 
 SELECT * FROM client.debit_accounts;
 
 SELECT * FROM client.credit_accounts;
+
 
 -- -- sample data for savings account
 -- INSERT INTO savings_account (current_balance, interest_rate, account_id)
