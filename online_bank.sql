@@ -281,8 +281,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-
-
+CREATE OR REPLACE FUNCTION create_md5_password(username TEXT, password TEXT)
+RETURNS TEXT AS $$
+DECLARE md5_password TEXT;
+BEGIN
+    SELECT CONCAT('md5', md5(REPLACE(CONCAT(password, username), '\n', ''))) INTO md5_password;
+    RETURN md5_password;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 
 CREATE OR REPLACE FUNCTION policy_customer_client_check(user_fullname TEXT)
@@ -299,7 +305,10 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE POLICY policy_customer_client ON customer
-    FOR SELECT TO user_banking_protection USING (id = policy_customer_client_check(current_user));
+    FOR SELECT TO user_banking_protection USING (id = policy_customer_client_check(session_user));
+
+CREATE POLICY policy_customer_client_update ON customer
+    FOR UPDATE TO user_banking_protection USING (id = policy_customer_client_check(session_user));
 
 ALTER TABLE customer ENABLE ROW LEVEL SECURITY;
 
@@ -317,7 +326,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE POLICY policy_online_account_client ON online_account
-    FOR SELECT TO user_banking_protection USING (id = policy_online_account_client_check(current_user));
+    FOR SELECT TO user_banking_protection USING (id = policy_online_account_client_check(session_user));
 
 ALTER TABLE online_account ENABLE ROW LEVEL SECURITY;
 
@@ -333,7 +342,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE POLICY policy_user_login_client ON user_login
-    FOR SELECT TO user_banking_protection USING (id = policy_user_login_client_check(current_user));
+    FOR SELECT TO user_banking_protection USING (id = policy_user_login_client_check(session_user));
 
 ALTER TABLE user_login ENABLE ROW LEVEL SECURITY;
 
@@ -351,24 +360,24 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE POLICY policy_account_client ON account
-    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(session_user));
 
 ALTER TABLE account ENABLE ROW LEVEL SECURITY;
 
 
 
 CREATE POLICY policy_savings_account_client ON savings_account
-    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(session_user));
 
 ALTER TABLE savings_account ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY policy_credit_account_client ON credit_account
-    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(session_user));
 
 ALTER TABLE credit_account ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY policy_debit_account_client ON debit_account
-    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(current_user));
+    FOR SELECT TO user_banking_protection USING (account_id = policy_account_client_check(session_user));
 
 ALTER TABLE debit_account ENABLE ROW LEVEL SECURITY;
 
@@ -722,9 +731,197 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION staff.update_personal_information(account_identifier INT, first_name_p TEXT, last_name_p TEXT, date_of_birth_p DATE, phone_number_p TEXT, email_address_p TEXT, address_street_p TEXT, address_city_p TEXT, address_county_p TEXT, address_postcode_p TEXT)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+BEGIN
+    UPDATE customer SET first_name = first_name_p, last_name = last_name_p, date_of_birth = date_of_birth_p, phone_number = phone_number_p, email_address = email_address_p, address_street = address_street_p, address_city = address_city_p, address_county = address_county_p, address_postcode = address_postcode_p
+    WHERE id = (SELECT customer_id FROM online_account WHERE id = account_identifier);
+
+    passed = TRUE;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION staff.update_password(account_identifier INT, new_password TEXT)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE ROW_COUNT INT;
+BEGIN
+    UPDATE user_login SET password = create_md5_password(session_user, new_password)
+    WHERE account_id = account_identifier;
+    GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Updated password', CURRENT_DATE);
+    passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION staff.update_email(account_identifier INT, new_email TEXT)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE ROW_COUNT INT;
+BEGIN
+    UPDATE user_login SET email = new_email
+    WHERE account_id = account_identifier;
+
+    GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Updated email', CURRENT_DATE);
+    passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION staff.open_debit_account(account_id INT)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE debit_account_number INT;
+DECLARE next_account_number INT;
+DECLARE ROW_COUNT INT;
+BEGIN
+    SELECT get_next_account_number() INTO next_account_number;
+
+    INSERT INTO debit_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number , account_id, 0, 0.01) RETURNING account_number INTO debit_account_number;
+    GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+    INSERT INTO debit_statement (starting_date, end_date, amount, account_number) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, debit_account_number);
+    INSERT INTO debit_overdraft (overdraft_usage, overdraft_limit, interest_rate, account_number, approved) VALUES (0, 0, 0.01, debit_account_number, FALSE);
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened debit account', CURRENT_DATE);
+    passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION staff.open_credit_account(account_id INT)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE credit_account_number INT;
+DECLARE next_account_number INT;
+DECLARE ROW_COUNT INT;
+BEGIN
+
+    SELECT get_next_account_number() INTO next_account_number;
+
+    INSERT INTO credit_account (account_number, outstanding_balance, credit_limit, interest_rate, account_id) VALUES (next_account_number ,0, 1000, 24.9, account_id) RETURNING account_number INTO credit_account_number;
+    GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+    INSERT INTO credit_statement (starting_date, end_date, amount, minimum_payment, minimum_payment_due_date, account_number) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, 0, CURRENT_DATE, credit_account_number);
+    INSERT INTO credit_account_application (account_number, application_status) VALUES (credit_account_number, 'PENDING');
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened credit account', CURRENT_DATE);
+    passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
+    return PASSED;
+END
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION staff.open_savings_account(account_id INT)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE savings_account_id INT;
+DECLARE next_account_number INT;
+DECLARE ROW_COUNT INT;
+BEGIN
+
+    SELECT get_next_account_number() INTO next_account_number;
+
+    INSERT INTO savings_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number ,account_id, 10000, 0.01) RETURNING account_number INTO savings_account_id;
+    GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+    INSERT INTO savings_statement (starting_date, end_date, amount, account_number) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, savings_account_id);
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened savings account', CURRENT_DATE);
+    passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION staff.open_loan(account_id INT, loan_amount NUMERIC, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE loan_id INT;
+DECLARE ROW_COUNT INT;
+BEGIN
+    INSERT INTO loan (account_id, amount, end_date, loan_type, interest_rate) VALUES (account_id, 0, loan_end_date, loan_type, loan_interest_rate) RETURNING id INTO loan_id;
+    GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+    INSERT INTO loan_statement (starting_date, amount, loan_id) VALUES (date_trunc('month', now()::date), 0, loan_id);
+    INSERT INTO loan_application (loan_id, application_status, amount) VALUES (loan_id, 'PENDING', loan_amount);
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened loan', CURRENT_DATE);
+    passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION staff.open_overdraft_application(account_id INT, overdraft_limit NUMERIC)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE ROW_COUNT INT;
+BEGIN
+    INSERT INTO overdraft_application (account_id, application_status, overdraft_limit) VALUES (account_id, 'PENDING', overdraft_limit);
+    GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened overdraft application', CURRENT_DATE);
+    passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION staff.view_personal_information(account_id INT)
+RETURNS TABLE (first_name TEXT, last_name TEXT, email TEXT, phone_number TEXT, address TEXT, city TEXT, country TEXT, postal_code TEXT) AS $$
+BEGIN
+    RETURN QUERY
+        SELECT first_name, last_name, email, phone_number, address, city, country, postal_code
+            FROM customer
+        INNER JOIN online_account ON online_account.customer_id = customer.id
+        WHERE accounts.id = account_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION staff.view_debit_accounts(account_id INT)
+RETURNS TABLE (id INT, current_balance NUMERIC, interest_rate NUMERIC, overdraft_limit NUMERIC, overdraft_usage NUMERIC, overdraft_interest_rate NUMERIC, external_account_number INT, overdraft_approved BOOLEAN) AS $$
+BEGIN
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed debit accounts', CURRENT_DATE);
+
+    RETURN QUERY
+        SELECT * FROM debit_account WHERE account_id = account_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION staff.view_credit_accounts(account_id INT)
+RETURNS TABLE (id INT, outstanding_balance NUMERIC, credit_limit NUMERIC, interest_rate NUMERIC, application_status TEXT) AS $$
+BEGIN
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed credit accounts', CURRENT_DATE);
+
+    RETURN QUERY
+        SELECT * FROM credit_account WHERE account_id = account_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION staff.view_savings_accounts(account_id INT)
+RETURNS TABLE (id INT, current_balance NUMERIC, interest_rate NUMERIC, external_account_number INT) AS $$
+BEGIN
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed savings accounts', CURRENT_DATE);
+
+    RETURN QUERY
+        SELECT * FROM savings_account WHERE account_id = account_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION staff.view_loans(account_id INT)
+RETURNS TABLE (id INT, loan_amount NUMERIC, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC, application_status TEXT) AS $$
+BEGIN
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed loans', CURRENT_DATE);
+
+    RETURN QUERY
+        SELECT * FROM loan WHERE account_id = account_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE SCHEMA IF NOT EXISTS client;
 SET search_path TO public, client;
 
+CREATE OR REPLACE VIEW client.online_account_information AS
+    SELECT * FROM online_account;
 
 CREATE OR REPLACE VIEW client.accounts AS
     SELECT account.account_number, account.account_id, online_account.sort_code FROM account
@@ -798,42 +995,64 @@ CREATE OR REPLACE VIEW client.loan_applications AS
 
 
 
-
-
-CREATE OR REPLACE FUNCTION client.update_personal_information(account_identifier INT, first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT, account_id INT)
-RETURNS BOOLEAN AS $$
-DECLARE passed BOOLEAN;
+CREATE OR REPLACE FUNCTION client.get_account_id()
+RETURNS INT AS $$
+DECLARE account_id INT;
 BEGIN
-    UPDATE customer SET first_name = first_name, last_name = last_name, date_of_birth = date_of_birth, phone_number = phone_number, email_address = email_address, address_street = address_street, address_city = address_city, address_county = address_county, address_postcode = address_postcode
-    WHERE id = (SELECT customer_id FROM online_account WHERE id = account_identifier);
-
-    -- INSERT INTO management_log (log_description, log_date, account_id) VALUES ('Updated personal information', CURRENT_DATE, account_identifier);
-    passed = CASE WHEN @@ROWCOUNT = 1 THEN TRUE ELSE FALSE END;
-    RETURN passed;
+    SELECT id INTO account_id FROM client.online_account_information;
+    RETURN account_id;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.update_password(account_identifier INT, new_password TEXT)
+CREATE OR REPLACE FUNCTION client.update_personal_information(first_name_p TEXT, last_name_p TEXT, date_of_birth_p DATE, phone_number_p TEXT, email_address_p TEXT, address_street_p TEXT, address_city_p TEXT, address_county_p TEXT, address_postcode_p TEXT)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
-DECLARE ROW_COUNT INT;
+DECLARE account_identifier INT;
 BEGIN
-    UPDATE user_login SET password = md5(new_password)
+
+    account_identifier = client.get_account_id();
+
+    UPDATE customer SET first_name = first_name_p, last_name = last_name_p, date_of_birth = date_of_birth_p, phone_number = phone_number_p, email_address = email_address_p, address_street = address_street_p, address_city = address_city_p, address_county = address_county_p, address_postcode = address_postcode_p
+    WHERE id = (SELECT customer_id FROM online_account WHERE id = account_identifier);
+
+    -- INSERT INTO management_log (log_description, log_date, account_id) VALUES ('Updated personal information', CURRENT_DATE, account_identifier);
+    passed = TRUE;
+    RETURN passed;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION client.update_password(new_password TEXT)
+RETURNS BOOLEAN AS $$
+DECLARE passed BOOLEAN;
+DECLARE account_identifier INT;
+DECLARE md5_password TEXT;
+DECLARE ROW_COUNT INT;
+
+BEGIN
+    account_identifier = client.get_account_id();
+    md5_password = create_md5_password(session_user, new_password);
+
+    UPDATE user_login SET password = create_md5_password(session_user, md5_password)
     WHERE account_id = account_identifier;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
+    EXECUTE 'ALTER USER ' || session_user || ' PASSWORD ''' || md5_password || ''';';
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Updated password', CURRENT_DATE);
     passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
     RETURN passed;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION client.update_email(account_identifier INT, new_email TEXT)
+CREATE OR REPLACE FUNCTION client.update_email(new_email TEXT)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
+DECLARE account_identifier INT;
 DECLARE ROW_COUNT INT;
 BEGIN
-    UPDATE user_login SET email = new_email
-    WHERE account_id = account_identifier;
+
+    account_identifier = client.get_account_id();
+
+    UPDATE customer SET email_address = new_email
+    WHERE id = (SELECT customer_id FROM online_account WHERE id = account_identifier);
 
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
 
@@ -841,20 +1060,22 @@ BEGIN
     passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
     RETURN passed;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 
-CREATE OR REPLACE FUNCTION client.open_debit_account(account_id INT)
+CREATE OR REPLACE FUNCTION client.open_debit_account()
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE debit_account_number INT;
 DECLARE next_account_number INT;
+DECLARE account_id INT;
 DECLARE ROW_COUNT INT;
 BEGIN
+    account_id = client.get_account_id();
 
     SELECT get_next_account_number() INTO next_account_number;
 
-    INSERT INTO debit_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number ,account_id, 0, 0.01) RETURNING account_number INTO debit_account_number;
+    INSERT INTO debit_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number ,client.get_account_id(), 0, 0.01) RETURNING account_number INTO debit_account_number;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO debit_statement (starting_date, end_date, amount, account_number) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, debit_account_number);
     INSERT INTO debit_overdraft (overdraft_usage, overdraft_limit, interest_rate, account_number, approved) VALUES (0, 0, 0.01, debit_account_number, FALSE);
@@ -864,13 +1085,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION client.open_credit_account(account_id INT)
+CREATE OR REPLACE FUNCTION client.open_credit_account()
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE credit_account_number INT;
 DECLARE next_account_number INT;
+DECLARE account_id INT;
 DECLARE ROW_COUNT INT;
 BEGIN
+
+    account_id = client.get_account_id();
 
     SELECT get_next_account_number() INTO next_account_number;
 
@@ -884,17 +1108,20 @@ BEGIN
 END
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION client.open_savings_account(account_id INT)
+CREATE OR REPLACE FUNCTION client.open_savings_account()
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE savings_account_id INT;
 DECLARE next_account_number INT;
+DECLARE account_id INT;
 DECLARE ROW_COUNT INT;
 BEGIN
 
+    account_id = client.get_account_id();
+
     SELECT get_next_account_number() INTO next_account_number;
 
-    INSERT INTO savings_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number ,account_id, 10000, 0.01) RETURNING account_number INTO savings_account_id;
+    INSERT INTO savings_account (account_number, account_id, current_balance, interest_rate) VALUES (next_account_number ,account_id, 0, 0.01) RETURNING account_number INTO savings_account_id;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO savings_statement (starting_date, end_date, amount, account_number) VALUES (date_trunc('month', now()::date), (date_trunc('month', now()::date)) + interval '1 month - 1 day', 0, savings_account_id);
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened savings account', CURRENT_DATE);
@@ -903,13 +1130,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION client.open_loan(account_id INT, loan_amount NUMERIC, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC)
+CREATE OR REPLACE FUNCTION client.open_loan(loan_amount NUMERIC, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE loan_id INT;
+DECLARE account_id INT;
 DECLARE ROW_COUNT INT;
 BEGIN
-    INSERT INTO loan (account_id, amount, end_date, loan_type, interest_rate) VALUES (account_id, 0, loan_end_date, loan_type, loan_interest_rate) RETURNING id INTO loan_id;
+    account_id = client.get_account_id();
+
+    INSERT INTO loan (account_id, amount, end_date, loan_type, interest_rate) VALUES (account_id, loan_amount, loan_end_date, loan_type, loan_interest_rate) RETURNING id INTO loan_id;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO loan_statement (starting_date, amount, loan_id) VALUES (date_trunc('month', now()::date), 0, loan_id);
     INSERT INTO loan_application (loan_id, application_status, amount) VALUES (loan_id, 'PENDING', loan_amount);
@@ -919,11 +1149,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION client.open_overdraft_application(account_id INT, overdraft_limit NUMERIC)
+CREATE OR REPLACE FUNCTION client.open_overdraft_application(overdraft_limit NUMERIC)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
+DECLARE account_id INT;
 DECLARE ROW_COUNT INT;
 BEGIN
+    account_id = client.get_account_id();
+
     INSERT INTO overdraft_application (account_id, application_status, overdraft_limit) VALUES (account_id, 'PENDING', overdraft_limit);
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Opened overdraft application', CURRENT_DATE);
@@ -932,9 +1165,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION client.view_personal_information(account_id INT)
+CREATE OR REPLACE FUNCTION client.view_personal_information()
 RETURNS TABLE (first_name TEXT, last_name TEXT, email TEXT, phone_number TEXT, address TEXT, city TEXT, country TEXT, postal_code TEXT) AS $$
+DECLARE account_id INT;
 BEGIN
+    account_id = client.get_account_id();
+
     RETURN QUERY
         SELECT first_name, last_name, email, phone_number, address, city, country, postal_code
             FROM client.personal_information
@@ -943,10 +1179,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_accounts(account_identifier INT)
+CREATE OR REPLACE FUNCTION client.view_accounts()
 RETURNS TABLE (account_number INT, account_id INT, sort_code INT, balance NUMERIC, interest_rate NUMERIC, account_type TEXT) AS $$
-
+DECLARE account_identifier INT;
 BEGIN
+    account_identifier = client.get_account_id();
 
     RETURN QUERY
         SELECT client.accounts.*, COALESCE(debit_accounts.current_balance, credit_accounts.outstanding_balance, savings_accounts.current_balance) AS balance,
@@ -961,53 +1198,68 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_debit_accounts(account_id INT)
-RETURNS TABLE (id INT, current_balance NUMERIC, interest_rate NUMERIC, overdraft_limit NUMERIC, overdraft_usage NUMERIC, overdraft_interest_rate NUMERIC, external_account_number INT, overdraft_approved BOOLEAN) AS $$
+CREATE OR REPLACE FUNCTION client.view_debit_accounts()
+RETURNS TABLE (id INT, account_number INT, current_balance NUMERIC, interest_rate NUMERIC, overdraft_limit NUMERIC, overdraft_usage NUMERIC, overdraft_interest_rate NUMERIC, overdraft_approved BOOLEAN) AS $$
+DECLARE account_identifier INT;
 BEGIN
 
-    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed debit accounts', CURRENT_DATE);
+    account_identifier = client.get_account_id();
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Viewed debit accounts', CURRENT_DATE);
 
     RETURN QUERY
-        SELECT * FROM client.debit_accounts WHERE account_id = account_id;
+        SELECT * FROM client.debit_accounts WHERE account_id = account_identifier;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_credit_accounts(account_id INT)
-RETURNS TABLE (id INT, outstanding_balance NUMERIC, credit_limit NUMERIC, interest_rate NUMERIC, application_status TEXT) AS $$
+CREATE OR REPLACE FUNCTION client.view_credit_accounts()
+RETURNS TABLE (id INT, account_number INT, outstanding_balance NUMERIC, credit_limit NUMERIC, interest_rate NUMERIC, application_status VARCHAR) AS $$
+DECLARE account_identifier INT;
 BEGIN
 
-    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed credit accounts', CURRENT_DATE);
+    account_identifier = client.get_account_id();
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Viewed credit accounts', CURRENT_DATE);
 
     RETURN QUERY
-        SELECT * FROM client.credit_accounts WHERE account_id = account_id;
+        SELECT * FROM client.credit_accounts WHERE account_id = account_identifier;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_savings_accounts(account_id INT)
-RETURNS TABLE (id INT, current_balance NUMERIC, interest_rate NUMERIC, external_account_number INT) AS $$
+CREATE OR REPLACE FUNCTION client.view_savings_accounts()
+RETURNS TABLE (id INT, account_number INT, current_balance NUMERIC, interest_rate NUMERIC) AS $$
+DECLARE account_identifier INT;
 BEGIN
 
-    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed savings accounts', CURRENT_DATE);
+    account_identifier = client.get_account_id();
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Viewed savings accounts', CURRENT_DATE);
 
     RETURN QUERY
-        SELECT * FROM client.savings_accounts WHERE account_id = account_id;
+        SELECT * FROM client.savings_accounts WHERE account_id = account_identifier;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_loans(account_id INT)
-RETURNS TABLE (id INT, loan_amount NUMERIC, loan_end_date DATE, loan_type TEXT, loan_interest_rate NUMERIC, application_status TEXT) AS $$
+CREATE OR REPLACE FUNCTION client.view_loans()
+RETURNS TABLE (id INT, loan_id INT, loan_amount NUMERIC, loan_interest_rate NUMERIC, loan_type VARCHAR, loan_end_date DATE, loan_application_status VARCHAR) AS $$
+DECLARE account_identifier INT;
 BEGIN
 
-    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed loans', CURRENT_DATE);
+    account_identifier = client.get_account_id();
+
+    INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Viewed loans', CURRENT_DATE);
 
     RETURN QUERY
-        SELECT * FROM client.loans WHERE account_id = account_id;
+        SELECT * FROM client.loans WHERE account_id = account_identifier;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_savings_statements(account_identifier INT, orig_account_number INT)
+CREATE OR REPLACE FUNCTION client.view_savings_statements(orig_account_number INT)
 RETURNS TABLE (starting_date DATE, end_date DATE, amount NUMERIC, account_id INT) AS $$
+DECLARE account_identifier INT;
 BEGIN
+
+    account_identifier = client.get_account_id();
 
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Viewed savings statements', CURRENT_DATE);
 
@@ -1019,9 +1271,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_debit_statements(account_identifier INT, account_number INT)
+CREATE OR REPLACE FUNCTION client.view_debit_statements(account_number INT)
 RETURNS TABLE (starting_date DATE, end_date DATE, amount NUMERIC, account_id INT) AS $$
+DECLARE account_identifier INT;
 BEGIN
+
+    account_identifier = client.get_account_id();
 
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Viewed debit statements', CURRENT_DATE);
 
@@ -1033,9 +1288,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_credit_statements(account_identifier INT, account_number INT)
+CREATE OR REPLACE FUNCTION client.view_credit_statements(account_number INT)
 RETURNS TABLE (starting_date DATE, end_date DATE, amount NUMERIC, account_id INT) AS $$
+DECLARE account_identifier INT;
 BEGIN
+
+    account_identifier = client.get_account_id();
 
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Viewed credit statements', CURRENT_DATE);
 
@@ -1047,9 +1305,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_debit_statement(account_identifier INT, account_number INT, statement_id INT)
+CREATE OR REPLACE FUNCTION client.view_debit_statement(account_number INT, statement_id INT)
 RETURNS TABLE (starting_date DATE, end_date DATE, amount NUMERIC, account_id INT) AS $$
+DECLARE account_identifier INT;
 BEGIN
+
+    account_identifier = client.get_account_id();
 
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Viewed debit statement', CURRENT_DATE);
 
@@ -1062,9 +1323,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_credit_statement(account_identifier INT, account_number INT, statement_id INT)
+CREATE OR REPLACE FUNCTION client.view_credit_statement(account_number INT, statement_id INT)
 RETURNS TABLE (starting_date DATE, end_date DATE, amount NUMERIC, account_id INT) AS $$
+DECLARE account_identifier INT;
 BEGIN
+
+    account_identifier = client.get_account_id();
 
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed credit statement', CURRENT_DATE);
 
@@ -1077,9 +1341,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.view_savings_statement(account_identifier INT, account_number_identifier INT, statement_id INT)
+CREATE OR REPLACE FUNCTION client.view_savings_statement(account_number_identifier INT, statement_id INT)
 RETURNS TABLE (starting_date DATE, end_date DATE, amount NUMERIC, account_id INT) AS $$
+DECLARE account_identifier INT;
 BEGIN
+
+    account_identifier = client.get_account_id();
 
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_id, 'Viewed savings statement', CURRENT_DATE);
 
@@ -1092,10 +1359,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.get_or_create_statement(account_identifier INT, orig_account_number INT)
+CREATE OR REPLACE FUNCTION client.get_or_create_statement(orig_account_number INT)
 RETURNS INT AS $$
 DECLARE statement_id INT;
+DECLARE account_identifier INT;
 BEGIN
+
+    account_identifier = client.get_account_id();
+
     CASE WHEN EXISTS (SELECT * FROM debit_account WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
         IF EXISTS (SELECT * FROM debit_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date) THEN
             SELECT id INTO statement_id FROM debit_statement WHERE account_number = orig_account_number AND starting_date <= now()::date AND end_date >= now()::date;
@@ -1127,13 +1398,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.place_transaction_into_account(account_identifier INT, orig_account_number INT, transaction_account_number INT, transaction_amount NUMERIC, transfer_account_sort_code INT, loan_payment BOOLEAN)
+CREATE OR REPLACE FUNCTION client.place_transaction_into_account(orig_account_number INT, transaction_account_number INT, transaction_amount NUMERIC, transfer_account_sort_code INT, loan_payment BOOLEAN)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE statement_id INT;
 DECLARE transaction_id INT;
+DECLARE account_identifier INT;
 
 BEGIN
+    account_identifier = client.get_account_id();
+
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Placed transaction into account', CURRENT_DATE);
 
     CASE WHEN EXISTS (SELECT * FROM debit_account WHERE account_id = account_identifier AND account_number = orig_account_number) THEN
@@ -1165,12 +1439,15 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 
-CREATE OR REPLACE FUNCTION client.initiate_transfer(account_identifier INT, orig_account_number INT, transfer_amount NUMERIC, transfer_account_number INT, transfer_account_sort_code INT)
+CREATE OR REPLACE FUNCTION client.initiate_transfer(orig_account_number INT, transfer_amount NUMERIC, transfer_account_number INT, transfer_account_sort_code INT)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE internal_account_id INT;
 DECLARE ROW_COUNT INT;
+DECLARE account_identifier INT;
 BEGIN
+    account_identifier = client.get_account_id();
+
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Initiated transfer', CURRENT_DATE);
 
     SELECT * FROM client.place_transaction_into_account(account_identifier, orig_account_number, transfer_account_number, transfer_amount, transfer_account_sort_code, FALSE) INTO passed;
@@ -1180,10 +1457,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION client.initiate_loan_payment(account_identifier INT, orig_account_number INT, payment_amount NUMERIC, loan_id INT)
+CREATE OR REPLACE FUNCTION client.initiate_loan_payment(orig_account_number INT, payment_amount NUMERIC, loan_id INT)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
+DECLARE account_identifier INT;
 BEGIN
+
+    account_identifier = client.get_account_id();
+
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Initiated loan payment', CURRENT_DATE);
 
 
@@ -1205,7 +1486,7 @@ SET search_path TO unauthenticated, public;
 
 -- Allows an unauthenticated user to match hashes to hashes of personal information contained in the customer table
 CREATE OR REPLACE VIEW unauthenticated.unauthenticated_personal_information AS
-SELECT id, md5(first_name) AS first_name, md5(last_name) AS last_name, md5(email_address) AS email_address
+SELECT id, md5(first_name) AS first_name, md5(last_name) AS last_name, md5(email_address) AS email_address, is_verified
 FROM customer;
 
 -- Allows an unauthenticated user to view hashes of usernames contained in the user_login table
@@ -1213,26 +1494,28 @@ CREATE OR REPLACE VIEW unauthenticated.unauthenticated_login AS
 SELECT md5(username) AS username FROM user_login;
 
 -- Allows a user to insert personal information into the online banking system
-CREATE OR REPLACE FUNCTION unauthenticated.create_personal_info(first_name TEXT, last_name TEXT, date_of_birth DATE, phone_number TEXT, email_address TEXT, address_street TEXT, address_city TEXT, address_county TEXT, address_postcode TEXT)
+CREATE OR REPLACE FUNCTION unauthenticated.create_personal_info(first_name_p TEXT, last_name_p TEXT, date_of_birth_p DATE, phone_number_p TEXT, email_address_p TEXT, address_street_p TEXT, address_city_p TEXT, address_county_p TEXT, address_postcode_p TEXT)
 RETURNS INT AS $$
 DECLARE customer_id INT;
 BEGIN
-    IF NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_naming AND md5(last_name) = last_naming AND md5(email_address) = email_addressing) THEN
-        INSERT INTO customer
-        VALUES (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
+    IF NOT EXISTS (SELECT * FROM unauthenticated.unauthenticated_personal_information WHERE first_name = md5(first_name_p) AND last_name = md5(last_name_p) AND email_address = md5(email_address_p)) THEN
+        INSERT INTO customer (first_name, last_name, date_of_birth, phone_number, email_address, address_street, address_city, address_county, address_postcode)
+        VALUES (first_name_p, last_name_p, date_of_birth_p, phone_number_p, email_address_p, address_street_p, address_city_p, address_county_p, address_postcode_p)
         RETURNING id INTO customer_id;
 
         INSERT INTO management_log (log_description, log_date) VALUES ('New customer created', now());
     ELSE
         RAISE NOTICE 'CUSTOMER INFORMATION ALREADY PRESENT';
-        SELECT id INTO customer_id FROM unauthenticated.unauthenticated_personal_information WHERE md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address;
+        SELECT id INTO customer_id FROM unauthenticated.unauthenticated_personal_information WHERE first_name = md5(first_name_p) AND last_name = md5(last_name_p) AND email_address = md5(email_address_p);
     END IF;
     RETURN customer_id;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 
 -- Allows an unauthenticated user to create an online account
-CREATE OR REPLACE FUNCTION unauthenticated.create_online_account_details(customer_id INT, first_name TEXT, last_name TEXT, email_address TEXT, question_choice_ids INT[], question_answers TEXT[])
+CREATE OR REPLACE FUNCTION unauthenticated.create_online_account_details(
+    customer_id_p INT, first_name_p TEXT, last_name_p TEXT, email_address_p TEXT, question_choice_ids_p INT[], question_answers_p TEXT[], username_p TEXT, password_p TEXT)
 RETURNS INT AS $$
 DECLARE account_id INT;
 DECLARE online_account_id INT;
@@ -1240,28 +1523,29 @@ DECLARE question_choice_id INT;
 BEGIN
 
     --check customer is verified
-    IF NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE id = customer_id AND md5(first_name) = first_name AND md5(last_name) = last_name AND md5(email_address) = email_address) AND is_verified = FALSE THEN
+    IF NOT EXISTS (SELECT FROM unauthenticated.unauthenticated_personal_information WHERE id = customer_id_p AND first_name = md5(first_name_p) AND last_name = md5(last_name_p)
+    AND email_address = md5(email_address_p) AND is_verified = FALSE) THEN
         RAISE NOTICE 'CUSTOMER INFORMATION NOT VERIFIED';
         RETURN -1;
     END IF;
 
-    IF NOT EXISTS (SELECT FROM user_login WHERE username = username) THEN
+    IF NOT EXISTS (SELECT FROM user_login WHERE username = username_p) THEN
         INSERT INTO online_account (date_opened, sort_code, customer_id)
-        VALUES ((SELECT now()), (SELECT num FROM GENERATE_SERIES(1, 6) AS s(num) LIMIT 1), customer_id)
+        VALUES ((SELECT now()), (SELECT num FROM GENERATE_SERIES(1, 6) AS s(num) LIMIT 1), customer_id_p)
         RETURNING id INTO account_id;
 
         INSERT INTO user_login (account_id, username, password)
-        VALUES (account_id, username, md5(password))
+        VALUES (account_id, username_p, create_md5_password(username_p, password_p))
         RETURNING id INTO online_account_id;
 
         FOR i IN 0..2 LOOP
             
             INSERT INTO user_login_security_question (question_choice_id, login_id)
-            VALUES (question_choice_ids[i], online_account_id)
+            VALUES (question_choice_ids_p[i], online_account_id)
             RETURNING id INTO question_choice_id;
 
             INSERT INTO security_question_answer (answer, question_id)
-            VALUES (question_answers[i], question_choice_id);
+            VALUES (question_answers_p[i], question_choice_id);
 
         END LOOP;
 
@@ -1271,16 +1555,17 @@ BEGIN
         RETURN account_id;
     ELSE
         RAISE NOTICE 'USERNAME ALREADY TAKEN';
-        RETURN NULL;
+        RETURN -1;
 
     END IF;
     RETURN 1;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 
 ALTER VIEW IF EXISTS client.personal_information OWNER TO user_banking_protection;
 ALTER VIEW IF EXISTS client.accounts OWNER TO user_banking_protection;
+ALTER VIEW IF EXISTS client.online_account_information OWNER TO user_banking_protection;
 
 
 REVOKE USAGE ON SCHEMA public FROM l1;
@@ -1416,17 +1701,15 @@ VALUES ('2020-01-01', '123456', 1),
 
 -- sample data for user login
 INSERT INTO user_login (account_id, username, password)
-VALUES (1, 'johnsmith', '8b1a9953c4611296a827abf8c47804d7'),
-(2, 'janedoe', '161e7ce7bfdc89ab4b9f52c1d4c94212'),
-(3, 'joebloggs', 'fa3ebd6742c360b2d9652b7f78d9bd7d'),
-(4, 'johnbloggs', 'dc647eb65e6711e155375218212b3964'),
-(5, 'janebloggs', '42f749ade7f9e195bf475f37a44cafcb'),
-(6, 'joedoe', '227d56be289d0f869da94b3976f7d82a'),
-(7, 'johndoe', 'a94d7853871a856c71a172a599cee227'),
-(8, 'joesmith', 'e433bdbeae0efbfba64964bd1c381b90'),
-(9, 'janesmith', '155f25da0ecfab1f56f21310490daaa7');
-
-
+VALUES (1, 'johnsmith', 'md5767a742e16ae1ef324aca4a214862460'),
+(2, 'janedoe', 'md5ffa2177e1637c154db3fbf17202db797'),
+(3, 'joebloggs', 'md5bab60734b6606c3ce80b2e5b38ae6c19'),
+(4, 'johnbloggs', 'md52dcb93a83b902dde49aac058affbe19a'),
+(5, 'janebloggs', 'md50382eacb7999b6b3af867a4c0e2809b6'),
+(6, 'joedoe', 'md555c358d84f40496fd67e963625abefc1'),
+(7, 'johndoe', 'md50471f745ccebbdd98a444048af8c4689'),
+(8, 'joesmith', 'md5e4024b63e04509fbec164bd86de40e4a'),
+(9, 'janesmith', 'md578546a741601683f0d9cd9cb24d599e0');
 
 
 -- sample data for security question option
@@ -1468,59 +1751,110 @@ VALUES ('Red', 1),
 
 SELECT * FROM staff.accounts;
 
-CREATE ROLE johnsmith WITH LOGIN PASSWORD '8b1a9953c4611296a827abf8c47804d7';
-CREATE ROLE janedoe WITH LOGIN PASSWORD '161e7ce7bfdc89ab4b9f52c1d4c94212';
-CREATE ROLE joebloggs WITH LOGIN PASSWORD 'fa3ebd6742c360b2d9652b7f78d9bd7d';
-CREATE ROLE johnbloggs WITH LOGIN PASSWORD 'dc647eb65e6711e155375218212b3964';
-CREATE ROLE janebloggs WITH LOGIN PASSWORD '42f749ade7f9e195bf475f37a44cafcb';
-CREATE ROLE joedoe WITH LOGIN PASSWORD '227d56be289d0f869da94b3976f7d82a';
-CREATE ROLE johndoe WITH LOGIN PASSWORD 'a94d7853871a856c71a172a599cee227';
-CREATE ROLE joesmith WITH LOGIN PASSWORD 'e433bdbeae0efbfba64964bd1c381b90';
-CREATE ROLE janesmith WITH LOGIN PASSWORD '155f25da0ecfab1f56f21310490daaa7';
+CREATE ROLE johnsmith WITH LOGIN PASSWORD 'md5767a742e16ae1ef324aca4a214862460';
+CREATE ROLE janedoe WITH LOGIN PASSWORD 'md5ffa2177e1637c154db3fbf17202db797';
+CREATE ROLE joebloggs WITH LOGIN PASSWORD 'md5bab60734b6606c3ce80b2e5b38ae6c19';
+CREATE ROLE johnbloggs WITH LOGIN PASSWORD 'md52dcb93a83b902dde49aac058affbe19a';
+CREATE ROLE janebloggs WITH LOGIN PASSWORD 'md50382eacb7999b6b3af867a4c0e2809b6';
+CREATE ROLE joedoe WITH LOGIN PASSWORD 'md555c358d84f40496fd67e963625abefc1';
+CREATE ROLE johndoe WITH LOGIN PASSWORD 'md50471f745ccebbdd98a444048af8c4689';
+CREATE ROLE joesmith WITH LOGIN PASSWORD 'md5e4024b63e04509fbec164bd86de40e4a';
+CREATE ROLE janesmith WITH LOGIN PASSWORD 'md578546a741601683f0d9cd9cb24d599e0';
 
 GRANT user_banking TO johnsmith, janedoe, joebloggs, johnbloggs, janebloggs, joedoe, johndoe, joesmith, janesmith;
 
---SET ROLE johnsmith;
 
-SELECT * FROM client.open_savings_account(1);
+-- test script to create a new customer and online account
+DO $$
+DECLARE customer_id INT;
+DECLARE result INT;
+BEGIN
+    customer_id = unauthenticated.create_personal_info(
+    'John'::text, 'Smith'::text, '1990-01-01'::date, '01234567890'::text,
+    'example@gmail.com'::text, 'example street'::text, 'example city'::text,
+    'example county'::text, 'EX1 1EX'::text);
 
---sample data for savings account
-SELECT * FROM client.open_savings_account(1);
-SELECT * FROM client.open_savings_account(2);
-SELECT * FROM client.open_savings_account(3);
-SELECT * FROM client.open_savings_account(4);
+    result = (SELECT * FROM unauthenticated.create_online_account_details(customer_id, 'John'::text, 'Smith'::text,
+    'example@gmail.com'::text, '{1,2,3}'::int[], '{Blue, Wraps, Dogs}'::text[], 'johnsmith'::text, 'Password123'::text));
 
-SELECT * FROM client.open_debit_account(1);
-SELECT * FROM client.open_debit_account(2);
-SELECT * FROM client.open_debit_account(3);
-SELECT * FROM client.open_debit_account(4);
+    RAISE NOTICE 'Result: %', result;
+END
+$$;
 
-SELECT * FROM client.open_credit_account(1);
-SELECT * FROM client.open_credit_account(2);
-SELECT * FROM client.open_credit_account(3);
-SELECT * FROM client.open_credit_account(4);
+SET ROLE johnsmith;
+SET SESSION AUTHORIZATION johnsmith;
 
-SELECT * FROM client.open_loan(1, 10000.00, '22-12-2025'::DATE, 'vehicle'::TEXT, 5.00);
+-- test script to change the password of an existing online account
+DO $$
+DECLARE result BOOLEAN;
+BEGIN
+    result = (SELECT * FROM client.update_password('Password1234'::text));
+    RAISE NOTICE 'Result: %', result;
+END
+$$;
 
+-- test script to change the email address of an existing online account
+DO $$
+DECLARE result BOOLEAN;
+BEGIN
+    result = (SELECT * FROM client.update_email('example@email.com'::text));
+    RAISE NOTICE 'Result: %', result;
+END
+$$;
 
-SELECT * FROM client.initiate_transfer(1, 10000001, 100.00, 10000000, 123456);
+-- test script to open a new debit account from an existing customer
+DO $$
+DECLARE result BOOLEAN;
+BEGIN
+    result = (SELECT * FROM client.open_debit_account());
+    RAISE NOTICE 'Result: %', result;
+END
+$$;
 
-SET ROLE janedoe;
+-- test script to open a new credit account from an existing customer
+DO $$
+DECLARE result BOOLEAN;
+BEGIN
+    result = (SELECT * FROM client.open_credit_account());
+    RAISE NOTICE 'Result: %', result;
+END
+$$;
+
+-- test script to open a new savings account from an existing customer
+DO $$
+DECLARE result BOOLEAN;
+BEGIN
+    result = (SELECT * FROM client.open_savings_account());
+    RAISE NOTICE 'Result: %', result;
+END
+$$;
+
+-- test script to start a new loan from an existing customer
+DO $$
+DECLARE result BOOLEAN;
+BEGIN
+    result = (SELECT * FROM client.open_loan(1000.00, '22-12-2025'::date, 'VEHICLE', 29.9));
+    RAISE NOTICE 'Result: %', result;
+END
+$$;
+
+-- test script to check account balances
+SELECT * FROM client.view_accounts();
+
+-- test script to view personal information
 SELECT * FROM client.personal_information;
-SELECT * FROM client.accounts;
 
-SELECT * FROM client.savings_accounts_statement;
+-- test script to view debit acounts
+SELECT * FROM client.view_debit_accounts();
 
+-- test script to view credit accounts
+SELECT * FROM client.view_credit_accounts();
 
---SELECT * FROM bank.verify_transaction(1);
+-- test script to view savings accounts
+SELECT * FROM client.view_savings_accounts();
 
-
-SELECT * FROM client.view_accounts(2);
-
-SELECT * FROM client.debit_accounts;
-
-SELECT * FROM client.credit_accounts;
-
+-- test script to view loans
+SELECT * FROM client.view_loans();
 
 -- -- sample data for savings account
 -- INSERT INTO savings_account (current_balance, interest_rate, account_id)
