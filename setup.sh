@@ -56,3 +56,11 @@ psql -d online_banking -c "ALTER DATABASE online_banking OWNER TO postgres;"
 
 #load sql file into database
 psql -U postgres -d online_banking -f online_bank.sql
+
+
+pg_ctl -D online_banking_instance -l logfile stop
+
+mv online_banking_instance/pg_hba.conf online_banking_instance/pg_hba_old.conf
+cp pg_hba.conf online_banking_instance/pg_hba.conf
+
+pg_ctl -D online_banking_instance -l logfile start

@@ -1,3 +1,5 @@
+ALTER ROLE postgres WITH PASSWORD 'SCRAM-SHA-256$4096:gqxolfd6HK9v3oACViTiIw==$dkXeMym0KplMhx52Yeou1etQzLtLX5I++0Z83KiB6sQ=:HpEcsfpkfIpto7iZ9MIJK0GJc2scjLwAv7SYyAbwbUg=';
+
 -- Creating roles for the database system
 CREATE ROLE l1 WITH CREATEDB CREATEROLE SUPERUSER;
 CREATE ROLE l2 WITH CREATEROLE;
@@ -314,15 +316,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Creating a function to return an md5 hash for a given password
-CREATE OR REPLACE FUNCTION create_md5_password(username TEXT, password TEXT)
-RETURNS TEXT AS $$
-DECLARE md5_password TEXT;
-BEGIN
-    SELECT CONCAT('md5', md5(REPLACE(CONCAT(password, username), '\n', ''))) INTO md5_password;
-    RETURN md5_password;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+CREATE EXTENSION pgcrypto;
+
+
 
 -- Creating a function to return a valid customer id for a given username
 CREATE OR REPLACE FUNCTION policy_customer_client_check(user_fullname TEXT)
@@ -850,7 +846,9 @@ DECLARE ROW_COUNT INT;
 BEGIN
     INSERT INTO staff_log(log_description, log_date, staff_name) VALUES ('Updating password', NOW(), CURRENT_USER);
 
-    UPDATE user_login SET password = create_md5_password(session_user, new_password)
+    EXECUTE 'ALTER ROLE ' || (SELECT username FROM user_login WHERE account_id = account_identifier) || 'WITH PASSWORD ''' || new_password || ''';';
+
+    UPDATE user_login SET password = (SELECT rolpassword FROM pg_authid WHERE rolname = username_p)
     WHERE account_id = account_identifier;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Updated password', CURRENT_DATE);
@@ -1164,17 +1162,16 @@ CREATE OR REPLACE FUNCTION client.update_password(new_password TEXT)
 RETURNS BOOLEAN AS $$
 DECLARE passed BOOLEAN;
 DECLARE account_identifier INT;
-DECLARE md5_password TEXT;
 DECLARE ROW_COUNT INT;
 
 BEGIN
     account_identifier = client.get_account_id();
-    md5_password = create_md5_password(session_user, new_password);
 
-    UPDATE user_login SET password = create_md5_password(session_user, md5_password)
+    EXECUTE 'ALTER ROLE ' || session_user || ' WITH PASSWORD ''' || new_password || ''';';
+
+    UPDATE user_login SET password = (SELECT rolpassword FROM pg_authid WHERE rolname = session_user)
     WHERE account_id = account_identifier;
     GET DIAGNOSTICS ROW_COUNT = ROW_COUNT;
-    EXECUTE 'ALTER USER ' || session_user || ' PASSWORD ''' || md5_password || ''';';
     INSERT INTO management_log (account_id, log_description, log_date) VALUES (account_identifier, 'Updated password', CURRENT_DATE);
     passed = CASE WHEN ROW_COUNT = 1 THEN TRUE ELSE FALSE END;
     RETURN passed;
@@ -1702,8 +1699,10 @@ BEGIN
         VALUES ((SELECT now()), (SELECT num FROM GENERATE_SERIES(1, 6) AS s(num) LIMIT 1), customer_id_p)
         RETURNING id INTO account_id;
 
+        EXECUTE 'CREATE ROLE ' || username_p || ' LOGIN PASSWORD ''' || password_p || ''';';
+
         INSERT INTO user_login (account_id, username, password)
-        VALUES (account_id, username_p, create_md5_password(username_p, password_p))
+        VALUES (account_id, username_p, (SELECT rolpassword FROM pg_authid WHERE rolname = username_p))
         RETURNING id INTO online_account_id;
 
         FOR i IN 0..2 LOOP
@@ -1717,7 +1716,6 @@ BEGIN
 
         END LOOP;
 
-        EXECUTE 'CREATE ROLE ' || username_p || ' LOGIN PASSWORD ''' || create_md5_password(username_p, password_p) || ''';';
         EXECUTE 'GRANT l2 TO ' || username_p || ';';
 
 
@@ -1812,6 +1810,7 @@ GRANT USAGE ON ALL SEQUENCES IN SCHEMA client TO l3;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO l3;
 GRANT INSERT ON TABLE management_log TO l3;
 GRANT INSERT ON TABLE authentication_log TO l3;
+GRANT INSERT ON TABLE staff_log TO l3;
 
 -- Begin by revoking all privileges from the user l4
 REVOKE USAGE ON SCHEMA public FROM l4;
@@ -1878,15 +1877,15 @@ VALUES ('2020-01-01', '123456', 1),
 
 -- sample data for user login
 INSERT INTO user_login (account_id, username, password)
-VALUES (1, 'johnsmith', 'md5767a742e16ae1ef324aca4a214862460'),
-(2, 'janedoe', 'md5ffa2177e1637c154db3fbf17202db797'),
-(3, 'joebloggs', 'md5bab60734b6606c3ce80b2e5b38ae6c19'),
-(4, 'johnbloggs', 'md52dcb93a83b902dde49aac058affbe19a'),
-(5, 'janebloggs', 'md50382eacb7999b6b3af867a4c0e2809b6'),
-(6, 'joedoe', 'md555c358d84f40496fd67e963625abefc1'),
-(7, 'johndoe', 'md50471f745ccebbdd98a444048af8c4689'),
-(8, 'joesmith', 'md5e4024b63e04509fbec164bd86de40e4a'),
-(9, 'janesmith', 'md578546a741601683f0d9cd9cb24d599e0');
+VALUES (1, 'johnsmith', 'SCRAM-SHA-256$4096:fXertN3iXYwXi/d1NAVWxA==$Km+VxQmt904W5FyobtdES0zrhQ09xdL/pvd6u5ygfic=:wde8zdAQOQlFfOW3dsfRHBwtEj23ca0e0S3csouNySo='),
+(2, 'janedoe', 'SCRAM-SHA-256$4096:p96clDu3+uiBV1I/jmAgHw==$RbQAtbMkbOdQKulY+38vda2IoiwBwLgui8dTgvFz9Qg=:4hF8ENWP5xNMpVIb6LW4J08J7ISkfTX9Q1/jeChhw94='),
+(3, 'joebloggs', 'SCRAM-SHA-256$4096:adA2GCgW3d6plVKRANTW3w==$86ddhb/Dqe0ZNPUwHBZnbsl3ik//LHmW1lnxar2N+dY=:CVo8Uv6IwVBac86vKlZOMydS6Ieri9VowNjdjIjorHo='),
+(4, 'johnbloggs', 'SCRAM-SHA-256$4096:+s+CUUPEB77XPlzIeNMNhQ==$0Y39fJSqIT+uf8gyRmK6WIOpjLxgYqQx05mzWfgfTBU=:ScgKkt4E19sHef2wC6Bpy6erxknIxY7MHJp91AsDP6I='),
+(5, 'janebloggs', 'SCRAM-SHA-256$4096:5DGw4usSvx0whpomKX+OaA==$e1PPUkUbYkj0I8wS1MMQbhPGw0NU23cfbjI0UzHiusI=:oIiGW/iW6MbDmn2uZraA4iax3f5+dz+f6sIchVdBQwY='),
+(6, 'joedoe', 'SCRAM-SHA-256$4096:3q7kiXiAi+eQubxPE5JGWA==$1GXPGiuczUdK5uDKIFNN0qP8Ij3YYEPBxrTqGYmyTr0=:KbSSuRkVv9k6xJ8ZDjlVYgcBPv1513iQIkiGq9TtBxw='),
+(7, 'johndoe', 'SCRAM-SHA-256$4096:BQHANI2Fs/8fhklD+b8CFw==$cHJJgKXGsaQm7W1C2k/5DthUu+5ThNNX+HxWAv95Ik0=:Rv5umCONzPr5o/3D/FcwgNruL59pem/GGB/eRpfz8Pc='),
+(8, 'joesmith', 'SCRAM-SHA-256$4096:rGXQZA9O7zXnJkYXjMiNeA==$nU0XPqAAY5FTHtsN4aKqlEI+0PVlvwX5vjanXa5G3M8=:omr5rrcqy3WkuglJsDtMHCcjhMtlns5Els4faCXi/Pk='),
+(9, 'janesmith', 'SCRAM-SHA-256$4096:o9vhxjolLJLx75rq9Z6zOQ==$wpWO4KKMBiV+KGugumnMKBb6Uo9ZUjHRgBzWn3Sshvs=:61Lu/sUm2AZ2Xy9ncXs/ulvoMDZAq/EUWFx0Q1SsP7w=');
 
 
 -- sample data for security question option
@@ -1926,18 +1925,15 @@ VALUES ('Red', 1),
 ('Black', 8),
 ('White', 9);
 
-
-SELECT * FROM staff.accounts;
-
-CREATE ROLE johnsmith WITH LOGIN PASSWORD 'md5767a742e16ae1ef324aca4a214862460';
-CREATE ROLE janedoe WITH LOGIN PASSWORD 'md5ffa2177e1637c154db3fbf17202db797';
-CREATE ROLE joebloggs WITH LOGIN PASSWORD 'md5bab60734b6606c3ce80b2e5b38ae6c19';
-CREATE ROLE johnbloggs WITH LOGIN PASSWORD 'md52dcb93a83b902dde49aac058affbe19a';
-CREATE ROLE janebloggs WITH LOGIN PASSWORD 'md50382eacb7999b6b3af867a4c0e2809b6';
-CREATE ROLE joedoe WITH LOGIN PASSWORD 'md555c358d84f40496fd67e963625abefc1';
-CREATE ROLE johndoe WITH LOGIN PASSWORD 'md50471f745ccebbdd98a444048af8c4689';
-CREATE ROLE joesmith WITH LOGIN PASSWORD 'md5e4024b63e04509fbec164bd86de40e4a';
-CREATE ROLE janesmith WITH LOGIN PASSWORD 'md578546a741601683f0d9cd9cb24d599e0';
+CREATE ROLE johnsmith WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:fXertN3iXYwXi/d1NAVWxA==$Km+VxQmt904W5FyobtdES0zrhQ09xdL/pvd6u5ygfic=:wde8zdAQOQlFfOW3dsfRHBwtEj23ca0e0S3csouNySo=';
+CREATE ROLE janedoe WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:p96clDu3+uiBV1I/jmAgHw==$RbQAtbMkbOdQKulY+38vda2IoiwBwLgui8dTgvFz9Qg=:4hF8ENWP5xNMpVIb6LW4J08J7ISkfTX9Q1/jeChhw94=';
+CREATE ROLE joebloggs WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:adA2GCgW3d6plVKRANTW3w==$86ddhb/Dqe0ZNPUwHBZnbsl3ik//LHmW1lnxar2N+dY=:CVo8Uv6IwVBac86vKlZOMydS6Ieri9VowNjdjIjorHo=';
+CREATE ROLE johnbloggs WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:+s+CUUPEB77XPlzIeNMNhQ==$0Y39fJSqIT+uf8gyRmK6WIOpjLxgYqQx05mzWfgfTBU=:ScgKkt4E19sHef2wC6Bpy6erxknIxY7MHJp91AsDP6I=';
+CREATE ROLE janebloggs WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:5DGw4usSvx0whpomKX+OaA==$e1PPUkUbYkj0I8wS1MMQbhPGw0NU23cfbjI0UzHiusI=:oIiGW/iW6MbDmn2uZraA4iax3f5+dz+f6sIchVdBQwY=';
+CREATE ROLE joedoe WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:3q7kiXiAi+eQubxPE5JGWA==$1GXPGiuczUdK5uDKIFNN0qP8Ij3YYEPBxrTqGYmyTr0=:KbSSuRkVv9k6xJ8ZDjlVYgcBPv1513iQIkiGq9TtBxw=';
+CREATE ROLE johndoe WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:BQHANI2Fs/8fhklD+b8CFw==$cHJJgKXGsaQm7W1C2k/5DthUu+5ThNNX+HxWAv95Ik0=:Rv5umCONzPr5o/3D/FcwgNruL59pem/GGB/eRpfz8Pc=';
+CREATE ROLE joesmith WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:rGXQZA9O7zXnJkYXjMiNeA==$nU0XPqAAY5FTHtsN4aKqlEI+0PVlvwX5vjanXa5G3M8=:omr5rrcqy3WkuglJsDtMHCcjhMtlns5Els4faCXi/Pk=';
+CREATE ROLE janesmith WITH LOGIN PASSWORD 'SCRAM-SHA-256$4096:o9vhxjolLJLx75rq9Z6zOQ==$wpWO4KKMBiV+KGugumnMKBb6Uo9ZUjHRgBzWn3Sshvs=:61Lu/sUm2AZ2Xy9ncXs/ulvoMDZAq/EUWFx0Q1SsP7w=';
 
 GRANT user_banking TO johnsmith, janedoe, joebloggs, johnbloggs, janebloggs, joedoe, johndoe, joesmith, janesmith;
 
@@ -1958,6 +1954,7 @@ BEGIN
     RAISE NOTICE 'Result: %', result;
 END
 $$;
+
 
 SELECT * FROM current_user;
 
@@ -2133,5 +2130,6 @@ SELECT * FROM staff.approve_or_deny_loan_application(1, FALSE);
 SELECT * FROM staff.overdrafts;
 SELECT * FROM staff.approve_or_deny_overdraft_application(1, FALSE);
 
-SELECT * FROM staff.open_debit_account(2);
+
+
 
